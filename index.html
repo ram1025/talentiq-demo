@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TALENTIQ - Find Your Dream Job</title>
+<style>
+body {font-family: Arial; background: #f5f7fa; margin: 0; padding: 20px;}
+.header {background: white; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between;}
+.logo {color: #6366f1; font-size: 24px; font-weight: bold;}
+.credits {color: #10b981; font-weight: bold;}
+.search-box {background: white; padding: 20px; margin-top: 20px; border-radius: 10px;}
+input {width: 70%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;}
+button {padding: 12px 20px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;}
+.job-card {background: white; padding: 20px; margin-top: 15px; border-radius: 10px;}
+.apply-btn {background: #10b981; padding: 10px 20px;}
+.match {color: #6366f1; font-weight: bold;}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">TALENTIQ</div>
+    <div>Welcome, JU | <span class="credits">Apply Credits: 50</span></div>
+</div>
+
+<div class="search-box">
+    <h2>Find Your Next Job</h2>
+    <input type="text" placeholder="Job Title, Skills e.g. React Developer">
+    <button>Search Jobs</button>
+</div>
+
+<div class="job-card">
+    <h3>Senior React Developer</h3>
+    <p>Company: TechCorp India | Location: Bangalore | Exp: 3-5 Years</p>
+    <p>Skills: React, Node.js, AWS</p>
+    <p class="match">Your Profile Match: 95%</p>
+    <button class="apply-btn" onclick="alert('Applied! 1 Credit Used')">Apply Now - 1 Credit</button>
+</div>
+
+<div class="job-card">
+    <h3>Full Stack Developer</h3>
+    <p>Company: StartupXYZ | Location: Remote | Exp: 2-4 Years</p>
+    <p>Skills: Vue, Node, MongoDB</p>
+    <p class="match">Your Profile Match: 88%</p>
+    <button class="apply-btn" onclick="alert('Applied! 1 Credit Used')">Apply Now - 1 Credit</button>
+</div>
+
+</body>
+</html>
