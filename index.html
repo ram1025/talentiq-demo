@@ -115,15 +115,134 @@ function saveProfile() {
 
     // 2. 1 sec tarwatha Success Green
     setTimeout(() => {
-        btn.classList.remove('btn-loading');
-        btn.classList.add('btn-success');
-        btn.innerText = "✓ Saved Successfully!";
-        
-        // 3. 2 sec tarwatha malli normal ki
-        setTimeout(() => {
-            btn.classList.remove('btn-success');
-            btn.innerText = "Save & Make Profile Live";
-            btn.disabled = false;
+        btn.classList.remove<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TALENTIQ - Candidate Portal</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+    body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; }
+   .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h1 { color: #2c3e50; text-align: center; }
+    label { font-weight: bold; margin-top: 15px; display: block; }
+    input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    /* GREEN SAVE BUTTON */
+   .btn-green {
+        width: 100%;
+        padding: 15px;
+        margin-top: 20px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+   .btn-green:hover { background: #218838; }
+    #status { text-align: center; margin-top: 15px; font-weight: bold; color: green; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚀 TALENTIQ</h1>
+    <p style="text-align:center;">Upload Resume & Go Live in 60 Seconds</p>
+
+    <label>Upload Resume PDF</label>
+    <input type="file" id="resumeFile" accept=".pdf">
+
+    <label>Full Name</label>
+    <input type="text" id="fullName" placeholder="Auto-filled from Resume">
+
+    <label>Designation</label>
+    <input type="text" id="designation" placeholder="Auto-filled from Resume">
+
+    <label>Skills</label>
+    <textarea id="skills" rows="3" placeholder="Auto-filled from Resume"></textarea>
+
+    <label>Location</label>
+    <input type="text" id="location" placeholder="Auto-filled from Resume">
+
+    <label>Notice Period</label>
+    <input type="text" id="notice" placeholder="e.g. 30 Days">
+
+    <!-- GREEN SAVE BUTTON -->
+    <button class="btn-green" onclick="saveProfile()">Create Profile & Make Live</button>
+
+    <div id="status"></div>
+</div>
+
+<script>
+// PDF READ + AUTO FILL LOGIC
+document.getElementById('resumeFile').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    document.getElementById('status').innerText = "⏳ Scanning Resume...";
+
+    const fileReader = new FileReader();
+    fileReader.onload = async function() {
+        const typedarray = new Uint8Array(this.result);
+        const pdf = await pdfjsLib.getDocument(typedarray).promise;
+        let text = '';
+        for(let i = 0; i < pdf.numPages; i++) {
+            const page = await pdf.getPage(i + 1);
+            const content = await page.getTextContent();
+            text += content.items.map(item => item.text).join(' ');
+        }
+        autoFillFields(text, file.name);
+    };
+    fileReader.readAsArrayBuffer(file);
+});
+
+function autoFillFields(text, filename){
+    // Name: Capital words 2
+    const nameMatch = text.match(/[A-Z][a-z]+ [A-Z][a-z]+/);
+    if(nameMatch) document.getElementById('fullName').value = nameMatch[0];
+
+    // Skills
+    const skills = ['Java', 'Python', 'React', 'JavaScript', 'SQL', 'AWS', 'Support', 'IT', 'HTML', 'CSS', 'Communication'];
+    const foundSkills = skills.filter(s => text.toLowerCase().includes(s.toLowerCase()));
+    if(foundSkills.length > 0) document.getElementById('skills').value = foundSkills.join(', ');
+
+    // Location
+    const locMatch = text.match(/Hyderabad|Bangalore|Pune|Mumbai|Delhi|Visakhapatnam|Chennai/i);
+    if(locMatch) document.getElementById('location').value = locMatch[0];
+
+    // Designation
+    const desMatch = text.match(/Engineer|Developer|Support|Analyst|Manager|Executive/i);
+    if(desMatch) document.getElementById('designation').value = desMatch[0];
+
+    document.getElementById('status').innerText = `✅ Resume scanned! Details auto-filled.`;
+    document.getElementById('resumeFile').dataset.filename = filename;
+}
+
+// SAVE + SYNC TO RECRUZEN
+function saveProfile(){
+    const profile = {
+        name: document.getElementById('fullName').value,
+        designation: document.getElementById('designation').value,
+        skills: document.getElementById('skills').value,
+        location: document.getElementById('location').value,
+        notice: document.getElementById('notice').value,
+        resumeFile: document.getElementById('resumeFile').dataset.filename || "Resume.pdf",
+        source: "TALENTIQ",
+        timestamp: new Date().toISOString()
+    };
+
+    if(!profile.name){ alert("Please upload resume or fill name"); return; }
+
+    localStorage.setItem('talentiq_profile', JSON.stringify(profile));
+    document.getElementById('status').innerText = "✅ Saved Successfully! Now check RECRUZEN ATS";
+    alert("✅ Profile Live! Go to RECRUZEN and Search");
+}
+</script>
+
+</body>
+</html> = false;
         }, 2000);
         
     }, 1000);
