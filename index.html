@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TALENTIQ - AI Job Matching</title>
 <style>
-body {font-family: Arial; background: #f0f4f8; padding: 20px;}
-.container {max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px;}
-input, select, textarea {width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;}
-.btn {background: #4f46e5; color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer;}
-.notif {background: #dcfce7; padding: 10px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #22c55e;}
-.ai-badge {background: #fef3c7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #92400e;}
+body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
+.container {max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
+h2 {color: #1e293b; margin-bottom: 10px;}
+.ai-badge {background: #fef3c7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #92400e; font-weight:700;}
+input, select {width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;}
+input:focus, select:focus {border-color: #4f46e5; outline: none;}
+.btn {background: #4f46e5; color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s;}
+.btn:hover {background: #4338ca;}
+.btn-success {background: #22c55e!important;} /* Green */
+.btn-loading {background: #9ca3af!important; cursor: not-allowed;} /* Gray */
+.notif {background: #dcfce7; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #22c55e; font-weight:600;}
+label {font-weight: 600; font-size: 14px; color: #374151;}
 </style>
 </head>
 <body>
@@ -18,15 +26,20 @@ input, select, textarea {width: 100%; padding: 12px; margin: 10px 0; border: 1px
     <div id="notifications"></div>
 
     <h3>Step 1: Upload Resume <span class="ai-badge">Auto Fill ON</span></h3>
+    <label>Upload Resume</label>
     <input type="file" id="resumeFile" accept=".pdf,.doc,.docx,.txt" onchange="autoFillResume()">
-    <p style="font-size:12px; color:gray;">Upload cheste AI automatic ga kindi fields fill chesthundi</p>
+    <p style="font-size:12px; color:gray; margin-top:-5px;">Upload cheste AI automatic ga kindi fields fill chesthundi</p>
 
-    <h3>Step 2: Verify & Save</h3>
+    <h3 style="margin-top:20px;">Step 2: Verify & Save</h3>
+    <label>Full Name</label>
     <input type="text" id="name" placeholder="Full Name">
-    <input type="text" id="designation" placeholder="Current Designation e.g: Senior Recruiter">
     
+    <label>Current Designation</label>
+    <input type="text" id="designation" placeholder="e.g: Senior Recruiter">
+    
+    <label>Job Status / Notice Period</label>
     <select id="jobType">
-        <option value="">Job Status / Notice Period</option>
+        <option value="">Select Notice Period</option>
         <option value="Immediately">Immediately Available</option>
         <option value="15 Days">15 Days Notice</option>
         <option value="30 Days">30 Days Notice</option>
@@ -34,25 +47,28 @@ input, select, textarea {width: 100%; padding: 12px; margin: 10px 0; border: 1px
         <option value="Searching">Actively Searching</option>
     </select>
 
-    <input type="text" id="skills" placeholder="Skills: Java, React, Recruitment, ATS">
-    <input type="text" id="location" placeholder="Location: Visakhapatnam">
-    <input type="number" id="exp" placeholder="Total Experience in Years">
+    <label>Key Skills</label>
+    <input type="text" id="skills" placeholder="Java, React, Recruitment, ATS - comma tho separate chey">
     
-    <button class="btn" onclick="saveProfile()">Save & Make Profile Live</button>
+    <label>Location</label>
+    <input type="text" id="location" placeholder="Visakhapatnam">
+    
+    <label>Total Experience</label>
+    <input type="number" id="exp" placeholder="Years">
+    
+    <button class="btn" id="saveBtn" onclick="saveProfile()">Save & Make Profile Live</button>
 </div>
 
 <script>
-// FAKE AI PARSER - Demo kosam. Real lo ChatGPT API use chestham
+// FAKE AI PARSER - Demo kosam
 function autoFillResume() {
     let file = document.getElementById('resumeFile').files[0];
     if(!file) return;
 
     alert("AI is scanning your resume... Please wait 2 seconds");
 
-    // Demo kosam fake data. Real lo PDF text ni read chesi extract chestham
     setTimeout(() => {
-        // Resume name nunchi guess cheyadam
-        let fakeName = file.name.split('_')[0] || "Ganesh Ram Makina";
+        let fakeName = "GANESH RAM MAKINA";
         let fakeSkills = "Java, J2EE, Spring Boot, WebSphere, Kibana, Grafana, Recruitment, ATS";
         let fakeExp = "9";
         let fakeLocation = "Visakhapatnam";
@@ -77,7 +93,15 @@ window.onload = function() {
     }
 }
 
+// GREEN BUTTON LOGIC
 function saveProfile() {
+    let btn = document.getElementById('saveBtn');
+    
+    // 1. Loading state
+    btn.classList.add('btn-loading');
+    btn.innerText = "Saving...";
+    btn.disabled = true;
+
     let profile = {
         name: document.getElementById('name').value,
         designation: document.getElementById('designation').value,
@@ -85,10 +109,24 @@ function saveProfile() {
         skills: document.getElementById('skills').value,
         location: document.getElementById('location').value,
         exp: document.getElementById('exp').value,
-        resumeFile: document.getElementById('resumeFile').files[0].name
+        resumeFile: document.getElementById('resumeFile').files[0]? document.getElementById('resumeFile').files[0].name : "Resume.pdf"
     };
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
-    alert("Profile Saved! Now visible to 100+ companies in RECRUZEN");
+
+    // 2. 1 sec tarwatha Success Green
+    setTimeout(() => {
+        btn.classList.remove('btn-loading');
+        btn.classList.add('btn-success');
+        btn.innerText = "✓ Saved Successfully!";
+        
+        // 3. 2 sec tarwatha malli normal ki
+        setTimeout(() => {
+            btn.classList.remove('btn-success');
+            btn.innerText = "Save & Make Profile Live";
+            btn.disabled = false;
+        }, 2000);
+        
+    }, 1000);
 }
 </script>
 </body>
