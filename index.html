@@ -1,47 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TALENTIQ - Find Your Dream Job</title>
 <style>
-body {font-family: Arial; background: #f5f7fa; margin: 0; padding: 20px;}
-.header {background: white; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between;}
-.logo {color: #6366f1; font-size: 24px; font-weight: bold;}
-.credits {color: #10b981; font-weight: bold;}
-.search-box {background: white; padding: 20px; margin-top: 20px; border-radius: 10px;}
-input {width: 70%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;}
-button {padding: 12px 20px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;}
-.job-card {background: white; padding: 20px; margin-top: 15px; border-radius: 10px;}
-.apply-btn {background: #10b981; padding: 10px 20px;}
-.match {color: #6366f1; font-weight: bold;}
+* {margin: 0; padding: 0; box-sizing: border-box;}
+body {font-family: 'Segoe UI', Arial, sans-serif; background: #f5f7fa; color: #333;}
+
+.header {background: white; padding: 20px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;}
+.logo {color: #6366f1; font-size: 28px; font-weight: 800;}
+.free {color: #10b981; font-weight: 700; background: #d1fae5; padding: 6px 12px; border-radius: 20px; font-size: 14px;}
+
+.container {max-width: 1000px; margin: 30px auto; padding: 0 20px;}
+
+.profile-box {background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;}
+.profile-box h3 {margin-bottom: 15px; color: #1f2937;}
+.upload-btn {display: inline-block; padding: 12px 20px; background: #6366f1; color: white; border-radius: 8px; cursor: pointer; font-weight: 700;}
+.upload-btn:hover {background: #4f46e5;}
+input[type="file"] {display: none;}
+.uploaded {color: #10b981; margin-left: 15px; font-weight: 600;}
+
+.search-box {background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);}
+.search-box h2 {margin-bottom: 15px; color: #1f2937;}
+.search-bar {display: flex; gap: 10px;}
+input[type="text"] {flex: 1; padding: 14px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 15px;}
+.btn {padding: 14px 25px; background: #6366f1; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;}
+
+.jobs {margin-top: 30px;}
+.job-card {background: white; padding: 25px; margin-bottom: 15px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);}
+.job-card h4 {color: #1f2937; font-size: 20px; margin-bottom: 8px;}
+.job-info {color: #6b7280; margin-bottom: 10px; font-size: 14px;}
+.skill-tag {display: inline-block; background: #e0e7ff; color: #4338ca; padding: 5px 12px; border-radius: 20px; font-size: 12px; margin-right: 8px;}
+.match {color: #6366f1; font-weight: 700; margin: 10px 0;}
+.apply-btn {background: #10b981; padding: 12px 22px; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;}
 </style>
 </head>
 <body>
 
 <div class="header">
     <div class="logo">TALENTIQ</div>
-    <div>Welcome, JU | <span class="credits">Apply Credits: 50</span></div>
+    <div>Welcome, JU | <span class="free">Free Forever</span></div>
 </div>
 
-<div class="search-box">
-    <h2>Find Your Next Job</h2>
-    <input type="text" placeholder="Job Title, Skills e.g. React Developer">
-    <button>Search Jobs</button>
-</div>
+<div class="container">
+    
+    <div class="profile-box">
+        <h3>Your Profile</h3>
+        <label for="resume" class="upload-btn">Upload Resume - PDF</label>
+        <input type="file" id="resume" accept=".pdf,.doc,.docx" onchange="document.getElementById('fileName').innerText = this.files[0].name">
+        <span id="fileName" class="uploaded"></span>
+        <p style="margin-top:10px; color:#6b7280; font-size:14px;">Resume upload chesthe AI meeku best jobs suggest chesthundi</p>
+    </div>
 
-<div class="job-card">
-    <h3>Senior React Developer</h3>
-    <p>Company: TechCorp India | Location: Bangalore | Exp: 3-5 Years</p>
-    <p>Skills: React, Node.js, AWS</p>
-    <p class="match">Your Profile Match: 95%</p>
-    <button class="apply-btn" onclick="alert('Applied! 1 Credit Used')">Apply Now - 1 Credit</button>
-</div>
+    <div class="search-box">
+        <h2>Find Your Next Job</h2>
+        <div class="search-bar">
+            <input type="text" placeholder="Job Title, Skills e.g. React Developer, Python">
+            <button class="btn">Search Jobs</button>
+        </div>
+    </div>
 
-<div class="job-card">
-    <h3>Full Stack Developer</h3>
-    <p>Company: StartupXYZ | Location: Remote | Exp: 2-4 Years</p>
-    <p>Skills: Vue, Node, MongoDB</p>
-    <p class="match">Your Profile Match: 88%</p>
-    <button class="apply-btn" onclick="alert('Applied! 1 Credit Used')">Apply Now - 1 Credit</button>
+    <div class="jobs">
+        <h3 style="margin:20px 0;">Recommended Jobs For You</h3>
+
+        <div class="job-card">
+            <h4>Senior React Developer</h4>
+            <div class="job-info">TechCorp India | Bangalore | 3-5 Years Exp | ₹15-25 LPA</div>
+            <span class="skill-tag">React</span> <span class="skill-tag">Node.js</span> <span class="skill-tag">AWS</span>
+            <div class="match">Your Profile Match: 95%</div>
+            <button class="apply-btn" onclick="alert('Applied Successfully! Good luck JU 🎉')">Apply Now - FREE</button>
+        </div>
+
+        <div class="job-card">
+            <h4>Full Stack Developer</h4>
+            <div class="job-info">StartupXYZ | Remote | 2-4 Years Exp | ₹10-18 LPA</div>
+            <span class="skill-tag">Vue</span> <span class="skill-tag">Node</span> <span class="skill-tag">MongoDB</span>
+            <div class="match">Your Profile Match: 88%</div>
+            <button class="apply-btn" onclick="alert('Applied Successfully! Good luck JU 🎉')">Apply Now - FREE</button>
+        </div>
+
+    </div>
 </div>
 
 </body>
