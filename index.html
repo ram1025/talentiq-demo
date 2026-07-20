@@ -2,88 +2,131 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>TALENTIQ AI Powered</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TALENTIQ - AI Job Matching</title>
 <style>
- body { font-family: Arial; background: #f5f7fa; padding: 20px; }
-.card { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
- h2 { color: #333; }.badge { background: #ffd700; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
- label { font-weight: bold; margin-top: 15px; display: block; }
- input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; }
-.btn { width: 100%; padding: 14px; margin-top: 20px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; }
- #msg { text-align: center; margin-top: 10px; color: green; font-weight: bold; }
+body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
+.container {max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
+h2 {color: #1e293b; margin-bottom: 10px;}
+.ai-badge {background: #fef3c7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #92400e; font-weight:700;}
+input, select {width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;}
+input:focus, select:focus {border-color: #4f46e5; outline: none;}
+.btn {background: #4f46e5; color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s;}
+.btn:hover {background: #4338ca;}
+.btn-success {background: #22c55e!important;} /* Green */
+.btn-loading {background: #9ca3af!important; cursor: not-allowed;} /* Gray */
+.notif {background: #dcfce7; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #22c55e; font-weight:600;}
+label {font-weight: 600; font-size: 14px; color: #374151;}
 </style>
 </head>
 <body>
-<div class="card">
-<h2>TALENTIQ <span class="badge">AI Powered</span></h2>
-<p><b>Step 1: Upload Resume</b> <span class="badge">Auto Fill ON</span></p>
+<div class="container">
+    <h2>TALENTIQ <span class="ai-badge">AI Powered</span></h2>
+    
+    <div id="notifications"></div>
 
-<label>Upload Resume</label>
-<input type="file" id="resumeFile" accept=".pdf">
+    <h3>Step 1: Upload Resume <span class="ai-badge">Auto Fill ON</span></h3>
+    <label>Upload Resume</label>
+    <input type="file" id="resumeFile" accept=".pdf,.doc,.docx,.txt" onchange="autoFillResume()">
+    <p style="font-size:12px; color:gray; margin-top:-5px;">Upload cheste AI automatic ga kindi fields fill chesthundi</p>
 
-<p><b>Step 2: Verify & Save</b></p>
-<label>Full Name</label>
-<input type="text" id="fullName">
+    <h3 style="margin-top:20px;">Step 2: Verify & Save</h3>
+    <label>Full Name</label>
+    <input type="text" id="name" placeholder="Full Name">
+    
+    <label>Current Designation</label>
+    <input type="text" id="designation" placeholder="e.g: Senior Recruiter">
+    
+    <label>Job Status / Notice Period</label>
+    <select id="jobType">
+        <option value="">Select Notice Period</option>
+        <option value="Immediately">Immediately Available</option>
+        <option value="15 Days">15 Days Notice</option>
+        <option value="30 Days">30 Days Notice</option>
+        <option value="60 Days">60 Days Notice</option>
+        <option value="Searching">Actively Searching</option>
+    </select>
 
-<label>Current Designation</label>
-<input type="text" id="designation" placeholder="e.g. Senior Recruiter">
-
-<label>Job Status / Notice Period</label>
-<select id="notice">
-<option>Select Notice Period</option>
-<option>Immediate</option>
-<option>15 Days</option>
-<option>30 Days</option>
-<option>60 Days</option>
-</select>
-
-<label>Key Skills</label>
-<textarea id="skills" rows="2" placeholder="Java, React, Recruitment, ATS - Comma tho separate chey"></textarea>
-
-<label>Location</label>
-<input type="text" id="location" placeholder="Visakhapatnam">
-
-<button class="btn" onclick="saveProfile()">Save & Make Profile Live</button>
-<div id="msg"></div>
+    <label>Key Skills</label>
+    <input type="text" id="skills" placeholder="Java, React, Recruitment, ATS - comma tho separate chey">
+    
+    <label>Location</label>
+    <input type="text" id="location" placeholder="Visakhapatnam">
+    
+    <label>Total Experience</label>
+    <input type="number" id="exp" placeholder="Years">
+    
+    <button class="btn" id="saveBtn" onclick="saveProfile()">Save & Make Profile Live</button>
 </div>
 
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+// FAKE AI PARSER - Demo kosam
+function autoFillResume() {
+    let file = document.getElementById('resumeFile').files[0];
+    if(!file) return;
 
-document.getElementById('resumeFile').addEventListener('change', async function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    document.getElementById('msg').innerText = "⏳ Scanning Resume...";
+    alert("AI is scanning your resume... Please wait 2 seconds");
+
+    setTimeout(() => {
+        let fakeName = "GANESH RAM MAKINA";
+        let fakeSkills = "Java, J2EE, Spring Boot, WebSphere, Kibana, Grafana, Recruitment, ATS";
+        let fakeExp = "9";
+        let fakeLocation = "Visakhapatnam";
+        let fakeDesg = "IT Support Specialist & Senior Talent Acquisition";
+
+        document.getElementById('name').value = fakeName;
+        document.getElementById('skills').value = fakeSkills;
+        document.getElementById('exp').value = fakeExp;
+        document.getElementById('location').value = fakeLocation;
+        document.getElementById('designation').value = fakeDesg;
+        document.getElementById('jobType').value = "30 Days";
+
+        alert("✅ AI Auto-Fill Complete! Please verify details and click Save");
+    }, 2000);
+}
+
+window.onload = function() {
+    let views = localStorage.getItem("profileViews") || 0;
+    if(views > 0) {
+        document.getElementById('notifications').innerHTML = 
+        `<div class="notif">🔔 ${views} Recruiter(s) viewed your profile in last 24 hours</div>`;
+    }
+}
+
+// GREEN BUTTON LOGIC
+function saveProfile() {
+    let btn = document.getElementById('saveBtn');
     
-    const reader = new FileReader();
-    reader.onload = async function() {
-        const pdf = await pdfjsLib.getDocument({data: new Uint8Array(reader.result)}).promise;
-        let text = '';
-        for(let i=1; i<=pdf.numPages; i++){
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            text += content.items.map(x => x.str).join(' ');
-        }
-        // AUTO FILL
-        const name = text.match(/[A-Z][a-z]+\s[A-Z][a-z]+/)?.[0] || '';
-        const des = text.match(/Recruiter|Engineer|Developer|Analyst|Manager/i)?.[0] || '';
-        const skills = ['Java','React','Python','SQL','ATS','Recruitment','Support'].filter(s => text.toLowerCase().includes(s.toLowerCase())).join(', ');
-        const loc = text.match(/Hyderabad|Bangalore|Visakhapatnam|Pune|Mumbai|Delhi/i)?.[0] || '';
-        
-        document.getElementById('fullName').value = name;
-        document.getElementById('designation').value = des;
-        document.getElementById('skills').value = skills;
-        document.getElementById('location').value = loc;
-        
-        document.getElementById('msg').innerText = "✅ Resume scanned! Verify & Save";
-    };
-    reader.readAsArrayBuffer(file);
-});
+    // 1. Loading state
+    btn.classList.add('btn-loading');
+    btn.innerText = "Saving...";
+    btn.disabled = true;
 
-function saveProfile(){
-    alert("✅ Profile Live! Now check RECRUZEN");
-    document.getElementById('msg').innerText = "✅ Saved Successfully!";
+    let profile = {
+        name: document.getElementById('name').value,
+        designation: document.getElementById('designation').value,
+        jobType: document.getElementById('jobType').value,
+        skills: document.getElementById('skills').value,
+        location: document.getElementById('location').value,
+        exp: document.getElementById('exp').value,
+        resumeFile: document.getElementById('resumeFile').files[0]? document.getElementById('resumeFile').files[0].name : "Resume.pdf"
+    };
+    localStorage.setItem("talentiqProfile", JSON.stringify(profile));
+
+    // 2. 1 sec tarwatha Success Green
+    setTimeout(() => {
+        btn.classList.remove('btn-loading');
+        btn.classList.add('btn-success');
+        btn.innerText = "✓ Saved Successfully!";
+        
+        // 3. 2 sec tarwatha malli normal ki
+        setTimeout(() => {
+            btn.classList.remove('btn-success');
+            btn.innerText = "Save & Make Profile Live";
+            btn.disabled = false;
+        }, 2000);
+        
+    }, 1000);
 }
 </script>
 </body>
