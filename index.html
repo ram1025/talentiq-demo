@@ -7,65 +7,50 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
     body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; min-height: 100vh; }
-  .container { max-width: 650px; margin: 20px auto; background: white; padding: 35px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
-   .subtitle { text-align:center; color: #7f8c8d; margin-bottom: 25px; }
-    label { font-weight: 600; margin-top: 15px; display: block; color: #34495e; }
-    input, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-    input:focus, textarea:focus { border-color: #667eea; outline: none; }
-  .btn-green {
-        width: 100%;
-        padding: 16px;
-        margin-top: 25px;
-        background: linear-gradient(135deg, #28a745, #218838);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 17px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-  .btn-green:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(40,167,69,0.4); }
-    #status { text-align: center; margin-top: 15px; font-weight: bold; color: #28a745; min-height: 20px; }
-   .rocket { font-size: 30px; }
+ .container { max-width: 650px; margin: 20px auto; background: white; padding: 35px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    h1 { color: #2c3e50; text-align: center; }
+  .subtitle { text-align:center; color: #7f8c8d; margin-bottom: 25px; }
+    label { font-weight: 600; margin-top: 15px; display: block; }
+    input, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; }
+   .btn-green { width: 100%; padding: 16px; margin-top: 25px; background: linear-gradient(135deg, #28a745, #218838); color: white; border: none; border-radius: 10px; font-size: 17px; font-weight: bold; cursor: pointer; }
+    #status { text-align: center; margin-top: 15px; font-weight: bold; color: #28a745; }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h1><span class="rocket">🚀</span> TALENTIQ</h1>
+    <h1>🚀 TALENTIQ</h1>
     <p class="subtitle">Upload Resume & Go Live in 60 Seconds</p>
 
     <label>Upload Resume PDF</label>
     <input type="file" id="resumeFile" accept=".pdf">
 
     <label>Full Name</label>
-    <input type="text" id="fullName" placeholder="Auto-filled from Resume">
+    <input type="text" id="fullName">
 
     <label>Designation</label>
-    <input type="text" id="designation" placeholder="Auto-filled from Resume">
+    <input type="text" id="designation">
 
     <label>Key Skills</label>
-    <textarea id="skills" rows="3" placeholder="Auto-filled from Resume"></textarea>
+    <textarea id="skills" rows="3"></textarea>
 
     <label>Location</label>
-    <input type="text" id="location" placeholder="Auto-filled from Resume">
+    <input type="text" id="location">
 
     <label>Job Status / Notice Period</label>
-    <input type="text" id="notice" placeholder="e.g. 30 Days / Immediate">
+    <input type="text" id="notice">
 
     <label>Total Experience</label>
-    <input type="text" id="experience" placeholder="e.g. 2 Years">
+    <input type="text" id="experience">
 
-    <!-- GREEN SAVE BUTTON -->
     <button class="btn-green" onclick="saveProfile()">Save & Make Profile Live</button>
-
     <div id="status"></div>
 </div>
 
 <script>
-// PDF READ + AUTO FILL LOGIC
+// IMPORTANT: pdf.js worker set cheyali
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
 document.getElementById('resumeFile').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -76,28 +61,37 @@ document.getElementById('resumeFile').addEventListener('change', async function(
     fileReader.onload = async function() {
         try {
             const typedarray = new Uint8Array(this.result);
-            const pdf = await pdfjsLib.getDocument(typedarray).promise;
+            const pdf = await pdfjsLib.getDocument({data: typedarray}).promise;
             let text = '';
             for(let i = 0; i < pdf.numPages; i++) {
                 const page = await pdf.getPage(i + 1);
                 const content = await page.getTextContent();
-                text += content.items.map(item => item.text).join(' ');
+                text += content.items.map(item => item.str).join(' ');
+            }
+
+            if(text.length < 10){
+                alert("❌ Ee PDF nunchi text radam ledu. Text PDF upload chey");
+                document.getElementById('status').innerText = "❌ Scan Failed";
+                return;
             }
             autoFillFields(text, file.name);
         } catch(err) {
-            document.getElementById('status').innerText = "❌ Error reading PDF";
+            alert("❌ Error: " + err.message);
+            document.getElementById('status').innerText = "❌ Scan Failed";
         }
     };
     fileReader.readAsArrayBuffer(file);
 });
 
 function autoFillFields(text, filename){
-    // Name
-    const nameMatch = text.match(/[A-Z][a-z]+ [A-Z][a-z]+/);
+    console.log("Extracted Text:", text); // Debug kosam
+
+    // Name - First 2 capital words
+    const nameMatch = text.match(/[A-Z][a-z]+\s[A-Z][a-z]+/);
     if(nameMatch) document.getElementById('fullName').value = nameMatch[0];
 
     // Skills
-    const skills = ['Java', 'Python', 'React', 'JavaScript', 'SQL', 'AWS', 'Support', 'IT', 'HTML', 'CSS', 'Recruitment', 'ATS'];
+    const skills = ['Java', 'Python', 'React', 'JavaScript', 'SQL', 'AWS', 'Support', 'IT', 'HTML', 'CSS', 'Recruitment', 'ATS', 'Communication'];
     const foundSkills = skills.filter(s => text.toLowerCase().includes(s.toLowerCase()));
     if(foundSkills.length > 0) document.getElementById('skills').value = foundSkills.join(', ');
 
@@ -109,11 +103,10 @@ function autoFillFields(text, filename){
     const desMatch = text.match(/Engineer|Developer|Support|Analyst|Manager|Executive|Recruiter/i);
     if(desMatch) document.getElementById('designation').value = desMatch[0];
 
-    document.getElementById('status').innerText = `✅ Resume scanned! Details auto-filled. Please verify.`;
+    document.getElementById('status').innerText = `✅ Resume scanned! Details auto-filled.`;
     document.getElementById('resumeFile').dataset.filename = filename;
 }
 
-// SAVE + SYNC TO RECRUZEN
 function saveProfile(){
     const profile = {
         name: document.getElementById('fullName').value,
@@ -131,7 +124,7 @@ function saveProfile(){
 
     localStorage.setItem('talentiq_profile', JSON.stringify(profile));
     document.getElementById('status').innerText = "✅ Saved Successfully! Now check RECRUZEN ATS";
-    alert("✅ Profile Live! Go to RECRUZEN and Search to see NEW FROM TALENTIQ");
+    alert("✅ Profile Live!");
 }
 </script>
 
