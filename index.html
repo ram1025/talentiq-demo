@@ -6,39 +6,14 @@
 <title>TALENTIQ - AI Job Matching</title>
 <style>
 body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
-
-/* TALENTIQ BANNER */
-.talent-banner {
-  background: linear-gradient(90deg, #0F766E 0%, #1E3A8A 100%);
-  color: white;
-  padding: 30px;
-  border-radius: 16px;
-  margin-bottom: 24px;
-  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.2);
-}
+.talent-banner {background: linear-gradient(90deg, #0F766E 0%, #1E3A8A 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 8px 20px rgba(15, 118, 110, 0.2);}
 .talent-banner h1 {margin:0; font-size:28px; font-weight:700;}
 .talent-banner p {margin:5px 0 0 0; opacity:0.9; font-size:16px;}
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-top: 20px;
-}
-@media(max-width: 768px){
-.stats-grid{ grid-template-columns: 1fr; }
-.header-right {display:none!important;}
-}
-.stat-card {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px);
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.2);
-}
+.stats-grid {display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px;}
+@media(max-width: 768px){.stats-grid{ grid-template-columns: 1fr; }.header-right {display:none!important;}}
+.stat-card {background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);}
 .stat-card h3 { margin: 0; font-size: 14px; opacity: 0.9; }
 .stat-card p { margin: 5px 0 0 0; font-size: 24px; font-weight: bold; }
-
-/* HEADER */
 .header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
 .header-left {display:flex; align-items:center; gap:12px;}
 .logo {background:linear-gradient(135deg, #0F766E, #1E3A8A); color:white; padding:8px 12px; border-radius:10px; font-weight:800; font-size:18px;}
@@ -49,15 +24,15 @@ body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
 .dropdown a {display:block; padding:12px 16px; color:#1e293b; text-decoration:none; font-weight:600; transition:0.2s;}
 .dropdown a:hover {background:#f1f5f9;}
 .dropdown hr {margin:5px 0; border:none; border-top:1px solid #e5e7eb;}
-
 .container {max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
 h2 {color: #1e293b; margin-bottom: 10px;}
 .ai-badge {background: #fef3c7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #92400e; font-weight:700;}
 .free-badge {background: #dcfce7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #166534; font-weight:700;}
 input, select {width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;}
 input:focus, select:focus {border-color: #0F766E; outline: none;}
-.btn {background: linear-gradient(90deg, #0F766E, #1E3A8A); color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s;}
+.btn {background: linear-gradient(90deg, #0F766E, #1E3A8A); color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top:10px;}
 .btn:hover {background: linear-gradient(90deg, #0d5f5a, #162e6e); transform: translateY(-2px);}
+.btn-danger {background: linear-gradient(90deg, #ef4444, #dc2626)!important;} /* RED RESET BUTTON */
 .btn-success {background: linear-gradient(90deg, #22c55e, #16a34a)!important;}
 .btn-loading {background: #9ca3af!important; cursor: not-allowed;}
 .notif {background: #dcfce7; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #22c55e; font-weight:600;}
@@ -66,11 +41,9 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 </head>
 <body>
 
-<!-- TALENTIQ BANNER -->
 <div class="talent-banner">
   <h1>TalentIQ Suite 🤖</h1>
   <p>AI-Powered Candidate Sourcing Platform - <span class="free-badge">100% FREE</span></p>
-
   <div class="stats-grid">
     <div class="stat-card">
       <h3>Profile Views</h3>
@@ -83,7 +56,6 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
   </div>
 </div>
 
-<!-- HEADER -->
 <div class="header">
     <div class="header-left">
         <div class="logo">TI</div>
@@ -92,13 +64,10 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
             <p style="margin:0; font-size:12px; color:gray;">For Job Seekers</p>
         </div>
     </div>
-
     <div class="header-right">
         <div class="profile" onclick="toggleDropdown()">
             <img src="https://i.pravatar.cc/40" style="border-radius:50%; width:40px; height:40px;">
-            <div>
-                <p style="margin:0; font-weight:700; font-size:14px;">Job Seeker ▼</p>
-            </div>
+            <div><p style="margin:0; font-weight:700; font-size:14px;">Job Seeker ▼</p></div>
             <div class="dropdown" id="profileDropdown">
                 <a href="#" onclick="alert('My Profile')">👤 My Profile</a>
                 <a href="#" onclick="alert('Settings')">⚙️ Settings</a>
@@ -111,7 +80,6 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 
 <div class="container">
     <h2>TALENTIQ <span class="ai-badge">AI Powered</span> <span class="free-badge">FREE</span></h2>
-
     <div id="notifications"></div>
 
     <h3>Step 1: Upload Resume <span class="ai-badge">Auto Fill ON</span></h3>
@@ -120,12 +88,8 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
     <p style="font-size:12px; color:gray; margin-top:-5px;">Upload cheste AI automatic ga kindi fields fill chesthundi</p>
 
     <h3 style="margin-top:20px;">Step 2: Verify & Save</h3>
-    <label>Full Name</label>
-    <input type="text" id="name" placeholder="Full Name">
-
-    <label>Current Designation</label>
-    <input type="text" id="designation" placeholder="e.g: Senior Recruiter">
-
+    <label>Full Name</label><input type="text" id="name" placeholder="Full Name">
+    <label>Current Designation</label><input type="text" id="designation" placeholder="e.g: Senior Recruiter">
     <label>Job Status / Notice Period</label>
     <select id="jobType">
         <option value="">Select Notice Period</option>
@@ -135,17 +99,13 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
         <option value="60 Days">60 Days Notice</option>
         <option value="Searching">Actively Searching</option>
     </select>
-
-    <label>Key Skills</label>
-    <input type="text" id="skills" placeholder="Java, React, Recruitment, ATS - comma tho separate chey">
-
-    <label>Location</label>
-    <input type="text" id="location" placeholder="Visakhapatnam">
-
-    <label>Total Experience</label>
-    <input type="number" id="exp" placeholder="Years">
+    <label>Key Skills</label><input type="text" id="skills" placeholder="Java, React, Recruitment, ATS - comma tho separate chey">
+    <label>Location</label><input type="text" id="location" placeholder="Visakhapatnam">
+    <label>Total Experience</label><input type="number" id="exp" placeholder="Years">
 
     <button class="btn" id="saveBtn" onclick="saveProfile()">Save & Make Profile Live</button>
+    <!-- NEW RESET BUTTON -->
+    <button class="btn btn-danger" onclick="resetProfile()">🗑️ Reset Profile Data</button>
 </div>
 
 <script>
@@ -161,46 +121,33 @@ window.onclick = function(event) {
 function autoFillResume() {
     let file = document.getElementById('resumeFile').files[0];
     if(!file) return;
-
     alert("AI is scanning your resume... Please wait 2 seconds");
-
     setTimeout(() => {
-        let fakeName = "GANESH RAM MAKINA";
-        let fakeSkills = "Java, J2EE, Spring Boot, WebSphere, Kibana, Grafana, Recruitment, ATS";
-        let fakeExp = "9";
-        let fakeLocation = "Visakhapatnam";
-        let fakeDesg = "IT Support Specialist & Senior Talent Acquisition";
-
-        document.getElementById('name').value = fakeName;
-        document.getElementById('skills').value = fakeSkills;
-        document.getElementById('exp').value = fakeExp;
-        document.getElementById('location').value = fakeLocation;
-        document.getElementById('designation').value = fakeDesg;
+        document.getElementById('name').value = "GANESH RAM MAKINA";
+        document.getElementById('skills').value = "Java, J2EE, Spring Boot, Recruitment, ATS";
+        document.getElementById('exp').value = "9";
+        document.getElementById('location').value = "Visakhapatnam";
+        document.getElementById('designation').value = "IT Support Specialist";
         document.getElementById('jobType').value = "30 Days";
-
         alert("✅ AI Auto-Fill Complete! Please verify details and click Save");
     }, 2000);
 }
 
-// FIXED: Profile unte matrame notification chupistundi
+// FIXED: Profile unte matrame notification
 window.onload = function() {
     let views = localStorage.getItem("profileViews") || 0;
     let profile = localStorage.getItem("talentiqProfile");
-
     document.getElementById('viewCount').innerText = views;
-
     if(profile && views > 0) {
-        document.getElementById('notifications').innerHTML =
-        `<div class="notif">🔔 ${views} Recruiter(s) viewed your profile in last 24 hours</div>`;
+        document.getElementById('notifications').innerHTML = `<div class="notif">🔔 ${views} Recruiter(s) viewed your profile in last 24 hours</div>`;
+    } else {
+        document.getElementById('notifications').innerHTML = ``; // Empty
     }
 }
 
 function saveProfile() {
     let btn = document.getElementById('saveBtn');
-
-    btn.classList.add('btn-loading');
-    btn.innerText = "Saving...";
-    btn.disabled = true;
+    btn.classList.add('btn-loading'); btn.innerText = "Saving..."; btn.disabled = true;
 
     let profile = {
         name: document.getElementById('name').value,
@@ -217,20 +164,23 @@ function saveProfile() {
     localStorage.setItem("profileViews", views);
 
     setTimeout(() => {
-        btn.classList.remove('btn-loading');
-        btn.classList.add('btn-success');
-        btn.innerText = "✓ Profile is LIVE!";
-
+        btn.classList.remove('btn-loading'); btn.classList.add('btn-success'); btn.innerText = "✓ Profile is LIVE!";
         setTimeout(() => {
-            btn.classList.remove('btn-success');
-            btn.innerText = "Save & Make Profile Live";
-            btn.disabled = false;
-            // Save ayina ventane notification update
-            window.onload();
+            btn.classList.remove('btn-success'); btn.innerText = "Save & Make Profile Live"; btn.disabled = false;
+            window.onload(); // Refresh notification
             alert("Your profile is now visible to recruiters in RecruZen ATS!");
         }, 2000);
-
     }, 1000);
+}
+
+// NEW FUNCTION: Reset kosam
+function resetProfile() {
+    if(confirm("Are you sure? All profile data will be deleted.")) {
+        localStorage.removeItem("talentiqProfile");
+        localStorage.removeItem("profileViews");
+        alert("Profile Reset Successfully!");
+        window.location.reload(); // Page refresh
+    }
 }
 </script>
 </body>
