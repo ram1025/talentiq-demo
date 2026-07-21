@@ -7,7 +7,7 @@
 <style>
 body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
 
-/* KOTTHA TALENTIQ BANNER */
+/* TALENTIQ BANNER - FREE VERSION */
 .talent-banner {
   background: linear-gradient(90deg, #0F766E 0%, #1E3A8A 100%);
   color: white;
@@ -20,13 +20,13 @@ body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
 .talent-banner p {margin:5px 0 0 0; opacity:0.9; font-size:16px;}
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr); /* 3 nundi 2 ki marcham */
   gap: 16px;
   margin-top: 20px;
 }
 @media(max-width: 768px){
- .stats-grid{ grid-template-columns: 1fr; }
- .header-right {display:none!important;}
+.stats-grid{ grid-template-columns: 1fr; }
+.header-right {display:none!important;}
 }
 .stat-card {
   background: rgba(255,255,255,0.15);
@@ -53,28 +53,26 @@ body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
 .container {max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
 h2 {color: #1e293b; margin-bottom: 10px;}
 .ai-badge {background: #fef3c7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #92400e; font-weight:700;}
+.free-badge {background: #dcfce7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #166534; font-weight:700;} /* NEW */
 input, select {width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;}
 input:focus, select:focus {border-color: #0F766E; outline: none;}
 .btn {background: linear-gradient(90deg, #0F766E, #1E3A8A); color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s;}
 .btn:hover {background: linear-gradient(90deg, #0d5f5a, #162e6e); transform: translateY(-2px);}
-.btn-success {background: linear-gradient(90deg, #22c55e, #16a34a)!important;} /* Green */
-.btn-loading {background: #9ca3af!important; cursor: not-allowed;} /* Gray */
+.btn-success {background: linear-gradient(90deg, #22c55e, #16a34a)!important;}
+.btn-loading {background: #9ca3af!important; cursor: not-allowed;}
 .notif {background: #dcfce7; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #22c55e; font-weight:600;}
 label {font-weight: 600; font-size: 14px; color: #374151;}
 </style>
 </head>
 <body>
 
-<!-- KOTTHA TALENTIQ BANNER -->
+<!-- TALENTIQ BANNER - FREE -->
 <div class="talent-banner">
   <h1>TalentIQ Suite 🤖</h1>
-  <p>AI-Powered Candidate Sourcing Platform</p>
+  <p>AI-Powered Candidate Sourcing Platform - <span class="free-badge">100% FREE</span></p>
 
   <div class="stats-grid">
-    <div class="stat-card">
-      <h3>AI Credits</h3>
-      <p>100</p>
-    </div>
+    <!-- AI CREDITS CARD TEESAM -->
     <div class="stat-card">
       <h3>Profile Views</h3>
       <p id="viewCount">0</p>
@@ -105,7 +103,7 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
             <div class="dropdown" id="profileDropdown">
                 <a href="#" onclick="alert('My Profile')">👤 My Profile</a>
                 <a href="#" onclick="alert('Settings')">⚙️ Settings</a>
-                <a href="#" onclick="alert('Go to RecruZen')">🚀 Go to RecruZen</a>
+                <!-- GO TO RECRUZEN TEESAM -->
                 <hr>
                 <a href="#" style="color:#ef4444;" onclick="alert('Logged Out')">🚪 Logout</a>
             </div>
@@ -114,7 +112,7 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 </div>
 
 <div class="container">
-    <h2>TALENTIQ <span class="ai-badge">AI Powered</span></h2>
+    <h2>TALENTIQ <span class="ai-badge">AI Powered</span> <span class="free-badge">FREE</span></h2>
 
     <div id="notifications"></div>
 
@@ -153,7 +151,6 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 </div>
 
 <script>
-// DROPDOWN FUNCTION
 function toggleDropdown() {
     document.getElementById("profileDropdown").classList.toggle("show");
 }
@@ -163,7 +160,6 @@ window.onclick = function(event) {
   }
 }
 
-// FAKE AI PARSER
 function autoFillResume() {
     let file = document.getElementById('resumeFile').files[0];
     if(!file) return;
@@ -197,7 +193,6 @@ window.onload = function() {
     }
 }
 
-// GREEN BUTTON LOGIC
 function saveProfile() {
     let btn = document.getElementById('saveBtn');
 
@@ -216,20 +211,19 @@ function saveProfile() {
     };
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
 
-    // Profile views ni +1 cheyyadam demo kosam
     let views = parseInt(localStorage.getItem("profileViews") || 0) + 1;
     localStorage.setItem("profileViews", views);
 
     setTimeout(() => {
         btn.classList.remove('btn-loading');
         btn.classList.add('btn-success');
-        btn.innerText = "✓ Saved Successfully!";
+        btn.innerText = "✓ Profile is LIVE!";
 
         setTimeout(() => {
             btn.classList.remove('btn-success');
             btn.innerText = "Save & Make Profile Live";
             btn.disabled = false;
-            alert("Your profile is now LIVE in RecruZen ATS!");
+            alert("Your profile is now visible to recruiters in RecruZen ATS!");
         }, 2000);
 
     }, 1000);
