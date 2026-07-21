@@ -7,7 +7,7 @@
 <style>
 body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
 
-/* TALENTIQ BANNER - FREE VERSION */
+/* TALENTIQ BANNER */
 .talent-banner {
   background: linear-gradient(90deg, #0F766E 0%, #1E3A8A 100%);
   color: white;
@@ -20,7 +20,7 @@ body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
 .talent-banner p {margin:5px 0 0 0; opacity:0.9; font-size:16px;}
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 3 nundi 2 ki marcham */
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   margin-top: 20px;
 }
@@ -53,7 +53,7 @@ body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
 .container {max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
 h2 {color: #1e293b; margin-bottom: 10px;}
 .ai-badge {background: #fef3c7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #92400e; font-weight:700;}
-.free-badge {background: #dcfce7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #166534; font-weight:700;} /* NEW */
+.free-badge {background: #dcfce7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #166534; font-weight:700;}
 input, select {width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;}
 input:focus, select:focus {border-color: #0F766E; outline: none;}
 .btn {background: linear-gradient(90deg, #0F766E, #1E3A8A); color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s;}
@@ -66,13 +66,12 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 </head>
 <body>
 
-<!-- TALENTIQ BANNER - FREE -->
+<!-- TALENTIQ BANNER -->
 <div class="talent-banner">
   <h1>TalentIQ Suite 🤖</h1>
   <p>AI-Powered Candidate Sourcing Platform - <span class="free-badge">100% FREE</span></p>
 
   <div class="stats-grid">
-    <!-- AI CREDITS CARD TEESAM -->
     <div class="stat-card">
       <h3>Profile Views</h3>
       <p id="viewCount">0</p>
@@ -103,7 +102,6 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
             <div class="dropdown" id="profileDropdown">
                 <a href="#" onclick="alert('My Profile')">👤 My Profile</a>
                 <a href="#" onclick="alert('Settings')">⚙️ Settings</a>
-                <!-- GO TO RECRUZEN TEESAM -->
                 <hr>
                 <a href="#" style="color:#ef4444;" onclick="alert('Logged Out')">🚪 Logout</a>
             </div>
@@ -184,10 +182,14 @@ function autoFillResume() {
     }, 2000);
 }
 
+// FIXED: Profile unte matrame notification chupistundi
 window.onload = function() {
     let views = localStorage.getItem("profileViews") || 0;
+    let profile = localStorage.getItem("talentiqProfile");
+
     document.getElementById('viewCount').innerText = views;
-    if(views > 0) {
+
+    if(profile && views > 0) {
         document.getElementById('notifications').innerHTML =
         `<div class="notif">🔔 ${views} Recruiter(s) viewed your profile in last 24 hours</div>`;
     }
@@ -223,6 +225,8 @@ function saveProfile() {
             btn.classList.remove('btn-success');
             btn.innerText = "Save & Make Profile Live";
             btn.disabled = false;
+            // Save ayina ventane notification update
+            window.onload();
             alert("Your profile is now visible to recruiters in RecruZen ATS!");
         }, 2000);
 
