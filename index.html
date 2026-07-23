@@ -217,19 +217,21 @@ const jobs = [
     {id:4, title:"Full Stack Developer", company:"HCL", location:"Remote", type:"Remote", skills:"Node.js, React, MongoDB"}
 ];
 
+// CHANGE 1: Login status check ni strict chesam
 (function initAuth(){
-    let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
+    let isLoggedIn = localStorage.getItem('talentiq_loggedin');
     let hash = window.location.hash;
-    if(isLoggedIn){
-        if(hash!== '#dashboard') window.location.replace('#dashboard');
+
+    if(isLoggedIn === 'true'){
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         document.body.classList.remove('login-bg');
+        if(hash!== '#dashboard') window.location.hash = '#dashboard';
     } else {
-        if(hash!== '#login') window.location.replace('#login');
         document.getElementById('loginPage').style.display = 'flex';
         document.getElementById('dashboard').style.display = 'none';
         document.body.classList.add('login-bg');
+        if(hash!== '#login') window.location.hash = '#login';
     }
     document.body.classList.add('ready');
 })();
@@ -245,6 +247,7 @@ function router(){
         updateStats();
         renderJobs();
     } else {
+        localStorage.removeItem('talentiq_loggedin'); // CHANGE 2: force logout if hash mismatch
         window.location.hash = '#login';
         document.getElementById('loginPage').style.display = 'flex';
         document.getElementById('dashboard').style.display = 'none';
@@ -275,6 +278,7 @@ function saveModalProfile(){
     profile.designation = document.getElementById('modalDesignationInput').value;
     profile.skills = document.getElementById('modalSkillsInput').value;
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
+    localStorage.setItem("talentiq_loggedin", "true"); // CHANGE 3: login status ni malli set cheyi
     alert('✅ Profile Updated Successfully!');
     loadProfile();
     closeProfileModal();
@@ -418,7 +422,7 @@ function loadProfile(){
     if(profile.designation) document.getElementById('designation').value = profile.designation;
     if(profile.jobType) document.getElementById('jobType').value = profile.jobType;
     if(profile.skills) document.getElementById('skills').value = profile.skills;
-    if(profile.location) document.getElementById('location').value = profile.location; // FIXED TYPO
+    if(profile.location) document.getElementById('location').value = profile.location;
     if(profile.exp) document.getElementById('exp').value = profile.exp;
     if(profile.workMode) document.getElementById('workMode').value = profile.workMode;
     calculateResumeScore();
@@ -436,6 +440,7 @@ function saveProfile() {
         phone: document.getElementById('modalPhoneInput')?.value || ''
     };
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
+    localStorage.setItem("talentiq_loggedin", "true"); // IMPORTANT: login ni maintain cheyi
     let views = parseInt(localStorage.getItem("profileViews") || 0) + 1;
     localStorage.setItem("profileViews", views);
     setTimeout(() => {
@@ -451,6 +456,7 @@ function resetProfile() {
     if(confirm("Are you sure? All profile data will be deleted.")) {
         localStorage.clear();
         alert("Profile Reset Successfully!");
+        window.location.hash = '#login';
         window.location.reload();
     }
 }
