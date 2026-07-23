@@ -19,12 +19,13 @@ body.ready {visibility: visible;}
 .input-group label{font-weight:700; color:#1e293b; font-size:14px; display:block; margin-bottom:6px;}
 .input-group input{width:100%; padding:12px 40px 12px 12px; border:2px solid #e5e7eb; border-radius:8px; font-size:15px;}
 .eye-icon{position:absolute; right:12px; top:38px; cursor:pointer; font-size:18px; color:gray;}
-.login-btn{width:100%; background:linear-gradient(90deg, #0F766E, #1E3A8A); color:white; padding:14px; border:none; border-radius:8px; font-weight:700; font-size:16px; cursor:pointer;}
+.login-btn{width:100%; background:linear-gradient(90deg, #0F766E, #1E3A8A); color:white; padding:14px; border:none; border-radius:8px; font-weight:700; font-size:16px; cursor:pointer; margin-bottom:10px;}
+.forgot-btn{background:transparent; border:none; color:#0F766E; font-weight:600; cursor:pointer; width:100%; padding:8px;} /* NEW */
 .demo-box{background:#f0fdfa; border:1px dashed #0F766E; border-radius:8px; padding:12px; margin-top:20px; text-align:center; font-size:13px;}
 
 /* DASHBOARD */
 #dashboard {display:none; background:#f0f4f8; min-height:100vh;}
-.talent-banner {background: linear-gradient(90deg, #0F766E 0%, #1E3A8A 100%); color: white; padding: 30px; border-radius: 0 0 16px 16px; margin-bottom: 24px; box-shadow: 0 8px 20px rgba(15, 118, 110, 0.2);}
+.talent-banner {background: linear-gradient(90deg, #0F766E 0%, #1E3A8A 100%); color: white; padding: 30px; border-radius: 0 0 16px 16px; margin-bottom: 24px;}
 .talent-banner h1 {margin:0; font-size:28px; font-weight:700;}
 .stats-grid {display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px;}
 @media(max-width: 768px){.stats-grid{ grid-template-columns: 1fr; }}
@@ -40,7 +41,8 @@ body.ready {visibility: visible;}
 .bell-badge {position:absolute; top:-5px; right:-5px; background:red; color:white; font-size:10px; padding:2px 6px; border-radius:50%; font-weight:700;}
 
 /* PROFILE PHOTO UPLOAD */
-.profile {display:flex; align-items:center; gap:8px; cursor:pointer; position:relative;}
+.profile {display:flex; align-items:center; gap:8px; position:relative;}
+.profile-name {cursor:pointer; display:flex; align-items:center; gap:5px;} /* FIX 1 */
 .profile-pic {position: relative; cursor: pointer;}
 .profile-pic img {border-radius:50%; width:40px; height:40px; border:2px solid #0F766E; object-fit: cover;}
 .profile-pic.edit-icon {position:absolute; bottom:0; right:0; background:#0F766E; color:white; border-radius:50%; width:16px; height:16px; font-size:10px; display:flex; align-items:center; justify-content:center;}
@@ -75,14 +77,21 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 
 /* JOB CARDS */
 .job-list {margin-top:20px;}
-.job-card {border:2px solid #e5e7eb; border-radius:12px; padding:18px; margin-bottom:15px; transition:0.3s;}
-.job-card:hover {border-color:#0F766E; box-shadow:0 4px 12px rgba(15,118,110,0.1);}
+.job-card {border:2px solid #e5e7eb; border-radius:12px; padding:18px; margin-bottom:15px;}
 .job-header {display:flex; justify-content:space-between; align-items:start; gap:10px;}
 .job-header h3 {margin:0; color:#1e293b; font-size:18px;}
 .job-company {color:#0F766E; font-weight:700; font-size:14px; margin:5px 0;}
 .job-tags {display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;}
 .job-tag {background:#f0fdfa; color:#0F766E; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;}
 .applied {background:#dcfce7!important; color:#166534!important; cursor:not-allowed;}
+
+/* MODAL - NEW */
+.modal {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999; justify-content:center; align-items:center;}
+.modal.show {display:flex;}
+.modal-content {background:white; padding:30px; border-radius:16px; max-width:500px; width:90%;}
+.modal-content h3 {margin-top:0; color:#0F766E;}
+.modal-pic {display:flex; flex-direction:column; align-items:center; gap:15px; margin:20px 0;}
+.modal-pic img {width:100px; height:100px; border-radius:50%; border:3px solid #0F766E; object-fit:cover;}
 </style>
 </head>
 <body>
@@ -101,6 +110,7 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
             <span class="eye-icon" onclick="togglePass()">👁️</span>
         </div>
         <button class="login-btn" onclick="login()">Login</button>
+        <button class="forgot-btn" onclick="alert('Password reset link will be sent to your email')">Forgot Password?</button> <!-- NEW -->
         <div class="demo-box">
             <p><b>Demo Login</b></p>
             <p>Email: <b>candidate@talentiq.com</b></p>
@@ -133,16 +143,16 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
                     <a href="#">Your profile got 3 views</a>
                 </div>
             </div>
-            <div class="profile" onclick="toggleDropdown()">
-                <div class="profile-pic" onclick="document.getElementById('profilePhotoInput').click(); event.stopPropagation();">
+            <div class="profile">
+                <div class="profile-pic" onclick="document.getElementById('profilePhotoInput').click();">
                     <img id="profileImg" src="https://i.pravatar.cc/40">
                     <div class="edit-icon">✏️</div>
                 </div>
                 <input type="file" id="profilePhotoInput" accept="image/*" onchange="uploadProfilePhoto()">
-                <p style="margin:0; font-weight:700; font-size:14px;">Job Seeker ▼</p>
+                <div class="profile-name" onclick="toggleDropdown()">Job Seeker ▼</div> <!-- FIX 1: click only on name -->
                 <div class="dropdown" id="profileDropdown">
-                    <a href="#" onclick="alert('My Profile')">👤 My Profile</a>
-                    <a href="#" onclick="alert('Settings')">⚙️ Settings</a>
+                    <a href="#" onclick="openProfileModal()">👤 My Profile</a> <!-- FIX 2 -->
+                    <a href="#" onclick="alert('Settings page coming soon')">⚙️ Settings</a>
                     <hr>
                     <a href="#" style="color:#ef4444;" onclick="logout()">🚪 Logout</a>
                 </div>
@@ -164,7 +174,6 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
         <h3>Step 1: Upload Resume <span class="ai-badge">Auto Fill ON</span></h3>
         <label>Upload Resume</label>
         <input type="file" id="resumeFile" accept=".pdf,.doc,.docx,.txt" onchange="autoFillResume()">
-        <p style="font-size:12px; color:gray; margin-top:-5px;">Upload cheste AI automatic ga kindi fields fill chesthundi</p>
 
         <h3 style="margin-top:20px;">Step 2: Verify & Save</h3>
         <label>Full Name</label><input type="text" id="name">
@@ -199,11 +208,26 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
     </div>
 </div>
 
+<!-- NEW: PROFILE MODAL -->
+<div class="modal" id="profileModal">
+    <div class="modal-content">
+        <h3>👤 My Profile</h3>
+        <div class="modal-pic">
+            <img id="modalProfileImg" src="https://i.pravatar.cc/100">
+            <input type="file" id="modalProfileInput" accept="image/*" onchange="uploadModalPhoto()">
+            <button class="btn btn-small" onclick="document.getElementById('modalProfileInput').click()">Change Photo</button>
+        </div>
+        <p><b>Name:</b> <span id="modalName">-</span></p>
+        <p><b>Designation:</b> <span id="modalDesignation">-</span></p>
+        <p><b>Skills:</b> <span id="modalSkills">-</span></p>
+        <button class="btn" onclick="closeProfileModal()">Close</button>
+    </div>
+</div>
+
 <script>
 let resumeScore = 0;
 let appliedJobs = JSON.parse(localStorage.getItem('appliedJobs') || '[]');
 
-// JOBS DATA
 const jobs = [
     {id:1, title:"Senior Java Developer", company:"TCS", location:"Hyderabad", type:"WFO", skills:"Java, Spring Boot"},
     {id:2, title:"React Frontend Engineer", company:"Infosys", location:"Bangalore", type:"Hybrid", skills:"React, JS, CSS"},
@@ -211,7 +235,6 @@ const jobs = [
     {id:4, title:"Full Stack Developer", company:"HCL", location:"Remote", type:"Remote", skills:"Node.js, React, MongoDB"}
 ];
 
-// IIFE - Page render avvakunda mundhe decide
 (function initAuth(){
     let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
     let hash = window.location.hash;
@@ -251,6 +274,30 @@ function router(){
 
 window.addEventListener('hashchange', router);
 
+// NEW: PROFILE MODAL FUNCTIONS
+function openProfileModal(){
+    document.getElementById('profileModal').classList.add('show');
+    document.getElementById('modalName').innerText = document.getElementById('name').value || '-';
+    document.getElementById('modalDesignation').innerText = document.getElementById('designation').value || '-';
+    document.getElementById('modalSkills').innerText = document.getElementById('skills').value || '-';
+    document.getElementById('modalProfileImg').src = document.getElementById('profileImg').src;
+    toggleDropdown(); // close dropdown
+}
+function closeProfileModal(){
+    document.getElementById('profileModal').classList.remove('show');
+}
+function uploadModalPhoto(){
+    let file = document.getElementById('modalProfileInput').files[0];
+    if(!file) return;
+    let reader = new FileReader();
+    reader.onload = function(e){
+        document.getElementById('modalProfileImg').src = e.target.result;
+        document.getElementById('profileImg').src = e.target.result;
+        localStorage.setItem('profilePhoto', e.target.result);
+    }
+    reader.readAsDataURL(file);
+}
+
 // PROFILE PHOTO UPLOAD
 function uploadProfilePhoto(){
     let file = document.getElementById('profilePhotoInput').files[0];
@@ -259,12 +306,10 @@ function uploadProfilePhoto(){
     reader.onload = function(e){
         document.getElementById('profileImg').src = e.target.result;
         localStorage.setItem('profilePhoto', e.target.result);
-        alert('✅ Profile photo updated!');
     }
     reader.readAsDataURL(file);
 }
 
-// RENDER JOBS
 function renderJobs(){
     let html = '';
     jobs.forEach(job=>{
@@ -289,12 +334,11 @@ function renderJobs(){
     document.getElementById('jobList').innerHTML = html;
 }
 
-// APPLY JOB
 function applyJob(jobId){
     if(!appliedJobs.includes(jobId)){
         appliedJobs.push(jobId);
         localStorage.setItem('appliedJobs', JSON.stringify(appliedJobs));
-        alert('✅ Job Applied Successfully! Recruiter ki notification vellindi.');
+        alert('✅ Job Applied Successfully!');
         renderJobs();
     }
 }
@@ -321,10 +365,11 @@ function logout(){
 }
 
 function toggleDropdown() { document.getElementById("profileDropdown").classList.toggle("show"); }
-function toggleBell() { document.getElementById("bellDropdown").classList.remove('show'); }
+function toggleBell() { document.getElementById("bellDropdown").classList.toggle("show"); }
 window.onclick = function(event) {
   if (!event.target.closest('.profile')) document.getElementById("profileDropdown").classList.remove('show');
   if (!event.target.closest('.bell')) document.getElementById("bellDropdown").classList.remove('show');
+  if (event.target.id === 'profileModal') closeProfileModal(); // click outside to close
 }
 
 function calculateResumeScore(){
@@ -332,7 +377,7 @@ function calculateResumeScore(){
     if(document.getElementById('name').value) score+=15; else suggestions.push("Add your Full Name");
     if(document.getElementById('designation').value) score+=15; else suggestions.push("Add Current Designation");
     if(document.getElementById('skills').value && document.getElementById('skills').value.split(',').length > 3) score+=25; else suggestions.push("Add at least 4 Key Skills");
-    if(document.getElementById('exp').value) score+=15; else suggestions.push("Add Years of Experience"); // FIXED TYPO
+    if(document.getElementById('exp').value) score+=15; else suggestions.push("Add Years of Experience");
     if(document.getElementById('location').value) score+=15; else suggestions.push("Select Preferred Location");
     if(document.getElementById('workMode').value) score+=15; else suggestions.push("Select Work Mode");
 
@@ -342,7 +387,7 @@ function calculateResumeScore(){
     document.getElementById('resumeScore').innerText = score + '%';
     document.getElementById('jobMatches').innerText = Math.floor(score/10);
 
-    let sugHTML = suggestions.length > 0? "<div class='suggestion'><b>AI Suggestions:</b><br>• " + suggestions.join('<br>• ') + "</div>" : "<div class='suggestion'>🎉 Your resume is 100% complete! Recruiters will love this.</div>";
+    let sugHTML = suggestions.length > 0? "<div class='suggestion'><b>AI Suggestions:</b><br>• " + suggestions.join('<br>• ') + "</div>" : "<div class='suggestion'>🎉 Your resume is 100% complete!</div>";
     document.getElementById('suggestions').innerHTML = sugHTML;
 }
 
@@ -367,13 +412,10 @@ function updateStats() {
     let views = localStorage.getItem("profileViews") || 0;
     let profile = localStorage.getItem("talentiqProfile");
     document.getElementById('viewCount').innerText = views;
-
-    // load profile photo
     let savedPhoto = localStorage.getItem('profilePhoto');
     if(savedPhoto) document.getElementById('profileImg').src = savedPhoto;
-
     if(profile && views > 0) {
-        document.getElementById('notifications').innerHTML = `<div class="notif">🔔 ${views} Recruiter(s) viewed your profile in last 24 hours</div>`;
+        document.getElementById('notifications').innerHTML = `<div class="notif">🔔 ${views} Recruiter(s) viewed your profile</div>`;
     } else {
         document.getElementById('notifications').innerHTML = ``;
     }
@@ -395,7 +437,6 @@ function loadProfile(){
 function saveProfile() {
     let btn = document.getElementById('saveBtn');
     btn.classList.add('btn-loading'); btn.innerText = "Saving..."; btn.disabled = true;
-
     let profile = {
         name: document.getElementById('name').value, designation: document.getElementById('designation').value,
         jobType: document.getElementById('jobType').value, skills: document.getElementById('skills').value,
@@ -403,32 +444,25 @@ function saveProfile() {
         workMode: document.getElementById('workMode').value
     };
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
-
     let views = parseInt(localStorage.getItem("profileViews") || 0) + 1;
     localStorage.setItem("profileViews", views);
-
     setTimeout(() => {
         btn.classList.remove('btn-loading'); btn.classList.add('btn-success'); btn.innerText = "✓ Profile is LIVE!";
         updateStats();
         setTimeout(() => {
             btn.classList.remove('btn-success'); btn.innerText = "Save & Make Profile Live"; btn.disabled = false;
-            alert("Your profile is now visible to recruiters in RecruZen ATS!");
         }, 2000);
     }, 1000);
 }
 
 function resetProfile() {
     if(confirm("Are you sure? All profile data will be deleted.")) {
-        localStorage.removeItem("talentiqProfile");
-        localStorage.removeItem("profileViews");
-        localStorage.removeItem('appliedJobs');
-        localStorage.removeItem('profilePhoto');
+        localStorage.clear();
         alert("Profile Reset Successfully!");
         window.location.reload();
     }
 }
 
-// Real-time score update
 ['name','designation','skills','exp','location','workMode'].forEach(id=>{
     let el = document.getElementById(id);
     if(el){ el.addEventListener('input', calculateResumeScore); el.addEventListener('change', calculateResumeScore); }
