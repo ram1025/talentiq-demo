@@ -6,13 +6,13 @@
 <title>TALENTIQ - AI Job Matching</title>
 <style>
 * {box-sizing: border-box;}
-body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 0; margin:0; visibility: hidden;} /* CHANGE 1: start lo hide */
+body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 0; margin:0; visibility: hidden;}
 body.login-bg {background: linear-gradient(135deg, #0F766E 0%, #1E3A8A 100%); min-height: 100vh;}
-body.ready {visibility: visible;} /* CHANGE 1: check ayyaka show */
+body.ready {visibility: visible;}
 .hidden{display:none!important}
 
 /* LOGIN PAGE */
-.login-container{display:none; justify-content:center; align-items:center; min-height:100vh; width:100%; padding:20px;} /* CHANGE 2: default none */
+.login-container{display:none; justify-content:center; align-items:center; min-height:100vh; width:100%; padding:20px;}
 .login-box{background:white; padding:40px 30px; border-radius:16px; width:100%; max-width:400px; box-shadow:0 20px 40px rgba(0,0,0,0.2);}
 .login-box h1{text-align:center; color:#0F766E; margin-bottom:20px; font-size:28px;}
 .input-group{margin-bottom:18px; position:relative;}
@@ -38,7 +38,14 @@ body.ready {visibility: visible;} /* CHANGE 1: check ayyaka show */
 .header-right {display:flex; align-items:center; gap:20px; position:relative;}
 .bell{position:relative; cursor:pointer; font-size:22px;}
 .bell-badge {position:absolute; top:-5px; right:-5px; background:red; color:white; font-size:10px; padding:2px 6px; border-radius:50%; font-weight:700;}
+
+/* NEW: PROFILE PHOTO UPLOAD */
 .profile {display:flex; align-items:center; gap:8px; cursor:pointer; position:relative;}
+.profile-pic {position: relative; cursor: pointer;}
+.profile-pic img {border-radius:50%; width:40px; height:40px; border:2px solid #0F766E; object-fit: cover;}
+.profile-pic.edit-icon {position:absolute; bottom:0; right:0; background:#0F766E; color:white; border-radius:50%; width:16px; height:16px; font-size:10px; display:flex; align-items:center; justify-content:center;}
+#profilePhotoInput {display: none;}
+
 .dropdown {display:none; position:absolute; top:50px; right:0; background:white; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15); min-width:180px; z-index:100; border:1px solid #e5e7eb; padding:8px 0;}
 .dropdown.show {display:block;}
 .dropdown a {display:block; padding:12px 16px; color:#1e293b; text-decoration:none; font-weight:600; transition:0.2s; font-size:14px;}
@@ -56,6 +63,7 @@ input:focus, select:focus {border-color: #0F766E; outline: none;}
 .btn-danger {background: linear-gradient(90deg, #ef4444, #dc2626)!important;}
 .btn-success {background: linear-gradient(90deg, #22c55e, #16a34a)!important;}
 .btn-loading {background: #9ca3af!important; cursor: not-allowed;}
+.btn-small {padding:8px 16px; font-size:14px; width:auto; margin-top:0;}
 .notif {background: #dcfce7; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #22c55e; font-weight:600;}
 label {font-weight: 600; font-size: 14px; color: #374151;}
 
@@ -64,9 +72,20 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 .meter-bar {background:#e5e7eb; height:12px; border-radius:10px; overflow:hidden; margin-top:8px;}
 .meter-fill {background:linear-gradient(90deg, #22c55e, #0F766E); height:100%; transition:0.5s;}
 .suggestion {background:#fef3c7; padding:10px; border-radius:8px; margin-top:10px; font-size:14px; color:#92400e;}
+
+/* NEW: JOB CARDS */
+.job-list {margin-top:20px;}
+.job-card {border:2px solid #e5e7eb; border-radius:12px; padding:18px; margin-bottom:15px; transition:0.3s;}
+.job-card:hover {border-color:#0F766E; box-shadow:0 4px 12px rgba(15,118,110,0.1);}
+.job-header {display:flex; justify-content:space-between; align-items:start; gap:10px;}
+.job-header h3 {margin:0; color:#1e293b; font-size:18px;}
+.job-company {color:#0F766E; font-weight:700; font-size:14px; margin:5px 0;}
+.job-tags {display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;}
+.job-tag {background:#f0fdfa; color:#0F766E; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;}
+.applied {background:#dcfce7!important; color:#166534!important; cursor:not-allowed;}
 </style>
 </head>
-<body> <!-- CHANGE 3: body class remove chesam -->
+<body>
 
 <!-- 1. LOGIN PAGE -->
 <div class="login-container" id="loginPage">
@@ -115,7 +134,11 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
                 </div>
             </div>
             <div class="profile" onclick="toggleDropdown()">
-                <img src="https://i.pravatar.cc/40" style="border-radius:50%; width:40px; height:40px;">
+                <div class="profile-pic" onclick="document.getElementById('profilePhotoInput').click(); event.stopPropagation();">
+                    <img id="profileImg" src="https://i.pravatar.cc/40">
+                    <div class="edit-icon">✏️</div>
+                </div>
+                <input type="file" id="profilePhotoInput" accept="image/*" onchange="uploadProfilePhoto()">
                 <p style="margin:0; font-weight:700; font-size:14px;">Job Seeker ▼</p>
                 <div class="dropdown" id="profileDropdown">
                     <a href="#" onclick="alert('My Profile')">👤 My Profile</a>
@@ -168,11 +191,25 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 
         <button class="btn" id="saveBtn" onclick="saveProfile()">Save & Make Profile Live</button>
         <button class="btn btn-danger" onclick="resetProfile()">🗑️ Reset Profile Data</button>
+
+        <!-- NEW: JOB APPLY SECTION -->
+        <h3 style="margin-top:30px;">🎯 Recommended Jobs</h3>
+        <div class="job-list" id="jobList"></div>
+
     </div>
 </div>
 
 <script>
 let resumeScore = 0;
+let appliedJobs = JSON.parse(localStorage.getItem('appliedJobs') || '[]');
+
+// JOBS DATA
+const jobs = [
+    {id:1, title:"Senior Java Developer", company:"TCS", location:"Hyderabad", type:"WFO", skills:"Java, Spring Boot"},
+    {id:2, title:"React Frontend Engineer", company:"Infosys", location:"Bangalore", type:"Hybrid", skills:"React, JS, CSS"},
+    {id:3, title:"IT Support Specialist", company:"Wipro", location:"Visakhapatnam", type:"WFO", skills:"J2EE, ATS, Support"},
+    {id:4, title:"Full Stack Developer", company:"HCL", location:"Remote", type:"Remote", skills:"Node.js, React, MongoDB"}
+];
 
 // CHANGE 4: IIFE - Page render avvakunda mundhe decide chesi pedthundi
 (function initAuth(){
@@ -190,7 +227,7 @@ let resumeScore = 0;
         document.getElementById('dashboard').style.display = 'none';
         document.body.classList.add('login-bg');
     }
-    document.body.classList.add('ready'); // ippudu page ni chupinchu
+    document.body.classList.add('ready');
 })();
 
 function router(){
@@ -203,6 +240,7 @@ function router(){
         document.body.classList.remove('login-bg');
         loadProfile();
         updateStats();
+        renderJobs(); // jobs load
     } else {
         window.location.hash = '#login';
         document.getElementById('loginPage').style.display = 'flex';
@@ -211,7 +249,55 @@ function router(){
     }
 }
 
-window.addEventListener('hashchange', router); // load event teesesaam
+window.addEventListener('hashchange', router);
+
+// NEW: PROFILE PHOTO UPLOAD
+function uploadProfilePhoto(){
+    let file = document.getElementById('profilePhotoInput').files[0];
+    if(!file) return;
+    let reader = new FileReader();
+    reader.onload = function(e){
+        document.getElementById('profileImg').src = e.target.result;
+        localStorage.setItem('profilePhoto', e.target.result);
+        alert('✅ Profile photo updated!');
+    }
+    reader.readAsDataURL(file);
+}
+
+// NEW: RENDER JOBS
+function renderJobs(){
+    let html = '';
+    jobs.forEach(job=>{
+        let isApplied = appliedJobs.includes(job.id);
+        html += `
+        <div class="job-card">
+            <div class="job-header">
+                <div>
+                    <h3>${job.title}</h3>
+                    <p class="job-company">${job.company} • ${job.location}</p>
+                </div>
+                <button class="btn btn-small ${isApplied?'applied':''}" onclick="applyJob(${job.id})" ${isApplied?'disabled':''}>
+                    ${isApplied?'✓ Applied':'Apply Now'}
+                </button>
+            </div>
+            <div class="job-tags">
+                <span class="job-tag">${job.type}</span>
+                <span class="job-tag">${job.skills}</span>
+            </div>
+        </div>`;
+    });
+    document.getElementById('jobList').innerHTML = html;
+}
+
+// NEW: APPLY JOB
+function applyJob(jobId){
+    if(!appliedJobs.includes(jobId)){
+        appliedJobs.push(jobId);
+        localStorage.setItem('appliedJobs', JSON.stringify(appliedJobs));
+        alert('✅ Job Applied Successfully! Recruiter ki notification vellindi.');
+        renderJobs();
+    }
+}
 
 function togglePass(){
     let p = document.getElementById('password');
@@ -246,7 +332,7 @@ function calculateResumeScore(){
     if(document.getElementById('name').value) score+=15; else suggestions.push("Add your Full Name");
     if(document.getElementById('designation').value) score+=15; else suggestions.push("Add Current Designation");
     if(document.getElementById('skills').value && document.getElementById('skills').value.split(',').length > 3) score+=25; else suggestions.push("Add at least 4 Key Skills");
-    if(document.getElementById('exp').value) score+=15; else suggestions.push("Add Years of Experience");
+    if(document.getElementById('exp')..value) score+=15; else suggestions.push("Add Years of Experience");
     if(document.getElementById('location').value) score+=15; else suggestions.push("Select Preferred Location");
     if(document.getElementById('workMode').value) score+=15; else suggestions.push("Select Work Mode");
 
@@ -281,6 +367,11 @@ function updateStats() {
     let views = localStorage.getItem("profileViews") || 0;
     let profile = localStorage.getItem("talentiqProfile");
     document.getElementById('viewCount').innerText = views;
+
+    // load profile photo
+    let savedPhoto = localStorage.getItem('profilePhoto');
+    if(savedPhoto) document.getElementById('profileImg').src = savedPhoto;
+
     if(profile && views > 0) {
         document.getElementById('notifications').innerHTML = `<div class="notif">🔔 ${views} Recruiter(s) viewed your profile in last 24 hours</div>`;
     } else {
@@ -330,6 +421,8 @@ function resetProfile() {
     if(confirm("Are you sure? All profile data will be deleted.")) {
         localStorage.removeItem("talentiqProfile");
         localStorage.removeItem("profileViews");
+        localStorage.removeItem('appliedJobs');
+        localStorage.removeItem('profilePhoto');
         alert("Profile Reset Successfully!");
         window.location.reload();
     }
