@@ -39,7 +39,7 @@ body.ready {visibility: visible;}
 .bell{position:relative; cursor:pointer; font-size:22px;}
 .bell-badge {position:absolute; top:-5px; right:-5px; background:red; color:white; font-size:10px; padding:2px 6px; border-radius:50%; font-weight:700;}
 
-/* NEW: PROFILE PHOTO UPLOAD */
+/* PROFILE PHOTO UPLOAD */
 .profile {display:flex; align-items:center; gap:8px; cursor:pointer; position:relative;}
 .profile-pic {position: relative; cursor: pointer;}
 .profile-pic img {border-radius:50%; width:40px; height:40px; border:2px solid #0F766E; object-fit: cover;}
@@ -73,7 +73,7 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 .meter-fill {background:linear-gradient(90deg, #22c55e, #0F766E); height:100%; transition:0.5s;}
 .suggestion {background:#fef3c7; padding:10px; border-radius:8px; margin-top:10px; font-size:14px; color:#92400e;}
 
-/* NEW: JOB CARDS */
+/* JOB CARDS */
 .job-list {margin-top:20px;}
 .job-card {border:2px solid #e5e7eb; border-radius:12px; padding:18px; margin-bottom:15px; transition:0.3s;}
 .job-card:hover {border-color:#0F766E; box-shadow:0 4px 12px rgba(15,118,110,0.1);}
@@ -192,7 +192,7 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
         <button class="btn" id="saveBtn" onclick="saveProfile()">Save & Make Profile Live</button>
         <button class="btn btn-danger" onclick="resetProfile()">🗑️ Reset Profile Data</button>
 
-        <!-- NEW: JOB APPLY SECTION -->
+        <!-- JOB APPLY SECTION -->
         <h3 style="margin-top:30px;">🎯 Recommended Jobs</h3>
         <div class="job-list" id="jobList"></div>
 
@@ -211,7 +211,7 @@ const jobs = [
     {id:4, title:"Full Stack Developer", company:"HCL", location:"Remote", type:"Remote", skills:"Node.js, React, MongoDB"}
 ];
 
-// CHANGE 4: IIFE - Page render avvakunda mundhe decide chesi pedthundi
+// IIFE - Page render avvakunda mundhe decide
 (function initAuth(){
     let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
     let hash = window.location.hash;
@@ -240,7 +240,7 @@ function router(){
         document.body.classList.remove('login-bg');
         loadProfile();
         updateStats();
-        renderJobs(); // jobs load
+        renderJobs();
     } else {
         window.location.hash = '#login';
         document.getElementById('loginPage').style.display = 'flex';
@@ -251,7 +251,7 @@ function router(){
 
 window.addEventListener('hashchange', router);
 
-// NEW: PROFILE PHOTO UPLOAD
+// PROFILE PHOTO UPLOAD
 function uploadProfilePhoto(){
     let file = document.getElementById('profilePhotoInput').files[0];
     if(!file) return;
@@ -264,7 +264,7 @@ function uploadProfilePhoto(){
     reader.readAsDataURL(file);
 }
 
-// NEW: RENDER JOBS
+// RENDER JOBS
 function renderJobs(){
     let html = '';
     jobs.forEach(job=>{
@@ -289,7 +289,7 @@ function renderJobs(){
     document.getElementById('jobList').innerHTML = html;
 }
 
-// NEW: APPLY JOB
+// APPLY JOB
 function applyJob(jobId){
     if(!appliedJobs.includes(jobId)){
         appliedJobs.push(jobId);
@@ -321,7 +321,7 @@ function logout(){
 }
 
 function toggleDropdown() { document.getElementById("profileDropdown").classList.toggle("show"); }
-function toggleBell() { document.getElementById("bellDropdown").classList.toggle("show"); }
+function toggleBell() { document.getElementById("bellDropdown").classList.remove('show'); }
 window.onclick = function(event) {
   if (!event.target.closest('.profile')) document.getElementById("profileDropdown").classList.remove('show');
   if (!event.target.closest('.bell')) document.getElementById("bellDropdown").classList.remove('show');
@@ -332,7 +332,7 @@ function calculateResumeScore(){
     if(document.getElementById('name').value) score+=15; else suggestions.push("Add your Full Name");
     if(document.getElementById('designation').value) score+=15; else suggestions.push("Add Current Designation");
     if(document.getElementById('skills').value && document.getElementById('skills').value.split(',').length > 3) score+=25; else suggestions.push("Add at least 4 Key Skills");
-    if(document.getElementById('exp')..value) score+=15; else suggestions.push("Add Years of Experience");
+    if(document.getElementById('exp').value) score+=15; else suggestions.push("Add Years of Experience"); // FIXED TYPO
     if(document.getElementById('location').value) score+=15; else suggestions.push("Select Preferred Location");
     if(document.getElementById('workMode').value) score+=15; else suggestions.push("Select Work Mode");
 
