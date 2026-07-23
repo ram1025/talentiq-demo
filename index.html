@@ -6,12 +6,13 @@
 <title>TALENTIQ - AI Job Matching</title>
 <style>
 * {box-sizing: border-box;}
-body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 0; margin:0;}
+body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 0; margin:0; visibility: hidden;} /* CHANGE 1: start lo hide */
 body.login-bg {background: linear-gradient(135deg, #0F766E 0%, #1E3A8A 100%); min-height: 100vh;}
+body.ready {visibility: visible;} /* CHANGE 1: check ayyaka show */
 .hidden{display:none!important}
 
 /* LOGIN PAGE */
-.login-container{display:flex; justify-content:center; align-items:center; min-height:100vh; width:100%; padding:20px;}
+.login-container{display:none; justify-content:center; align-items:center; min-height:100vh; width:100%; padding:20px;} /* CHANGE 2: default none */
 .login-box{background:white; padding:40px 30px; border-radius:16px; width:100%; max-width:400px; box-shadow:0 20px 40px rgba(0,0,0,0.2);}
 .login-box h1{text-align:center; color:#0F766E; margin-bottom:20px; font-size:28px;}
 .input-group{margin-bottom:18px; position:relative;}
@@ -65,7 +66,7 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 .suggestion {background:#fef3c7; padding:10px; border-radius:8px; margin-top:10px; font-size:14px; color:#92400e;}
 </style>
 </head>
-<body>
+<body> <!-- CHANGE 3: body class remove chesam -->
 
 <!-- 1. LOGIN PAGE -->
 <div class="login-container" id="loginPage">
@@ -173,16 +174,28 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 <script>
 let resumeScore = 0;
 
-// ROUTER FUNCTION - URL HASH base - ONLY THIS CHANGED
+// CHANGE 4: IIFE - Page render avvakunda mundhe decide chesi pedthundi
+(function initAuth(){
+    let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
+    let hash = window.location.hash;
+
+    if(isLoggedIn){
+        if(hash!== '#dashboard') window.location.replace('#dashboard');
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.body.classList.remove('login-bg');
+    } else {
+        if(hash!== '#login') window.location.replace('#login');
+        document.getElementById('loginPage').style.display = 'flex';
+        document.getElementById('dashboard').style.display = 'none';
+        document.body.classList.add('login-bg');
+    }
+    document.body.classList.add('ready'); // ippudu page ni chupinchu
+})();
+
 function router(){
     let hash = window.location.hash;
     let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
-
-    // KEY FIX: Logged in unna, hash lekapothe direct dashboard ki pampu
-    if(isLoggedIn &&!hash){
-        window.location.hash = '#dashboard';
-        return;
-    }
 
     if(hash === '#dashboard' && isLoggedIn){
         document.getElementById('loginPage').style.display = 'none';
@@ -198,10 +211,8 @@ function router(){
     }
 }
 
-window.addEventListener('load', router);
-window.addEventListener('hashchange', router);
+window.addEventListener('hashchange', router); // load event teesesaam
 
-//... rest of your JS same as before...
 function togglePass(){
     let p = document.getElementById('password');
     p.type = p.type === 'password'? 'text' : 'password';
