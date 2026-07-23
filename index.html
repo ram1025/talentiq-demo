@@ -217,29 +217,11 @@ const jobs = [
     {id:4, title:"Full Stack Developer", company:"HCL", location:"Remote", type:"Remote", skills:"Node.js, React, MongoDB"}
 ];
 
-// CHANGE 1: Login status check ni strict chesam
+// FIX 1: Hash change cheyadam aapesam. Reload problem solve
 (function initAuth(){
-    let isLoggedIn = localStorage.getItem('talentiq_loggedin');
-    let hash = window.location.hash;
-
-    if(isLoggedIn === 'true'){
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        document.body.classList.remove('login-bg');
-        if(hash!== '#dashboard') window.location.hash = '#dashboard';
-    } else {
-        document.getElementById('loginPage').style.display = 'flex';
-        document.getElementById('dashboard').style.display = 'none';
-        document.body.classList.add('login-bg');
-        if(hash!== '#login') window.location.hash = '#login';
-    }
-    document.body.classList.add('ready');
-})();
-
-function router(){
-    let hash = window.location.hash;
     let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
-    if(hash === '#dashboard' && isLoggedIn){
+
+    if(isLoggedIn){
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         document.body.classList.remove('login-bg');
@@ -247,14 +229,26 @@ function router(){
         updateStats();
         renderJobs();
     } else {
-        localStorage.removeItem('talentiq_loggedin'); // CHANGE 2: force logout if hash mismatch
-        window.location.hash = '#login';
+        document.getElementById('loginPage').style.display = 'flex';
+        document.getElementById('dashboard').style.display = 'none';
+        document.body.classList.add('login-bg');
+    }
+    document.body.classList.add('ready');
+})();
+
+// FIX 2: router lo force logout teesesa
+function router(){
+    let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
+    if(isLoggedIn){
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.body.classList.remove('login-bg');
+    } else {
         document.getElementById('loginPage').style.display = 'flex';
         document.getElementById('dashboard').style.display = 'none';
         document.body.classList.add('login-bg');
     }
 }
-window.addEventListener('hashchange', router);
 
 function openProfileModal(){
     document.getElementById('profileModal').classList.add('show');
@@ -278,7 +272,7 @@ function saveModalProfile(){
     profile.designation = document.getElementById('modalDesignationInput').value;
     profile.skills = document.getElementById('modalSkillsInput').value;
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
-    localStorage.setItem("talentiq_loggedin", "true"); // CHANGE 3: login status ni malli set cheyi
+    localStorage.setItem("talentiq_loggedin", "true");
     alert('✅ Profile Updated Successfully!');
     loadProfile();
     closeProfileModal();
@@ -348,14 +342,12 @@ function login(){
     let pass = document.getElementById('password').value;
     if(email === 'candidate@talentiq.com' && pass === 'candidate123'){
         localStorage.setItem('talentiq_loggedin', 'true');
-        window.location.hash = '#dashboard';
-        router();
+        initAuth(); // hash change cheyadam ledu
     } else { alert('Invalid Email or Password'); }
 }
 function logout(){
     localStorage.removeItem('talentiq_loggedin');
-    window.location.hash = '#login';
-    router();
+    initAuth();
     document.getElementById('email').value = '';
     document.getElementById('password').value = '';
 }
@@ -440,7 +432,7 @@ function saveProfile() {
         phone: document.getElementById('modalPhoneInput')?.value || ''
     };
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
-    localStorage.setItem("talentiq_loggedin", "true"); // IMPORTANT: login ni maintain cheyi
+    localStorage.setItem("talentiq_loggedin", "true");
     let views = parseInt(localStorage.getItem("profileViews") || 0) + 1;
     localStorage.setItem("profileViews", views);
     setTimeout(() => {
@@ -456,8 +448,7 @@ function resetProfile() {
     if(confirm("Are you sure? All profile data will be deleted.")) {
         localStorage.clear();
         alert("Profile Reset Successfully!");
-        window.location.hash = '#login';
-        window.location.reload();
+        initAuth();
     }
 }
 
@@ -467,4 +458,4 @@ function resetProfile() {
 });
 </script>
 </body>
-</html>
+    </html>
