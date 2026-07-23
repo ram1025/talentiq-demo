@@ -9,7 +9,6 @@
 body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 0; margin:0; visibility: hidden;}
 body.login-bg {background: linear-gradient(135deg, #0F766E 0%, #1E3A8A 100%); min-height: 100vh;}
 body.ready {visibility: visible;}
-.hidden{display:none!important}
 
 /* LOGIN PAGE */
 .login-container{display:none; justify-content:center; align-items:center; min-height:100vh; width:100%; padding:20px;}
@@ -20,7 +19,7 @@ body.ready {visibility: visible;}
 .input-group input{width:100%; padding:12px 40px 12px 12px; border:2px solid #e5e7eb; border-radius:8px; font-size:15px;}
 .eye-icon{position:absolute; right:12px; top:38px; cursor:pointer; font-size:18px; color:gray;}
 .login-btn{width:100%; background:linear-gradient(90deg, #0F766E, #1E3A8A); color:white; padding:14px; border:none; border-radius:8px; font-weight:700; font-size:16px; cursor:pointer; margin-bottom:10px;}
-.forgot-btn{background:transparent; border:none; color:#0F766E; font-weight:600; cursor:pointer; width:100%; padding:8px;} /* NEW */
+.forgot-btn{background:transparent; border:none; color:#0F766E; font-weight:600; cursor:pointer; width:100%; padding:8px;}
 .demo-box{background:#f0fdfa; border:1px dashed #0F766E; border-radius:8px; padding:12px; margin-top:20px; text-align:center; font-size:13px;}
 
 /* DASHBOARD */
@@ -40,9 +39,10 @@ body.ready {visibility: visible;}
 .bell{position:relative; cursor:pointer; font-size:22px;}
 .bell-badge {position:absolute; top:-5px; right:-5px; background:red; color:white; font-size:10px; padding:2px 6px; border-radius:50%; font-weight:700;}
 
-/* PROFILE PHOTO UPLOAD */
+/* PROFILE */
 .profile {display:flex; align-items:center; gap:8px; position:relative;}
-.profile-name {cursor:pointer; display:flex; align-items:center; gap:5px;} /* FIX 1 */
+.profile-name {cursor:pointer; display:flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px;}
+.profile-name:hover {background:#f1f5f9;}
 .profile-pic {position: relative; cursor: pointer;}
 .profile-pic img {border-radius:50%; width:40px; height:40px; border:2px solid #0F766E; object-fit: cover;}
 .profile-pic.edit-icon {position:absolute; bottom:0; right:0; background:#0F766E; color:white; border-radius:50%; width:16px; height:16px; font-size:10px; display:flex; align-items:center; justify-content:center;}
@@ -85,10 +85,10 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 .job-tag {background:#f0fdfa; color:#0F766E; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;}
 .applied {background:#dcfce7!important; color:#166534!important; cursor:not-allowed;}
 
-/* MODAL - NEW */
+/* MODAL */
 .modal {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999; justify-content:center; align-items:center;}
 .modal.show {display:flex;}
-.modal-content {background:white; padding:30px; border-radius:16px; max-width:500px; width:90%;}
+.modal-content {background:white; padding:30px; border-radius:16px; max-width:500px; width:90%; max-height:90vh; overflow-y:auto;}
 .modal-content h3 {margin-top:0; color:#0F766E;}
 .modal-pic {display:flex; flex-direction:column; align-items:center; gap:15px; margin:20px 0;}
 .modal-pic img {width:100px; height:100px; border-radius:50%; border:3px solid #0F766E; object-fit:cover;}
@@ -110,7 +110,7 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
             <span class="eye-icon" onclick="togglePass()">👁️</span>
         </div>
         <button class="login-btn" onclick="login()">Login</button>
-        <button class="forgot-btn" onclick="alert('Password reset link will be sent to your email')">Forgot Password?</button> <!-- NEW -->
+        <button class="forgot-btn" onclick="alert('Password reset link will be sent to your email')">Forgot Password?</button>
         <div class="demo-box">
             <p><b>Demo Login</b></p>
             <p>Email: <b>candidate@talentiq.com</b></p>
@@ -149,9 +149,9 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
                     <div class="edit-icon">✏️</div>
                 </div>
                 <input type="file" id="profilePhotoInput" accept="image/*" onchange="uploadProfilePhoto()">
-                <div class="profile-name" onclick="toggleDropdown()">Job Seeker ▼</div> <!-- FIX 1: click only on name -->
+                <div class="profile-name" onclick="toggleDropdown()">Job Seeker ▼</div> <!-- ONLY THIS HAS CLICK -->
                 <div class="dropdown" id="profileDropdown">
-                    <a href="#" onclick="openProfileModal()">👤 My Profile</a> <!-- FIX 2 -->
+                    <a href="#" onclick="openProfileModal()">👤 My Profile</a>
                     <a href="#" onclick="alert('Settings page coming soon')">⚙️ Settings</a>
                     <hr>
                     <a href="#" style="color:#ef4444;" onclick="logout()">🚪 Logout</a>
@@ -208,7 +208,7 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
     </div>
 </div>
 
-<!-- NEW: PROFILE MODAL -->
+<!-- PROFILE MODAL WITH EDIT -->
 <div class="modal" id="profileModal">
     <div class="modal-content">
         <h3>👤 My Profile</h3>
@@ -217,9 +217,12 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
             <input type="file" id="modalProfileInput" accept="image/*" onchange="uploadModalPhoto()">
             <button class="btn btn-small" onclick="document.getElementById('modalProfileInput').click()">Change Photo</button>
         </div>
-        <p><b>Name:</b> <span id="modalName">-</span></p>
-        <p><b>Designation:</b> <span id="modalDesignation">-</span></p>
-        <p><b>Skills:</b> <span id="modalSkills">-</span></p>
+        <label>Full Name</label><input type="text" id="modalNameInput">
+        <label>Email</label><input type="email" id="modalEmailInput" placeholder="your@email.com">
+        <label>Phone</label><input type="tel" id="modalPhoneInput" placeholder="+91 9876543210">
+        <label>Designation</label><input type="text" id="modalDesignationInput">
+        <label>Skills</label><input type="text" id="modalSkillsInput">
+        <button class="btn btn-success" onclick="saveModalProfile()">💾 Save Profile</button>
         <button class="btn" onclick="closeProfileModal()">Close</button>
     </div>
 </div>
@@ -274,17 +277,32 @@ function router(){
 
 window.addEventListener('hashchange', router);
 
-// NEW: PROFILE MODAL FUNCTIONS
+// PROFILE MODAL FUNCTIONS
 function openProfileModal(){
     document.getElementById('profileModal').classList.add('show');
-    document.getElementById('modalName').innerText = document.getElementById('name').value || '-';
-    document.getElementById('modalDesignation').innerText = document.getElementById('designation').value || '-';
-    document.getElementById('modalSkills').innerText = document.getElementById('skills').value || '-';
+    let profile = JSON.parse(localStorage.getItem("talentiqProfile") || '{}');
+    document.getElementById('modalNameInput').value = profile.name || '';
+    document.getElementById('modalEmailInput').value = profile.email || '';
+    document.getElementById('modalPhoneInput').value = profile.phone || '';
+    document.getElementById('modalDesignationInput').value = profile.designation || '';
+    document.getElementById('modalSkillsInput').value = profile.skills || '';
     document.getElementById('modalProfileImg').src = document.getElementById('profileImg').src;
-    toggleDropdown(); // close dropdown
+    toggleDropdown();
 }
 function closeProfileModal(){
     document.getElementById('profileModal').classList.remove('show');
+}
+function saveModalProfile(){
+    let profile = JSON.parse(localStorage.getItem("talentiqProfile") || '{}');
+    profile.name = document.getElementById('modalNameInput').value;
+    profile.email = document.getElementById('modalEmailInput').value;
+    profile.phone = document.getElementById('modalPhoneInput').value;
+    profile.designation = document.getElementById('modalDesignationInput').value;
+    profile.skills = document.getElementById('modalSkillsInput').value;
+    localStorage.setItem("talentiqProfile", JSON.stringify(profile));
+    alert('✅ Profile Updated Successfully!');
+    loadProfile();
+    closeProfileModal();
 }
 function uploadModalPhoto(){
     let file = document.getElementById('modalProfileInput').files[0];
@@ -369,7 +387,7 @@ function toggleBell() { document.getElementById("bellDropdown").classList.toggle
 window.onclick = function(event) {
   if (!event.target.closest('.profile')) document.getElementById("profileDropdown").classList.remove('show');
   if (!event.target.closest('.bell')) document.getElementById("bellDropdown").classList.remove('show');
-  if (event.target.id === 'profileModal') closeProfileModal(); // click outside to close
+  if (event.target.id === 'profileModal') closeProfileModal();
 }
 
 function calculateResumeScore(){
@@ -428,7 +446,7 @@ function loadProfile(){
     if(profile.designation) document.getElementById('designation').value = profile.designation;
     if(profile.jobType) document.getElementById('jobType').value = profile.jobType;
     if(profile.skills) document.getElementById('skills').value = profile.skills;
-    if(profile.location) document.getElementById('location').value = profile.location;
+    if(profile.location) document.getElementById('location')..value = profile.location;
     if(profile.exp) document.getElementById('exp').value = profile.exp;
     if(profile.workMode) document.getElementById('workMode').value = profile.workMode;
     calculateResumeScore();
@@ -441,7 +459,9 @@ function saveProfile() {
         name: document.getElementById('name').value, designation: document.getElementById('designation').value,
         jobType: document.getElementById('jobType').value, skills: document.getElementById('skills').value,
         location: document.getElementById('location').value, exp: document.getElementById('exp').value,
-        workMode: document.getElementById('workMode').value
+        workMode: document.getElementById('workMode').value,
+        email: document.getElementById('modalEmailInput')?.value || '',
+        phone: document.getElementById('modalPhoneInput')?.value || ''
     };
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
     let views = parseInt(localStorage.getItem("profileViews") || 0) + 1;
