@@ -5,26 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TALENTIQ - AI Job Matching</title>
 <style>
-body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 20px;}
-.talent-banner {background: linear-gradient(90deg, #0F766E 0%, #1E3A8A 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 8px 20px rgba(15, 118, 110, 0.2);}
+body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 0; margin:0;}
+.hidden{display:none!important}
+
+/* LOGIN PAGE */
+.login-container{display:flex; justify-content:center; align-items:center; min-height:100vh; background: linear-gradient(135deg, #0F766E 0%, #1E3A8A 100%);}
+.login-box{background:white; padding:40px 30px; border-radius:16px; width:90%; max-width:400px; box-shadow:0 20px 40px rgba(0,0,0,0.2);}
+.login-box h1{text-align:center; color:#0F766E; margin-bottom:20px; font-size:28px;}
+.input-group{margin-bottom:18px; position:relative;}
+.input-group label{font-weight:700; color:#1e293b; font-size:14px; display:block; margin-bottom:6px;}
+.input-group input{width:100%; padding:12px 40px 12px 12px; border:2px solid #e5e7eb; border-radius:8px; font-size:15px;}
+.eye-icon{position:absolute; right:12px; top:38px; cursor:pointer; font-size:18px; color:gray;}
+.login-btn{width:100%; background:linear-gradient(90deg, #0F766E, #1E3A8A); color:white; padding:14px; border:none; border-radius:8px; font-weight:700; font-size:16px; cursor:pointer;}
+.demo-box{background:#f0fdfa; border:1px dashed #0F766E; border-radius:8px; padding:12px; margin-top:20px; text-align:center; font-size:13px;}
+
+/* DASHBOARD */
+.talent-banner {background: linear-gradient(90deg, #0F766E 0%, #1E3A8A 100%); color: white; padding: 30px; border-radius: 0 0 16px 16px; margin-bottom: 24px; box-shadow: 0 8px 20px rgba(15, 118, 110, 0.2);}
 .talent-banner h1 {margin:0; font-size:28px; font-weight:700;}
-.talent-banner p {margin:5px 0 0 0; opacity:0.9; font-size:16px;}
-.stats-grid {display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px;}
-@media(max-width: 768px){.stats-grid{ grid-template-columns: 1fr; }.header-right {display:none!important;}}
+.stats-grid {display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px;}
+@media(max-width: 768px){.stats-grid{ grid-template-columns: 1fr; }}
 .stat-card {background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);}
 .stat-card h3 { margin: 0; font-size: 14px; opacity: 0.9; }
 .stat-card p { margin: 5px 0 0 0; font-size: 24px; font-weight: bold; }
-.header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
+
+.header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin:20px;}
 .header-left {display:flex; align-items:center; gap:12px;}
 .logo {background:linear-gradient(135deg, #0F766E, #1E3A8A); color:white; padding:8px 12px; border-radius:10px; font-weight:800; font-size:18px;}
 .header-right {display:flex; align-items:center; gap:20px; position:relative;}
+.bell{position:relative; cursor:pointer; font-size:22px;}
+.bell-badge {position:absolute; top:-5px; right:-5px; background:red; color:white; font-size:10px; padding:2px 6px; border-radius:50%; font-weight:700;}
 .profile {display:flex; align-items:center; gap:8px; cursor:pointer; position:relative;}
-.dropdown {display:none; position:absolute; top:50px; right:0; background:white; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15); min-width:180px; z-index:100; border:1px solid #e5e7eb;}
+.dropdown {display:none; position:absolute; top:50px; right:0; background:white; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15); min-width:180px; z-index:100; border:1px solid #e5e7eb; padding:8px 0;}
 .dropdown.show {display:block;}
-.dropdown a {display:block; padding:12px 16px; color:#1e293b; text-decoration:none; font-weight:600; transition:0.2s;}
+.dropdown a {display:block; padding:12px 16px; color:#1e293b; text-decoration:none; font-weight:600; transition:0.2s; font-size:14px;}
 .dropdown a:hover {background:#f1f5f9;}
 .dropdown hr {margin:5px 0; border:none; border-top:1px solid #e5e7eb;}
-.container {max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
+
+.container {max-width: 700px; margin: 20px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
 h2 {color: #1e293b; margin-bottom: 10px;}
 .ai-badge {background: #fef3c7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #92400e; font-weight:700;}
 .free-badge {background: #dcfce7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #166534; font-weight:700;}
@@ -32,90 +49,214 @@ input, select {width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5
 input:focus, select:focus {border-color: #0F766E; outline: none;}
 .btn {background: linear-gradient(90deg, #0F766E, #1E3A8A); color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top:10px;}
 .btn:hover {background: linear-gradient(90deg, #0d5f5a, #162e6e); transform: translateY(-2px);}
-.btn-danger {background: linear-gradient(90deg, #ef4444, #dc2626)!important;} /* RED RESET BUTTON */
+.btn-danger {background: linear-gradient(90deg, #ef4444, #dc2626)!important;}
 .btn-success {background: linear-gradient(90deg, #22c55e, #16a34a)!important;}
 .btn-loading {background: #9ca3af!important; cursor: not-allowed;}
 .notif {background: #dcfce7; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #22c55e; font-weight:600;}
 label {font-weight: 600; font-size: 14px; color: #374151;}
+
+/* RESUME METER */
+.meter-box {background:#f0fdfa; border:2px solid #0F766E; padding:15px; border-radius:12px; margin:15px 0;}
+.meter-bar {background:#e5e7eb; height:12px; border-radius:10px; overflow:hidden; margin-top:8px;}
+.meter-fill {background:linear-gradient(90deg, #22c55e, #0F766E); height:100%; transition:0.5s;}
+.suggestion {background:#fef3c7; padding:10px; border-radius:8px; margin-top:10px; font-size:14px; color:#92400e;}
 </style>
 </head>
 <body>
 
-<div class="talent-banner">
-  <h1>TalentIQ Suite 🤖</h1>
-  <p>AI-Powered Candidate Sourcing Platform - <span class="free-badge">100% FREE</span></p>
-  <div class="stats-grid">
-    <div class="stat-card">
-      <h3>Profile Views</h3>
-      <p id="viewCount">0</p>
-    </div>
-    <div class="stat-card">
-      <h3>Match Score</h3>
-      <p>92%</p>
-    </div>
-  </div>
-</div>
-
-<div class="header">
-    <div class="header-left">
-        <div class="logo">TI</div>
-        <div>
-            <h1 style="margin:0; color: #1e293b; font-size:20px;">TalentIQ Suite</h1>
-            <p style="margin:0; font-size:12px; color:gray;">For Job Seekers</p>
+<!-- 1. LOGIN PAGE -->
+<div class="login-container" id="loginPage">
+    <div class="login-box">
+        <h1>TalentIQ 🤖</h1>
+        <div class="input-group">
+            <label>Email ID</label>
+            <input type="email" id="email" placeholder="Enter Email ID">
+        </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter Password">
+            <span class="eye-icon" onclick="togglePass()">👁️</span>
+        </div>
+        <button class="login-btn" onclick="login()">Login</button>
+        <div class="demo-box">
+            <p><b>Demo Login</b></p>
+            <p>Email: <b>candidate@talentiq.com</b></p>
+            <p>Password: <b>candidate123</b></p>
         </div>
     </div>
-    <div class="header-right">
-        <div class="profile" onclick="toggleDropdown()">
-            <img src="https://i.pravatar.cc/40" style="border-radius:50%; width:40px; height:40px;">
-            <div><p style="margin:0; font-weight:700; font-size:14px;">Job Seeker ▼</p></div>
-            <div class="dropdown" id="profileDropdown">
-                <a href="#" onclick="alert('My Profile')">👤 My Profile</a>
-                <a href="#" onclick="alert('Settings')">⚙️ Settings</a>
-                <hr>
-                <a href="#" style="color:#ef4444;" onclick="alert('Logged Out')">🚪 Logout</a>
+</div>
+
+<!-- 2. DASHBOARD -->
+<div id="dashboard" class="hidden">
+    <div class="talent-banner">
+      <h1>TalentIQ Suite 🤖</h1>
+      <p>AI-Powered Candidate Platform - <span class="free-badge">100% FREE</span></p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Profile Views</h3>
+          <p id="viewCount">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Resume Score</h3>
+          <p id="resumeScore">0%</p>
+        </div>
+        <div class="stat-card">
+          <h3>Job Matches</h3>
+          <p id="jobMatches">0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">TI</div>
+            <div>
+                <h1 style="margin:0; color: #1e293b; font-size:20px;">TalentIQ Suite</h1>
+                <p style="margin:0; font-size:12px; color:gray;">For Job Seekers</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="bell" onclick="toggleBell()">
+                🔔 <span class="bell-badge">2</span>
+                <div class="dropdown" id="bellDropdown">
+                    <a href="#">New job match: Java Developer</a>
+                    <a href="#">Your profile got 3 views</a>
+                </div>
+            </div>
+            <div class="profile" onclick="toggleDropdown()">
+                <img src="https://i.pravatar.cc/40" style="border-radius:50%; width:40px; height:40px;">
+                <div><p style="margin:0; font-weight:700; font-size:14px;">Job Seeker ▼</p></div>
+                <div class="dropdown" id="profileDropdown">
+                    <a href="#" onclick="alert('My Profile')">👤 My Profile</a>
+                    <a href="#" onclick="alert('Settings')">⚙️ Settings</a>
+                    <hr>
+                    <a href="#" style="color:#ef4444;" onclick="logout()">🚪 Logout</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container">
-    <h2>TALENTIQ <span class="ai-badge">AI Powered</span> <span class="free-badge">FREE</span></h2>
-    <div id="notifications"></div>
+    <div class="container">
+        <h2>TALENTIQ <span class="ai-badge">AI Powered</span> <span class="free-badge">FREE</span></h2>
+        <div id="notifications"></div>
 
-    <h3>Step 1: Upload Resume <span class="ai-badge">Auto Fill ON</span></h3>
-    <label>Upload Resume</label>
-    <input type="file" id="resumeFile" accept=".pdf,.doc,.docx,.txt" onchange="autoFillResume()">
-    <p style="font-size:12px; color:gray; margin-top:-5px;">Upload cheste AI automatic ga kindi fields fill chesthundi</p>
+        <!-- RESUME METER -->
+        <div class="meter-box">
+            <h3>📊 Resume Strength Meter</h3>
+            <div class="meter-bar"><div class="meter-fill" id="meterFill" style="width:0%"></div></div>
+            <p style="font-size:13px; margin-top:5px;">Score: <b id="meterScore">0%</b></p>
+            <div id="suggestions"></div>
+        </div>
 
-    <h3 style="margin-top:20px;">Step 2: Verify & Save</h3>
-    <label>Full Name</label><input type="text" id="name" placeholder="Full Name">
-    <label>Current Designation</label><input type="text" id="designation" placeholder="e.g: Senior Recruiter">
-    <label>Job Status / Notice Period</label>
-    <select id="jobType">
-        <option value="">Select Notice Period</option>
-        <option value="Immediately">Immediately Available</option>
-        <option value="15 Days">15 Days Notice</option>
-        <option value="30 Days">30 Days Notice</option>
-        <option value="60 Days">60 Days Notice</option>
-        <option value="Searching">Actively Searching</option>
-    </select>
-    <label>Key Skills</label><input type="text" id="skills" placeholder="Java, React, Recruitment, ATS - comma tho separate chey">
-    <label>Location</label><input type="text" id="location" placeholder="Visakhapatnam">
-    <label>Total Experience</label><input type="number" id="exp" placeholder="Years">
+        <h3>Step 1: Upload Resume <span class="ai-badge">Auto Fill ON</span></h3>
+        <label>Upload Resume</label>
+        <input type="file" id="resumeFile" accept=".pdf,.doc,.docx,.txt" onchange="autoFillResume()">
+        <p style="font-size:12px; color:gray; margin-top:-5px;">Upload cheste AI automatic ga kindi fields fill chesthundi</p>
 
-    <button class="btn" id="saveBtn" onclick="saveProfile()">Save & Make Profile Live</button>
-    <!-- NEW RESET BUTTON -->
-    <button class="btn btn-danger" onclick="resetProfile()">🗑️ Reset Profile Data</button>
+        <h3 style="margin-top:20px;">Step 2: Verify & Save</h3>
+        <label>Full Name</label><input type="text" id="name" placeholder="Full Name">
+        <label>Current Designation</label><input type="text" id="designation" placeholder="e.g: Senior Recruiter">
+        <label>Job Status / Notice Period</label>
+        <select id="jobType">
+            <option value="">Select Notice Period</option>
+            <option value="Immediately">Immediately Available</option>
+            <option value="15 Days">15 Days Notice</option>
+            <option value="30 Days">30 Days Notice</option>
+            <option value="60 Days">60 Days Notice</option>
+            <option value="Searching">Actively Searching</option>
+        </select>
+        <label>Key Skills</label><input type="text" id="skills" placeholder="Java, React, Recruitment, ATS">
+
+        <label>Preferred Location</label>
+        <select id="location">
+            <option value="">Select Location</option>
+            <option>Visakhapatnam</option><option>Hyderabad</option><option>Bangalore</option>
+            <option>Chennai</option><option>Pune</option><option>Mumbai</option><option>Delhi</option><option>Remote</option>
+        </select>
+
+        <label>Work Mode</label>
+        <select id="workMode">
+            <option value="">Select Work Mode</option>
+            <option>Work From Office - WFO</option>
+            <option>Work From Home - WFH</option>
+            <option>Hybrid</option>
+            <option>Remote</option>
+            <option>Anywhere</option>
+        </select>
+
+        <label>Total Experience</label><input type="number" id="exp" placeholder="Years">
+
+        <button class="btn" id="saveBtn" onclick="saveProfile()">Save & Make Profile Live</button>
+        <button class="btn btn-danger" onclick="resetProfile()">🗑️ Reset Profile Data</button>
+    </div>
 </div>
 
 <script>
-function toggleDropdown() {
-    document.getElementById("profileDropdown").classList.toggle("show");
+let resumeScore = 0;
+
+// PAGE LOAD CHECK
+(function(){
+    if(localStorage.getItem('talentiq_loggedin') === 'true'){
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        loadProfile();
+        window.onload();
+    }
+})();
+
+function togglePass(){
+    let p = document.getElementById('password');
+    p.type = p.type === 'password'? 'text' : 'password';
 }
+function login(){
+    let email = document.getElementById('email').value;
+    let pass = document.getElementById('password').value;
+    if(email === 'candidate@talentiq.com' && pass === 'candidate123'){
+        localStorage.setItem('talentiq_loggedin', 'true');
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        loadProfile();
+        window.onload();
+    } else { alert('Invalid Email or Password'); }
+}
+function logout(){
+    localStorage.removeItem('talentiq_loggedin');
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
+}
+
+function toggleDropdown() { document.getElementById("profileDropdown").classList.toggle("show"); }
+function toggleBell() { document.getElementById("bellDropdown").classList.toggle("show"); }
 window.onclick = function(event) {
-  if (!event.target.closest('.profile')) {
-    document.getElementById("profileDropdown").classList.remove('show');
-  }
+  if (!event.target.closest('.profile')) document.getElementById("profileDropdown").classList.remove('show');
+  if (!event.target.closest('.bell')) document.getElementById("bellDropdown").classList.remove('show');
+}
+
+function calculateResumeScore(){
+    let score = 0; let suggestions = [];
+    if(document.getElementById('name').value) score+=15; else suggestions.push("Add your Full Name");
+    if(document.getElementById('designation').value) score+=15; else suggestions.push("Add Current Designation");
+    if(document.getElementById('skills').value && document.getElementById('skills').value.split(',').length > 3) score+=25;
+    else suggestions.push("Add at least 4 Key Skills");
+    if(document.getElementById('exp').value) score+=15; else suggestions.push("Add Years of Experience");
+    if(document.getElementById('location').value) score+=15; else suggestions.push("Select Preferred Location");
+    if(document.getElementById('workMode').value) score+=15; else suggestions.push("Select Work Mode");
+
+    resumeScore = score;
+    document.getElementById('meterFill').style.width = score + '%';
+    document.getElementById('meterScore').innerText = score + '%';
+    document.getElementById('resumeScore').innerText = score + '%';
+    document.getElementById('jobMatches').innerText = Math.floor(score/10);
+
+    let sugHTML = "";
+    if(suggestions.length > 0){
+        sugHTML = "<div class='suggestion'><b>AI Suggestions:</b><br>" + suggestions.join('<br>• ') + "</div>";
+    } else {
+        sugHTML = "<div class='suggestion'>🎉 Your resume is 100% complete! Recruiters will love this.</div>";
+    }
+    document.getElementById('suggestions').innerHTML = sugHTML;
 }
 
 function autoFillResume() {
@@ -129,20 +270,32 @@ function autoFillResume() {
         document.getElementById('location').value = "Visakhapatnam";
         document.getElementById('designation').value = "IT Support Specialist";
         document.getElementById('jobType').value = "30 Days";
-        alert("✅ AI Auto-Fill Complete! Please verify details and click Save");
+        document.getElementById('workMode').value = "Hybrid";
+        alert("✅ AI Auto-Fill Complete!");
+        calculateResumeScore();
     }, 2000);
 }
 
-// FIXED: Profile unte matrame notification
 window.onload = function() {
     let views = localStorage.getItem("profileViews") || 0;
     let profile = localStorage.getItem("talentiqProfile");
     document.getElementById('viewCount').innerText = views;
     if(profile && views > 0) {
         document.getElementById('notifications').innerHTML = `<div class="notif">🔔 ${views} Recruiter(s) viewed your profile in last 24 hours</div>`;
-    } else {
-        document.getElementById('notifications').innerHTML = ``; // Empty
     }
+    calculateResumeScore();
+}
+
+function loadProfile(){
+    let profile = JSON.parse(localStorage.getItem("talentiqProfile") || '{}');
+    if(profile.name) document.getElementById('name').value = profile.name;
+    if(profile.designation) document.getElementById('designation').value = profile.designation;
+    if(profile.jobType) document.getElementById('jobType').value = profile.jobType;
+    if(profile.skills) document.getElementById('skills').value = profile.skills;
+    if(profile.location) document.getElementById('location').value = profile.location;
+    if(profile.exp) document.getElementById('exp').value = profile.exp;
+    if(profile.workMode) document.getElementById('workMode').value = profile.workMode;
+    calculateResumeScore();
 }
 
 function saveProfile() {
@@ -156,6 +309,7 @@ function saveProfile() {
         skills: document.getElementById('skills').value,
         location: document.getElementById('location').value,
         exp: document.getElementById('exp').value,
+        workMode: document.getElementById('workMode').value,
         resumeFile: document.getElementById('resumeFile').files[0]? document.getElementById('resumeFile').files[0].name : "Resume.pdf"
     };
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
@@ -165,23 +319,29 @@ function saveProfile() {
 
     setTimeout(() => {
         btn.classList.remove('btn-loading'); btn.classList.add('btn-success'); btn.innerText = "✓ Profile is LIVE!";
+        calculateResumeScore();
         setTimeout(() => {
             btn.classList.remove('btn-success'); btn.innerText = "Save & Make Profile Live"; btn.disabled = false;
-            window.onload(); // Refresh notification
+            window.onload();
             alert("Your profile is now visible to recruiters in RecruZen ATS!");
         }, 2000);
     }, 1000);
 }
 
-// NEW FUNCTION: Reset kosam
 function resetProfile() {
     if(confirm("Are you sure? All profile data will be deleted.")) {
         localStorage.removeItem("talentiqProfile");
         localStorage.removeItem("profileViews");
         alert("Profile Reset Successfully!");
-        window.location.reload(); // Page refresh
+        window.location.reload();
     }
 }
+
+// Real-time score update
+['name','designation','skills','exp','location','workMode'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', calculateResumeScore);
+    document.getElementById(id).addEventListener('change', calculateResumeScore);
+});
 </script>
 </body>
 </html>
