@@ -9,8 +9,6 @@
 body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 0; margin:0; visibility: hidden;}
 body.login-bg {background: linear-gradient(135deg, #0F766E 0%, #1E3A8A 100%); min-height: 100vh;}
 body.ready {visibility: visible;}
-
-/* LOGIN PAGE */
 .login-container{display:none; justify-content:center; align-items:center; min-height:100vh; width:100%; padding:20px;}
 .login-box{background:white; padding:40px 30px; border-radius:16px; width:100%; max-width:400px; box-shadow:0 20px 40px rgba(0,0,0,0.2);}
 .login-box h1{text-align:center; color:#0F766E; margin-bottom:20px; font-size:28px;}
@@ -21,8 +19,6 @@ body.ready {visibility: visible;}
 .login-btn{width:100%; background:linear-gradient(90deg, #0F766E, #1E3A8A); color:white; padding:14px; border:none; border-radius:8px; font-weight:700; font-size:16px; cursor:pointer; margin-bottom:10px;}
 .forgot-btn{background:transparent; border:none; color:#0F766E; font-weight:600; cursor:pointer; width:100%; padding:8px;}
 .demo-box{background:#f0fdfa; border:1px dashed #0F766E; border-radius:8px; padding:12px; margin-top:20px; text-align:center; font-size:13px;}
-
-/* DASHBOARD */
 #dashboard {display:none; background:#f0f4f8; min-height:100vh;}
 .talent-banner {background: linear-gradient(90deg, #0F766E 0%, #1E3A8A 100%); color: white; padding: 30px; border-radius: 0 0 16px 16px; margin-bottom: 24px;}
 .talent-banner h1 {margin:0; font-size:28px; font-weight:700;}
@@ -31,15 +27,12 @@ body.ready {visibility: visible;}
 .stat-card {background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);}
 .stat-card h3 { margin: 0; font-size: 14px; opacity: 0.9; }
 .stat-card p { margin: 5px 0 0 0; font-size: 24px; font-weight: bold; }
-
 .header {display: flex; justify-content: space-between; align-items: center; margin:20px; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 99;}
 .header-left {display:flex; align-items:center; gap:12px;}
 .logo {background:linear-gradient(135deg, #0F766E, #1E3A8A); color:white; padding:8px 12px; border-radius:10px; font-weight:800; font-size:18px;}
 .header-right {display:flex; align-items:center; gap:20px; position:relative;}
 .bell{position:relative; cursor:pointer; font-size:22px;}
 .bell-badge {position:absolute; top:-5px; right:-5px; background:red; color:white; font-size:10px; padding:2px 6px; border-radius:50%; font-weight:700;}
-
-/* PROFILE */
 .profile {display:flex; align-items:center; gap:8px; position:relative;}
 .profile-name {cursor:pointer; display:flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px;}
 .profile-name:hover {background:#f1f5f9;}
@@ -47,13 +40,11 @@ body.ready {visibility: visible;}
 .profile-pic img {border-radius:50%; width:40px; height:40px; border:2px solid #0F766E; object-fit: cover;}
 .profile-pic.edit-icon {position:absolute; bottom:0; right:0; background:#0F766E; color:white; border-radius:50%; width:16px; height:16px; font-size:10px; display:flex; align-items:center; justify-content:center;}
 #profilePhotoInput {display: none;}
-
 .dropdown {display:none; position:absolute; top:50px; right:0; background:white; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.15); min-width:180px; z-index:100; border:1px solid #e5e7eb; padding:8px 0;}
 .dropdown.show {display:block;}
 .dropdown a {display:block; padding:12px 16px; color:#1e293b; text-decoration:none; font-weight:600; transition:0.2s; font-size:14px;}
 .dropdown a:hover {background:#f1f5f9;}
 .dropdown hr {margin:5px 0; border:none; border-top:1px solid #e5e7eb;}
-
 .container {max-width: 700px; margin: 20px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
 h2 {color: #1e293b; margin-bottom: 10px;}
 .ai-badge {background: #fef3c7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #92400e; font-weight:700;}
@@ -68,14 +59,10 @@ input:focus, select:focus {border-color: #0F766E; outline: none;}
 .btn-small {padding:8px 16px; font-size:14px; width:auto; margin-top:0;}
 .notif {background: #dcfce7; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #22c55e; font-weight:600;}
 label {font-weight: 600; font-size: 14px; color: #374151;}
-
-/* RESUME METER */
 .meter-box {background:#f0fdfa; border:2px solid #0F766E; padding:15px; border-radius:12px; margin:15px 0;}
 .meter-bar {background:#e5e7eb; height:12px; border-radius:10px; overflow:hidden; margin-top:8px;}
 .meter-fill {background:linear-gradient(90deg, #22c55e, #0F766E); height:100%; transition:0.5s;}
 .suggestion {background:#fef3c7; padding:10px; border-radius:8px; margin-top:10px; font-size:14px; color:#92400e;}
-
-/* JOB CARDS */
 .job-list {margin-top:20px;}
 .job-card {border:2px solid #e5e7eb; border-radius:12px; padding:18px; margin-bottom:15px;}
 .job-header {display:flex; justify-content:space-between; align-items:start; gap:10px;}
@@ -84,8 +71,6 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 .job-tags {display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;}
 .job-tag {background:#f0fdfa; color:#0F766E; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;}
 .applied {background:#dcfce7!important; color:#166534!important; cursor:not-allowed;}
-
-/* MODAL */
 .modal {display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999; justify-content:center; align-items:center;}
 .modal.show {display:flex;}
 .modal-content {background:white; padding:30px; border-radius:16px; max-width:500px; width:90%; max-height:90vh; overflow-y:auto;}
@@ -96,7 +81,6 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 </head>
 <body>
 
-<!-- 1. LOGIN PAGE -->
 <div class="login-container" id="loginPage">
     <div class="login-box">
         <h1>TalentIQ 🤖</h1>
@@ -119,7 +103,6 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
     </div>
 </div>
 
-<!-- 2. DASHBOARD -->
 <div id="dashboard">
     <div class="talent-banner">
       <h1>TalentIQ Suite 🤖</h1>
@@ -149,7 +132,7 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
                     <div class="edit-icon">✏️</div>
                 </div>
                 <input type="file" id="profilePhotoInput" accept="image/*" onchange="uploadProfilePhoto()">
-                <div class="profile-name" onclick="toggleDropdown()">Job Seeker ▼</div> <!-- ONLY THIS HAS CLICK -->
+                <div class="profile-name" onclick="toggleDropdown()">Job Seeker ▼</div>
                 <div class="dropdown" id="profileDropdown">
                     <a href="#" onclick="openProfileModal()">👤 My Profile</a>
                     <a href="#" onclick="alert('Settings page coming soon')">⚙️ Settings</a>
@@ -163,7 +146,6 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
     <div class="container">
         <h2>TALENTIQ <span class="ai-badge">AI Powered</span> <span class="free-badge">FREE</span></h2>
         <div id="notifications"></div>
-
         <div class="meter-box">
             <h3>📊 Resume Strength Meter</h3>
             <div class="meter-bar"><div class="meter-fill" id="meterFill" style="width:0%"></div></div>
@@ -201,14 +183,11 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
         <button class="btn" id="saveBtn" onclick="saveProfile()">Save & Make Profile Live</button>
         <button class="btn btn-danger" onclick="resetProfile()">🗑️ Reset Profile Data</button>
 
-        <!-- JOB APPLY SECTION -->
         <h3 style="margin-top:30px;">🎯 Recommended Jobs</h3>
         <div class="job-list" id="jobList"></div>
-
     </div>
 </div>
 
-<!-- PROFILE MODAL WITH EDIT -->
 <div class="modal" id="profileModal">
     <div class="modal-content">
         <h3>👤 My Profile</h3>
@@ -241,7 +220,6 @@ const jobs = [
 (function initAuth(){
     let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
     let hash = window.location.hash;
-
     if(isLoggedIn){
         if(hash!== '#dashboard') window.location.replace('#dashboard');
         document.getElementById('loginPage').style.display = 'none';
@@ -259,7 +237,6 @@ const jobs = [
 function router(){
     let hash = window.location.hash;
     let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
-
     if(hash === '#dashboard' && isLoggedIn){
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
@@ -274,10 +251,8 @@ function router(){
         document.body.classList.add('login-bg');
     }
 }
-
 window.addEventListener('hashchange', router);
 
-// PROFILE MODAL FUNCTIONS
 function openProfileModal(){
     document.getElementById('profileModal').classList.add('show');
     let profile = JSON.parse(localStorage.getItem("talentiqProfile") || '{}');
@@ -316,7 +291,6 @@ function uploadModalPhoto(){
     reader.readAsDataURL(file);
 }
 
-// PROFILE PHOTO UPLOAD
 function uploadProfilePhoto(){
     let file = document.getElementById('profilePhotoInput').files[0];
     if(!file) return;
@@ -398,13 +372,11 @@ function calculateResumeScore(){
     if(document.getElementById('exp').value) score+=15; else suggestions.push("Add Years of Experience");
     if(document.getElementById('location').value) score+=15; else suggestions.push("Select Preferred Location");
     if(document.getElementById('workMode').value) score+=15; else suggestions.push("Select Work Mode");
-
     resumeScore = score;
     document.getElementById('meterFill').style.width = score + '%';
     document.getElementById('meterScore').innerText = score + '%';
     document.getElementById('resumeScore').innerText = score + '%';
     document.getElementById('jobMatches').innerText = Math.floor(score/10);
-
     let sugHTML = suggestions.length > 0? "<div class='suggestion'><b>AI Suggestions:</b><br>• " + suggestions.join('<br>• ') + "</div>" : "<div class='suggestion'>🎉 Your resume is 100% complete!</div>";
     document.getElementById('suggestions').innerHTML = sugHTML;
 }
@@ -446,7 +418,7 @@ function loadProfile(){
     if(profile.designation) document.getElementById('designation').value = profile.designation;
     if(profile.jobType) document.getElementById('jobType').value = profile.jobType;
     if(profile.skills) document.getElementById('skills').value = profile.skills;
-    if(profile.location) document.getElementById('location')..value = profile.location;
+    if(profile.location) document.getElementById('location').value = profile.location; // FIXED TYPO
     if(profile.exp) document.getElementById('exp').value = profile.exp;
     if(profile.workMode) document.getElementById('workMode').value = profile.workMode;
     calculateResumeScore();
