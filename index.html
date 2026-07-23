@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TALENTIQ - AI Job Matching</title>
 <style>
-* {box-sizing: border-box;} /* <-- GLOBAL FIX: anni elements ki apply avthundi */
+* {box-sizing: border-box;}
 body {font-family: 'Segoe UI', Arial; background: #f0f4f8; padding: 0; margin:0;}
 body.login-bg {background: linear-gradient(135deg, #0F766E 0%, #1E3A8A 100%); min-height: 100vh;}
 .hidden{display:none!important}
 
 /* LOGIN PAGE */
-.login-container{display:flex; justify-content:center; align-items:center; min-height:100vh; width:100%; padding:20px;} /* padding add chesanu */
+.login-container{display:flex; justify-content:center; align-items:center; min-height:100vh; width:100%; padding:20px;}
 .login-box{background:white; padding:40px 30px; border-radius:16px; width:100%; max-width:400px; box-shadow:0 20px 40px rgba(0,0,0,0.2);}
 .login-box h1{text-align:center; color:#0F766E; margin-bottom:20px; font-size:28px;}
 .input-group{margin-bottom:18px; position:relative;}
 .input-group label{font-weight:700; color:#1e293b; font-size:14px; display:block; margin-bottom:6px;}
-.input-group input{width:100%; padding:12px 40px 12px 12px; border:2px solid #e5e7eb; border-radius:8px; font-size:15px;} /* box-sizing already global */
+.input-group input{width:100%; padding:12px 40px 12px 12px; border:2px solid #e5e7eb; border-radius:8px; font-size:15px;}
 .eye-icon{position:absolute; right:12px; top:38px; cursor:pointer; font-size:18px; color:gray;}
 .login-btn{width:100%; background:linear-gradient(90deg, #0F766E, #1E3A8A); color:white; padding:14px; border:none; border-radius:8px; font-weight:700; font-size:16px; cursor:pointer;}
 .demo-box{background:#f0fdfa; border:1px dashed #0F766E; border-radius:8px; padding:12px; margin-top:20px; text-align:center; font-size:13px;}
@@ -31,7 +31,7 @@ body.login-bg {background: linear-gradient(135deg, #0F766E 0%, #1E3A8A 100%); mi
 .stat-card h3 { margin: 0; font-size: 14px; opacity: 0.9; }
 .stat-card p { margin: 5px 0 0 0; font-size: 24px; font-weight: bold; }
 
-.header {display: flex; justify-content: space-between; align-items: center; margin:20px; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
+.header {display: flex; justify-content: space-between; align-items: center; margin:20px; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 99;}
 .header-left {display:flex; align-items:center; gap:12px;}
 .logo {background:linear-gradient(135deg, #0F766E, #1E3A8A); color:white; padding:8px 12px; border-radius:10px; font-weight:800; font-size:18px;}
 .header-right {display:flex; align-items:center; gap:20px; position:relative;}
@@ -48,7 +48,7 @@ body.login-bg {background: linear-gradient(135deg, #0F766E 0%, #1E3A8A 100%); mi
 h2 {color: #1e293b; margin-bottom: 10px;}
 .ai-badge {background: #fef3c7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #92400e; font-weight:700;}
 .free-badge {background: #dcfce7; padding: 5px 10px; border-radius: 20px; font-size: 12px; color: #166534; font-weight:700;}
-input, select {width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;} /* box-sizing already global */
+input, select {width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;}
 input:focus, select:focus {border-color: #0F766E; outline: none;}
 .btn {background: linear-gradient(90deg, #0F766E, #1E3A8A); color: white; padding: 14px; border: none; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top:10px;}
 .btn:hover {background: linear-gradient(90deg, #0d5f5a, #162e6e); transform: translateY(-2px);}
@@ -173,10 +173,16 @@ label {font-weight: 600; font-size: 14px; color: #374151;}
 <script>
 let resumeScore = 0;
 
-// ROUTER FUNCTION - URL HASH base
+// ROUTER FUNCTION - URL HASH base - ONLY THIS CHANGED
 function router(){
     let hash = window.location.hash;
     let isLoggedIn = localStorage.getItem('talentiq_loggedin') === 'true';
+
+    // KEY FIX: Logged in unna, hash lekapothe direct dashboard ki pampu
+    if(isLoggedIn &&!hash){
+        window.location.hash = '#dashboard';
+        return;
+    }
 
     if(hash === '#dashboard' && isLoggedIn){
         document.getElementById('loginPage').style.display = 'none';
@@ -185,7 +191,7 @@ function router(){
         loadProfile();
         updateStats();
     } else {
-        if(!hash) window.location.hash = '#login';
+        window.location.hash = '#login';
         document.getElementById('loginPage').style.display = 'flex';
         document.getElementById('dashboard').style.display = 'none';
         document.body.classList.add('login-bg');
@@ -195,6 +201,7 @@ function router(){
 window.addEventListener('load', router);
 window.addEventListener('hashchange', router);
 
+//... rest of your JS same as before...
 function togglePass(){
     let p = document.getElementById('password');
     p.type = p.type === 'password'? 'text' : 'password';
