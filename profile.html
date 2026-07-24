@@ -1,143 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Profile - TalentIQ</title>
-<link rel="stylesheet" href="style.css">
-<style>
-.profile-header{display:flex;align-items:center;gap:15px;padding:20px;background:white}
-.profile-pic{width:80px;height:80px;border-radius:50%;background:#0F766E;color:white;display:flex;justify-content:center;align-items:center;font-size:32px;font-weight:700}
-.form-group{margin-bottom:15px}
-.form-group label{font-weight:700;color:#1e293b;font-size:14px;display:block;margin-bottom:6px}
-.form-group input, .form-group select{width:100%;padding:12px;border:2px solid #e5e7eb;border-radius:8px;font-size:15px}
-</style>
-</head>
+<head>... same as before...</head>
 <body>
-<div class="header">
-  <h2>My Profile</h2>
-  <button onclick="location='dashboard.html'">← Back</button>
-</div>
+<div class="header"><h2>My Profile</h2><button onclick="location='dashboard.html'">← Back</button></div>
 
 <div class="card">
-    <div class="profile-header">
-        <div class="profile-pic" id="profilePic">R</div>
-        <div>
-            <h3 id="profileName">Ram</h3>
-            <p id="profileEmail">candidate@talentiq.com</p>
-        </div>
-    </div>
-</div>
+    <h3>AI Auto-Filled Profile</h3>
+    <p style="font-size:13px; color:#64748b; margin-bottom:15px;">Resume nundi teesina data. Only 3 fields manual.</p>
 
-<div class="card">
-    <h3>Step 2: Verify & Save</h3>
+    <div class="form-group"><label>Full Name</label><input type="text" id="name" readonly></div>
+    <div class="form-group"><label>Email</label><input type="email" id="email" readonly></div>
+    <div class="form-group"><label>Designation</label><input type="text" id="designation" readonly></div>
+    <div class="form-group"><label>Skills</label><input type="text" id="skills" readonly></div>
+    <div class="form-group"><label>Experience</label><input type="text" id="exp" readonly></div>
+    <div class="form-group"><label>LinkedIn</label><input type="text" id="linkedin"></div>
+    <div class="form-group"><label>GitHub</label><input type="text" id="github"></div>
+    <div class="form-group"><label>Portfolio</label><input type="text" id="portfolio"></div>
+
+    <!-- MANUAL DROPDOWNS ONLY -->
     <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="name" placeholder="Enter Full Name">
+        <label>Notice Period *</label>
+        <select id="jobType"><option>Select</option><option>Immediate</option><option>15 Days</option><option>30 Days</option><option>60 Days</option></select>
     </div>
     <div class="form-group">
-        <label>Current Designation</label>
-        <input type="text" id="designation" placeholder="e.g. Java Developer">
+        <label>Preferred Location *</label>
+        <select id="location"><option>Select</option><option>Hyderabad</option><option>Bangalore</option><option>Visakhapatnam</option><option>Remote</option></select>
     </div>
     <div class="form-group">
-        <label>Job Status / Notice Period</label>
-        <select id="jobType">
-            <option>Select Notice Period</option>
-            <option>Immediate</option>
-            <option>15 Days</option>
-            <option>30 Days</option>
-            <option>60 Days</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label>Key Skills</label>
-        <input type="text" id="skills" placeholder="e.g. Java, Spring, React">
-    </div>
-    <div class="form-group">
-        <label>Preferred Location</label>
-        <select id="location">
-            <option>Select Location</option>
-            <option>Hyderabad</option>
-            <option>Bangalore</option>
-            <option>Visakhapatnam</option>
-            <option>Remote</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label>Work Mode</label>
-        <select id="workMode">
-            <option>Select Work Mode</option>
-            <option>WFO</option>
-            <option>Hybrid</option>
-            <option>Remote</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label>Total Experience</label>
-        <input type="text" id="exp" placeholder="e.g. 3 Years">
+        <label>Work Mode *</label>
+        <select id="workMode"><option>Select</option><option>WFO</option><option>Hybrid</option><option>Remote</option></select>
     </div>
 
     <button class="btn-primary" onclick="saveProfile()">Save & Make Profile Live</button>
-    <button class="btn-danger" onclick="resetProfile()">Reset Profile Data</button>
 </div>
-
-<nav class="bottom-nav">
-  <button onclick="location='dashboard.html'">🏠<span>Home</span></button>
-  <button onclick="location='dashboard.html#jobs'">📄<span>Apply</span></button>
-  <button class="active">👤<span>Profile</span></button>
-</nav>
-
 <script>
-// Login check
-if(localStorage.getItem('talentiq_loggedin')!=='true'){
-    window.location.href = 'index.html';
-}
-
-// Page load ayyagane data load cheyi
+// load function lo anni fields auto fill avthayi localStorage nundi
 window.onload = function(){
-    loadProfile();
-}
-
-function loadProfile(){
     let profile = JSON.parse(localStorage.getItem("talentiqProfile") || '{}');
-    if(profile.name) {
-        document.getElementById('name').value = profile.name;
-        document.getElementById('profileName').innerText = profile.name;
-        document.getElementById('profilePic').innerText = profile.name.charAt(0).toUpperCase();
-    }
-    if(profile.designation) document.getElementById('designation').value = profile.designation;
-    if(profile.jobType) document.getElementById('jobType').value = profile.jobType;
-    if(profile.skills) document.getElementById('skills').value = profile.skills;
-    if(profile.location) document.getElementById('location').value = profile.location;
-    if(profile.exp) document.getElementById('exp').value = profile.exp;
-    if(profile.workMode) document.getElementById('workMode').value = profile.workMode;
+    document.getElementById('name').value = profile.name || '';
+    document.getElementById('email').value = profile.email || '';
+    document.getElementById('designation').value = profile.designation || '';
+    document.getElementById('skills').value = profile.skills || '';
+    document.getElementById('exp').value = profile.exp || '';
+    document.getElementById('linkedin').value = profile.linkedin || '';
+    document.getElementById('github').value = profile.github || '';
+    document.getElementById('portfolio').value = profile.portfolio || '';
 }
 
 function saveProfile(){
-    let profile = {
-        name: document.getElementById('name').value,
-        designation: document.getElementById('designation').value,
-        jobType: document.getElementById('jobType').value,
-        skills: document.getElementById('skills').value,
-        location: document.getElementById('location').value,
-        exp: document.getElementById('exp').value,
-        workMode: document.getElementById('workMode').value
-    };
+    let profile = JSON.parse(localStorage.getItem("talentiqProfile") || '{}');
+    profile.jobType = document.getElementById('jobType').value;
+    profile.location = document.getElementById('location').value;
+    profile.workMode = document.getElementById('workMode').value;
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
-    localStorage.setItem("profileComplete", "true"); // profile complete flag
-    alert("Profile Saved Successfully ✅");
-    document.getElementById('profileName').innerText = profile.name;
-    document.getElementById('profilePic').innerText = profile.name.charAt(0).toUpperCase();
-}
-
-function resetProfile(){
-    if(confirm("Are you sure? All data will be lost")){
-        localStorage.removeItem("talentiqProfile");
-        localStorage.removeItem("profileComplete");
-        localStorage.removeItem("resumeUploaded");
-        location.reload();
-    }
+    localStorage.setItem("profileComplete", "true");
+    alert("Profile Live ✅ Now you can see jobs");
 }
 </script>
 </body>
-  </html>
+</html>
