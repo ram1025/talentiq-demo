@@ -1,29 +1,30 @@
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Roboto,Arial}
-body{background:#f1f5f9;padding-bottom:80px;color:#0f172a}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Roboto}
+body{background:#f1f5f9;padding-bottom:80px}
 .login-bg{background:linear-gradient(135deg,#0F766E 0%,#1E3A8A 100%);min-height:100vh}
-.login-container{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.login-container{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;flex-direction:column}
 .login-box{background:white;padding:30px;border-radius:20px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,0.15)}
 .login-box h1{text-align:center;color:#0F766E;margin-bottom:25px;font-size:26px;font-weight:800}
 .input-group{margin-bottom:16px}
 .input-group label{font-weight:700;color:#334155;font-size:14px;display:block;margin-bottom:6px}
 .input-group input{width:100%;padding:14px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:15px}
-.login-btn{width:100%;background:linear-gradient(90deg,#0F766E,#1E3A8A);color:white;padding:14px;border:none;border-radius:10px;font-weight:800;font-size:16px;cursor:pointer;margin-top:10px}
+.login-btn{width:100%;background:linear-gradient(90deg,#0F766E,#1E3A8A);color:white;padding:14px;border:none;border-radius:10px;font-weight:800;font-size:16px;cursor:pointer}
 .demo-box{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:12px;margin-top:20px;text-align:center;font-size:13px}
+.made-in-india{color:white;margin-top:30px;text-align:center;font-weight:600} /* idi center ki vachindi */
 
 .header{background:linear-gradient(90deg,#0F766E,#1E3A8A);color:white;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
-.header h2{font-size:18px;font-weight:700}
 .card{background:white;margin:15px;border-radius:16px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,0.06)}
-.stat-card{background:rgba(255,255,255,0.15);padding:12px;border-radius:12px;margin-top:12px}
-.stat-card h4{font-size:12px;opacity:0.9}
-.stat-card p{font-size:22px;font-weight:800;margin-top:4px}
+.stat-card{background:rgba(255,255,255,0.15);padding:12px;border-radius:12px;text-align:center}
+.stat-card h4{font-size:12px;color:white;opacity:0.9}
+.stat-card p{font-size:22px;font-weight:800;margin-top:4px;color:white}
 .progress-bar{background:#e2e8f0;height:8px;border-radius:10px;overflow:hidden;margin-top:8px}
-.progress-fill{background:#16A34A;height:100%;width:100%}
+.progress-fill{background:#16A34A;height:100%}
 .form-group{margin-bottom:16px}
 .form-group label{display:block;font-weight:700;margin-bottom:8px;font-size:14px}
-.form-group input, .form-group select{width:100%;padding:12px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:15px}
-.btn-primary{background:linear-gradient(90deg,#0F766E,#1E3A8A);color:white;padding:14px;border:none;border-radius:10px;width:100%;font-weight:800;font-size:16px}
-.btn-danger{background:#DC2626;color:white;padding:14px;border:none;border-radius:10px;width:100%;font-weight:800}
+.form-group input,.form-group select{width:100%;padding:12px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:15px}
+.btn-primary{background:linear-gradient(90deg,#0F766E,#1E3A8A);color:white;padding:14px;border:none;border-radius:10px;width:100%;font-weight:800;font-size:16px;margin-top:10px}
+.btn-danger{background:#DC2626;color:white;padding:14px;border:none;border-radius:10px;width:100%;font-weight:800;margin-top:10px}
 .bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:white;display:flex;justify-content:space-around;padding:12px 0;border-top:1px solid #e2e8f0}
 .bottom-nav button{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:4px;color:#64748b;font-size:12px;font-weight:700}
 .bottom-nav button.active{color:#0F766E}
 .tag{background:#FEF9C3;color:#854D0E;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700}
+.file-input-wrapper{border:2px dashed #0F766E;border-radius:10px;padding:20px;text-align:center;background:#f0fdfa;margin:10px 0}
