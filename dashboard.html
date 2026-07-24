@@ -6,8 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+<script src='https://unpkg.com/tesseract.js@4.1.1/dist/tesseract.min.js'></script>
+<script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
 </head>
 <body style="background:linear-gradient(135deg,#0F766E 0%,#1E3A8A 100%);">
 
@@ -127,7 +127,6 @@ function loadDashboardData(){
     }
 }
 
-// ULTIMATE PARSER - PDF + DOCX + SCANNED PDF OCR
 async function uploadAndParseResume(){
     let file = document.getElementById('resumeFile').files[0];
     if(!file){ return; }
@@ -139,22 +138,15 @@ async function uploadAndParseResume(){
     let fileType = file.name.split('.').pop().toLowerCase();
 
     try {
-        // CASE 1: WORD FILE
         if(fileType === 'docx' || fileType === 'doc'){
             document.getElementById('scoreMsg').innerText = 'Reading Word file...';
             const arrayBuffer = await file.arrayBuffer();
             const result = await mammoth.extractRawText({arrayBuffer: arrayBuffer});
             resumeText = result.value;
         }
-
-        // CASE 2: PDF FILE
         else if(fileType === 'pdf'){
-            const fileReader = new FileReader();
-            const pdfData = await new Promise(resolve => {
-                fileReader.onload = () => resolve(new Uint8Array(fileReader.result));
-                fileReader.readAsArrayBuffer(file);
-            });
-
+            document.getElementById('scoreMsg').innerText = 'Reading PDF...';
+            const pdfData = await file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument(pdfData).promise;
 
             for(let i=1; i<=pdf.numPages; i++){
@@ -163,60 +155,44 @@ async function uploadAndParseResume(){
                 textContent.items.forEach(item => resumeText += item.str + " ");
             }
 
-            // SCANNED PDF DETECTED - RUN OCR
             if(resumeText.trim().length < 20){
-                document.getElementById('scoreMsg').innerText = 'Scanned PDF detected. Running OCR... 10-15s';
+                document.getElementById('scoreMsg').innerText = 'Scanned PDF. OCR Running... 15s';
                 for(let i=1; i<=pdf.numPages; i++){
                     const page = await pdf.getPage(i);
-                    const viewport = page.getViewport({scale: 2.0});
+                    const viewport = page.getViewport({scale: 1.5});
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
                     await page.render({canvasContext: context, viewport: viewport}).promise;
 
-                    const { data: { text } = await Tesseract.recognize(canvas, 'eng');
-                    resumeText += text + " ";
+                    const worker = await Tesseract.createWorker('eng');
+                    const ret = await worker.recognize(canvas);
+                    resumeText += ret.data.text + " ";
+                    await worker.terminate();
                 }
             }
         }
 
         if(resumeText.trim().length < 10){
-            alert("Could not read this file. Please upload a readable PDF or Word file.");
-            return;
+            throw new Error("Could not read text from file");
         }
 
-        // ===== SMART DATA EXTRACTION =====
         let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
-        let name = "Candidate Name";
-        for(let i=0; i<Math.min(5, lines.length); i++){
-            let line = lines[i];
-            if(!line.includes('@') &&!line.includes('.com') && line.length < 50){
-                name = line.replace(/RESUME|CV|CURRICULUM VITAE/gi, '').trim();
-                if(name === name.toUpperCase()) break;
-            }
-        }
-        name = name.replace(/Senior|Junior|Lead|Analyst|Developer|Engineer|Test|ETL|Support|Manager|Specialist|Consultant|&|-/gi, '').trim();
+        let name = lines.find(l =>!l.includes('@') && l.length < 40 && l === l.toUpperCase()) || "Candidate";
+        name = name.replace(/RESUME|CV|SENIOR|JUNIOR|LEAD|ANALYST|DEVELOPER|ENGINEER/gi, '').trim();
 
         let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
-        let linkedin = resumeText.match(/linkedin\.com\/in\/[a-zA-Z0-9-\/]+/i)?.[0] || "";
-        let github = resumeText.match(/github\.com\/[a-zA-Z0-9-]+/i)?.[0] || "";
-        let portfolio = resumeText.match(/[a-zA-Z0-9-]+\.(dev|com|io|me)\/[a-zA-Z0-9-\/]*/i)?.[0] || "";
         let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
-
         let designation = "Software Engineer";
-        if(resumeText.match(/Test Analyst|QA|ETL/i)) designation = "Test Analyst";
-        else if(resumeText.match(/Java Developer|Full Stack/i)) designation = "Java Developer";
+        if(resumeText.match(/Test|QA/i)) designation = "Test Analyst";
+        else if(resumeText.match(/Java|Developer/i)) designation = "Java Developer";
         else if(resumeText.match(/Recruiter|HR/i)) designation = "Recruiter";
-        else if(resumeText.match(/Support|Helpdesk/i)) designation = "IT Support Specialist";
 
-        let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "SQL", "JIRA", "KIBANA", "GRAFANA", "REACT", "NODE", "PYTHON", "AWS", "DOCKER", "ETL", "TESTING"];
+        let skillsList = ["JAVA", "SQL", "REACT", "PYTHON", "AWS", "TESTING", "SPRING", "DOCKER"];
         let skills = skillsList.filter(s => resumeText.toUpperCase().includes(s)).join(", ");
 
-        let fakeParsedData = {
-            name, email, designation, exp, skills, linkedin, github, portfolio,
-            location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"
-        };
+        let fakeParsedData = {name, email, designation, exp, skills, location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"};
 
         localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
         localStorage.setItem('resumeUploaded','true');
@@ -224,8 +200,10 @@ async function uploadAndParseResume(){
         loadDashboardData();
 
     } catch(e){
-        alert('File Error: ' + e.message);
         console.error(e);
+        document.getElementById('scoreMsg').innerText = 'Error: ' + e.message;
+        document.getElementById('scoreMsg').style.background = '#FEE2E2';
+        alert('Error: ' + e.message);
     }
 }
 
