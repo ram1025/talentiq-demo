@@ -49,12 +49,17 @@ function uploadResume(){
 }
 
 function showJobs(){
-    if(localStorage.getItem('resumeUploaded')==='true'){
+    let resume = localStorage.getItem('resumeUploaded')==='true';
+    let profile = localStorage.getItem('profileComplete')==='true';
+    if(resume && profile){ // rendu unte ne jobs
         document.getElementById('jobsSection').style.display = 'block';
         document.getElementById('jobsList').innerHTML = `
         <div class="card"><b>Senior Java Developer</b><br>TCS - Hyderabad <button>Apply Now</button></div>
         <div class="card"><b>React Frontend Engineer</b><br>Infosys - Bangalore <button>Apply Now</button></div>
+        <div class="card"><b>IT Support Specialist</b><br>Wipro - Vizag <button>Apply Now</button></div>
         `;
+    } else {
+        document.getElementById('jobsSection').style.display = 'none';
     }
 }
 
