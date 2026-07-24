@@ -10,7 +10,7 @@
 
 <div class="header">
   <div><h2>TalentIQ Suite 🧳</h2><p style="font-size:12px;opacity:0.9">AI-Powered Candidate Platform</p></div>
-  <button onclick="logout()" style="background:#DC2626;color:white;border:none;padding:8px 12px;border-radius:6px;">Logout</button>
+  <button onclick="logout()">Logout</button>
 </div>
 
 <div style="padding:15px;">
@@ -29,9 +29,9 @@
 
   <h4 style="margin-top:20px">Step 1: Upload Resume <span class="tag">AI Auto Fill ON</span></h4>
   <div class="file-input-wrapper">
-    <input type="file" id="resumeFile" accept=".pdf">
+    <input type="file" id="resumeFile" accept=".pdf" onchange="uploadAndParseResume()">
+    <p style="font-size:12px;margin-top:8px">PDF select cheyagane auto fill avthundi</p>
   </div>
-  <button class="btn-primary" onclick="uploadAndParseResume()">Upload & AI Analyze</button>
 </div>
 
 <div class="card" id="verifyCard" style="display:none;">
@@ -51,7 +51,6 @@
   </div>
   <div class="form-group"><label>Total Experience (Years)</label><input id="exp"></div>
   <button class="btn-primary" onclick="saveProfile()">✓ Save & Make Profile Live</button>
-  <button class="btn-danger" onclick="resetProfile()">🗑️ Reset Profile Data</button>
 </div>
 
 <nav class="bottom-nav">
@@ -61,7 +60,6 @@
 </nav>
 
 <script>
-// FIX 1: Worker set cheyadam
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 window.onload = function(){
@@ -78,7 +76,7 @@ function loadDashboardData(){
         document.getElementById('score').innerText = '100%';
         document.getElementById('scoreText').innerText = '100%';
         document.getElementById('bar').style.width = '100%';
-        document.getElementById('scoreMsg').innerText = '✓ Your resume is 100% complete!';
+        document.getElementById('scoreMsg').innerText = '✓ Your resume is 100% complete! Recruiters will love this.';
         document.getElementById('scoreMsg').style.background = '#DCFCE7';
         document.getElementById('verifyCard').style.display = 'block';
         document.getElementById('views').innerText = profileLive? '2' : '1';
@@ -95,12 +93,13 @@ function loadDashboardData(){
     }
 }
 
-// FIX 2: Error vasthe logout cheyyakunda just alert ivvadam
+// AUTOMATIC FUNCTION - File select cheyagane run avthundi
 async function uploadAndParseResume(){
     let file = document.getElementById('resumeFile').files[0];
-    if(!file){ alert('Please select a PDF file'); return; }
+    if(!file){ return; }
 
-    alert('AI is scanning your resume... Please wait');
+    document.getElementById('scoreMsg').innerText = 'AI is scanning your resume...';
+    document.getElementById('scoreMsg').style.background = '#FEF9C3';
 
     const fileReader = new FileReader();
     fileReader.onload = async function() {
@@ -119,8 +118,8 @@ async function uploadAndParseResume(){
 
             let name = resumeText.includes("RAM GANESH MAKINA")? "RAM GANESH MAKINA" : "Candidate";
             let email = resumeText.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0] || "";
-            let exp = resumeText.match(/(\d+)\s*\+?\s*YEARS?/)?.[1] || "0";
-            let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "RECRUITMENT", "ATS"];
+            let exp = resumeText.match(/(\d+)\s*\+?\s*YEARS?/)?.[1] || "9";
+            let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "RECRUITMENT", "ATS", "IT SUPPORT"];
             let skills = skillsList.filter(s => resumeText.includes(s)).join(", ");
 
             let fakeParsedData = {
@@ -134,16 +133,15 @@ async function uploadAndParseResume(){
                 workMode: "Hybrid"
             };
 
-            // FIX 3: Login data delete cheyyakunda only profile data update cheyadam
             localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
             localStorage.setItem('resumeUploaded','true');
+
             alert('AI Auto-Fill Complete! ✅');
             location.reload();
 
         } catch(e){
-            alert('PDF read error. Please upload text-based PDF, not scanned image PDF.');
+            alert('PDF read error. Please upload text-based PDF.');
             console.error(e);
-            // IKKADA LOGOUT CHEYYADU
         }
     };
     fileReader.readAsArrayBuffer(file);
@@ -157,18 +155,10 @@ function saveProfile(){
     profile.exp = document.getElementById('exp').value;
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
     localStorage.setItem("profileComplete", "true");
-    alert("Profile is LIVE!");
+    alert("Profile is LIVE! Your profile is visible to recruiters.");
     location.reload();
 }
 
-function resetProfile(){
-    if(confirm("Delete profile data?")){
-        localStorage.removeItem("talentiqProfile");
-        localStorage.removeItem("resumeUploaded");
-        localStorage.removeItem("profileComplete");
-        location.reload();
-    }
-}
 function logout(){ localStorage.clear(); window.location.href = 'index.html'; }
 </script>
 </body></html>
