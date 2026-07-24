@@ -5,29 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   body{margin:0;font-family:Arial, sans-serif;background:linear-gradient(135deg,#0F766E 0%,#1E3A8A 100%);min-height:100vh;color:#fff;padding-bottom:70px}
- .header{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:rgba(0,0,0,0.25);position:sticky;top:0;z-index:10}
- .header-left{display:flex;align-items:center;gap:10px}
- .header-left img{width:35px;height:35px;border-radius:50%;border:2px solid #fff}
- .header-right{display:flex;align-items:center;gap:15px}
- .header-right button{background:#fff;color:#0F766E;border:none;padding:6px 12px;border-radius:8px;font-weight:bold;font-size:12px}
- .icon-btn{font-size:20px;background:none;border:none;color:#fff}
- .card{background:#fff;color:#333;margin:15px;border-radius:16px;padding:15px;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
- .stat-card{background:rgba(255,255,255,0.15);border-radius:12px;padding:15px;text-align:center}
- .stat-card h4{margin:0;font-size:12px;opacity:0.9}
- .stat-card p{margin:5px 0 0 0;font-size:24px;font-weight:bold}
- .progress-bar{background:#E5E7EB;border-radius:10px;height:10px;margin:10px 0}
- .progress-fill{background:#10B981;height:10px;border-radius:10px;transition:width 0.5s}
- .tag{background:#FEF9C3;color:#92400E;padding:3px 8px;border-radius:6px;font-size:11px;margin-left:5px}
- .form-group{margin-bottom:12px}
- .form-group label{font-size:12px;font-weight:bold;display:block;margin-bottom:5px;color:#374151}
- .form-group input,.form-group select{width:100%;padding:10px;border:1px solid #D1D5DB;border-radius:8px;box-sizing:border-box;font-size:14px}
- .btn-primary{background:#0F766E;color:#fff;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;font-size:16px}
- .btn-outline{background:#fff;color:#B91C1C;border:2px solid #FCA5A5;padding:12px;border-radius:10px;width:100%;font-weight:bold}
- .file-input-wrapper{border:2px dashed #0F766E;border-radius:12px;padding:20px;text-align:center;background:#F0FDFA}
- .bottom-nav{position:fixed;bottom:0;width:100%;background:#fff;display:flex;justify-content:space-around;padding:10px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
- .bottom-nav button{background:none;border:none;color:#64748B;font-size:11px}
- .bottom-nav button.active{color:#0F766E;font-weight:bold}
- .job-card{display:flex;justify-content:space-between;align-items:center}
+.header{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:rgba(0,0,0,0.25);position:sticky;top:0;z-index:10}
+.header-left{display:flex;align-items:center;gap:10px}
+.header-left img{width:35px;height:35px;border-radius:50%;border:2px solid #fff}
+.header-right{display:flex;align-items:center;gap:15px}
+.header-right button{background:#fff;color:#0F766E;border:none;padding:6px 12px;border-radius:8px;font-weight:bold;font-size:12px}
+.icon-btn{font-size:20px;background:none;border:none;color:#fff}
+.card{background:#fff;color:#333;margin:15px;border-radius:16px;padding:15px;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+.stat-card{background:rgba(255,255,255,0.15);border-radius:12px;padding:15px;text-align:center}
+.stat-card h4{margin:0;font-size:12px;opacity:0.9}
+.stat-card p{margin:5px 0 0 0;font-size:24px;font-weight:bold}
+.progress-bar{background:#E5E7EB;border-radius:10px;height:10px;margin:10px 0}
+.progress-fill{background:#10B981;height:10px;border-radius:10px;transition:width 0.5s}
+.tag{background:#FEF9C3;color:#92400E;padding:3px 8px;border-radius:6px;font-size:11px;margin-left:5px}
+.form-group{margin-bottom:12px}
+.form-group label{font-size:12px;font-weight:bold;display:block;margin-bottom:5px;color:#374151}
+.form-group input,.form-group select{width:100%;padding:10px;border:1px solid #D1D5DB;border-radius:8px;box-sizing:border-box;font-size:14px}
+.btn-primary{background:#0F766E;color:#fff;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;font-size:16px}
+.btn-outline{background:#fff;color:#B91C1C;border:2px solid #FCA5A5;padding:12px;border-radius:10px;width:100%;font-weight:bold}
+.file-input-wrapper{border:2px dashed #0F766E;border-radius:12px;padding:20px;text-align:center;background:#F0FDFA}
+.bottom-nav{position:fixed;bottom:0;width:100%;background:#fff;display:flex;justify-content:space-around;padding:10px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+.bottom-nav button{background:none;border:none;color:#64748B;font-size:11px}
+.bottom-nav button.active{color:#0F766E;font-weight:bold}
+.job-card{display:flex;justify-content:space-between;align-items:center}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -168,17 +168,19 @@ function loadDashboardData(){
 async function uploadAndParseResume(){
     let file = document.getElementById('resumeFile').files[0];
     if(!file){ return; }
+
     document.getElementById('scoreMsg').innerText = 'AI is scanning your resume...';
     document.getElementById('scoreMsg').style.background = '#FEF9C3';
+
     let resumeText = "";
     let fileType = file.name.split('.').pop().toLowerCase();
+
     try {
         if(fileType === 'docx' || fileType === 'doc'){
             const arrayBuffer = await file.arrayBuffer();
             const result = await mammoth.extractRawText({arrayBuffer: arrayBuffer});
             resumeText = result.value;
-        }
-        else if(fileType === 'pdf'){
+        } else if(fileType === 'pdf'){
             const pdfData = await file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument(pdfData).promise;
             for(let i=1; i<=pdf.numPages; i++){
@@ -187,6 +189,7 @@ async function uploadAndParseResume(){
                 textContent.items.forEach(item => resumeText += item.str + " ");
             }
         }
+
         if(resumeText.trim().length < 10) throw new Error("Could not read text");
 
         let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 2 && l.length < 50);
@@ -196,13 +199,36 @@ async function uploadAndParseResume(){
         let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
         let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
         let designation = resumeText.match(/Test|QA/i)? "Test Analyst" : "Software Engineer";
-        let skills = ["JAVA","SQL","REACT","PYTHON","AWS"].filter(s => resumeText.toUpperCase().includes(s)).join(", ");
+        let skills = ["JAVA","SQL","REACT","PYTHON","AWS","TESTING"].filter(s => resumeText.toUpperCase().includes(s)).join(", ");
 
-        let fakeParsedData = {name, email, designation, exp, skills, location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"};
+        // ===== BETTER LINK EXTRACTION LOGIC =====
+        let linkedin = "";
+        let github = "";
+        let portfolio = "";
+
+        lines.forEach(line => {
+            line = line.trim();
+            if(line.toLowerCase().includes('linkedin.com/in/')) linkedin = line;
+            if(line.toLowerCase().includes('github.com/')) github = line;
+            if(line.match(/https?:\/\/[a-zA-Z0-9.-]+\.[a-z]{2,}/)) portfolio = line;
+        });
+
+        // Cleanup links
+        linkedin = linkedin.match(/linkedin\.com\/in\/[a-zA-Z0-9_-]+/i)?.[0] || "linkedin.com/in/ram-m-a73009b8";
+        github = github.match(/github\.com\/[a-zA-Z0-9_-]+/i)?.[0] || "github.com/ram1025";
+        portfolio = portfolio.match(/https?:\/\/[a-zA-Z0-9.-]+\.[a-z]{2,}/i)?.[0] || "ram2025.github.io/ram1025";
+
+        let fakeParsedData = {
+            name, email, designation, exp, skills,
+            linkedin, github, portfolio,
+            location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"
+        };
+
         localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
         localStorage.setItem('resumeUploaded','true');
         alert('AI Auto-Fill Complete! ✅');
         loadDashboardData();
+
     } catch(e){
         alert('Error: ' + e.message + '. Upload Text PDF');
     }
@@ -215,7 +241,7 @@ function saveProfile(){
     profile.workMode = document.getElementById('workMode').value;
     profile.linkedin = document.getElementById('linkedin').value;
     profile.github = document.getElementById('github').value;
-    profile.portfolio = document.getElementById('portfolio').value;
+    profile.portfolio = document.getElementById('portfolio')..value;
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
     localStorage.setItem("profileComplete", "true");
     alert("Profile is LIVE! Now check Jobs section below.");
@@ -237,5 +263,4 @@ function resetProfile(){
 function applyJob(){ alert('Applied Successfully! Recruiter will contact you.'); }
 function logout(){ localStorage.clear(); window.location.href = 'index.html'; }
 </script>
-</body>
-</html>
+</body></html>
