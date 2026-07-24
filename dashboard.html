@@ -102,7 +102,6 @@ function loadDashboardData(){
         document.getElementById('scoreMsg').style.background = '#FEF9C3';
         document.getElementById('verifyCard').style.display = 'block';
 
-        // FIX: Views and Jobs should show ONLY after Save
         document.getElementById('views').innerText = profileLive? '1' : '0';
         document.getElementById('jobs').innerText = profileLive? '10' : '0';
 
@@ -126,7 +125,7 @@ function loadDashboardData(){
     }
 }
 
-// 100% DYNAMIC AI PARSER
+// 100% SMART DYNAMIC AI PARSER - NAME & DESIGNATION FIXED
 async function uploadAndParseResume(){
     let file = document.getElementById('resumeFile').files[0];
     if(!file){ return; }
@@ -147,29 +146,62 @@ async function uploadAndParseResume(){
                 textContent.items.forEach(item => resumeText += item.str + " ");
             }
 
-            let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 3);
-            let name = lines[0] || "Candidate Name";
-            let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
-            let linkedin = resumeText.match(/linkedin\.com\/in\/[a-zA-Z0-9-\/]+/i)?.[0] || "";
-            let github = resumeText.match(/(github\.com\/[a-zA-Z0-9-]+)|([a-zA-Z0-9-]+\.github\.io\/[a-zA-Z0-9-\/]+)/i)?.[0] || "";
-            let portfolio = resumeText.match(/[a-zA-Z0-9-]+\.(dev|com|io|me)\/[a-zA-Z0-9-\/]*/i)?.[0] || "";
-            let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
-            let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "WEBSPHERE", "SQL", "JIRA", "KIBANA", "GRAFANA", "RECRUITMENT", "ATS", "REACT", "NODE", "PYTHON", "AWS", "DOCKER", "IT SUPPORT"];
-            let skills = skillsList.filter(s => resumeText.toUpperCase().includes(s)).join(", ");
-            let designation = "Software Engineer";
-            if(resumeText.toUpperCase().includes("SUPPORT")) designation = "IT Support Specialist";
-            if(resumeText.toUpperCase().includes("RECRUITER")) designation = "Recruiter";
+            // 1. SMART NAME EXTRACTION - Removes designation from name
+            let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+            let rawName = lines[0] || "Candidate Name";
+            let name = rawName.replace(/Senior|Junior|Lead|Analyst|Developer|Engineer|Test|ETL|Support|Manager|Specialist|Consultant|&|-/gi, '').trim();
+            name = name.split(" ")[0].trim(); // double space unte cut
+            if(name.length < 2) name = rawName.split(" ")[0]; // fallback
 
-            let fakeParsedData = {name, email, designation, exp, skills, linkedin, github, portfolio, location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"};
+            // 2. EMAIL
+            let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
+
+            // 3. LINKEDIN
+            let linkedin = resumeText.match(/linkedin\.com\/in\/[a-zA-Z0-9-\/]+/i)?.[0] || "";
+
+            // 4. GITHUB
+            let github = resumeText.match(/(github\.com\/[a-zA-Z0-9-]+)|([a-zA-Z0-9-]+\.github\.io\/[a-zA-Z0-9-\/]+)/i)?.[0] || "";
+
+            // 5. PORTFOLIO
+            let portfolio = resumeText.match(/[a-zA-Z0-9-]+\.(dev|com|io|me)\/[a-zA-Z0-9-\/]*/i)?.[0] || "";
+
+            // 6. EXPERIENCE
+            let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
+
+            // 7. SMART DESIGNATION EXTRACTION FROM PDF
+            let designation = "Software Engineer"; // default
+            if(resumeText.match(/Test Analyst|Test Lead|QA Engineer|ETL/i)) designation = "Test Analyst";
+            else if(resumeText.match(/Java Developer|Full Stack|Frontend|Backend/i)) designation = "Java Developer";
+            else if(resumeText.match(/Recruiter|HR|Talent Acquisition/i)) designation = "Recruiter";
+            else if(resumeText.match(/Support|Helpdesk|Technical Support/i)) designation = "IT Support Specialist";
+            else if(resumeText.match(/Data Engineer|ETL Developer|Data Analyst/i)) designation = "Data Engineer";
+
+            // 8. SKILLS
+            let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "WEBSPHERE", "SQL", "JIRA", "KIBANA", "GRAFANA", "RECRUITMENT", "ATS", "REACT", "NODE", "PYTHON", "AWS", "DOCKER", "ETL", "TESTING"];
+            let skills = skillsList.filter(s => resumeText.toUpperCase().includes(s)).join(", ");
+
+            let fakeParsedData = {
+                name: name,
+                email: email,
+                designation: designation,
+                exp: exp,
+                skills: skills,
+                linkedin: linkedin,
+                github: github,
+                portfolio: portfolio,
+                location: "Visakhapatnam",
+                jobType: "30 Days",
+                workMode: "Hybrid"
+            };
 
             localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
             localStorage.setItem('resumeUploaded','true');
-            // IMPORTANT: Don't set profileComplete here
             alert('AI Auto-Fill Complete! ✅ Now verify and Save to go LIVE');
             loadDashboardData();
 
         } catch(e){
             alert('PDF Error: ' + e.message);
+            console.error(e);
         }
     };
     fileReader.readAsArrayBuffer(file);
@@ -185,12 +217,11 @@ function saveProfile(){
     profile.portfolio = document.getElementById('portfolio').value;
 
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
-    localStorage.setItem("profileComplete", "true"); // IKKADA NE LIVE AVTUNDI
+    localStorage.setItem("profileComplete", "true");
     alert("Profile is LIVE! Now you can see jobs.");
     loadDashboardData();
 }
 
-// NEW RESET FUNCTION
 function resetProfile(){
     if(confirm("Are you sure? This will clear your uploaded resume data.")){
         localStorage.removeItem("talentiqProfile");
