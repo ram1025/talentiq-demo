@@ -1,22 +1,79 @@
 <!DOCTYPE html>
 <html>
-<head><title>TalentIQ Login</title><link rel="stylesheet" href="style.css"><meta name="viewport" content="width=device-width"></head>
+<head>
+<title>TalentIQ Login</title>
+<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width">
+<style>
+.input-group{position:relative}
+.eye-btn{position:absolute;right:12px;top:38px;background:none;border:none;font-size:18px;cursor:pointer;color:#64748B}
+.forgot-link{display:block;text-align:right;margin-top:8px;font-size:12px;color:#0F766E;text-decoration:none;font-weight:bold}
+</style>
+</head>
 <body class="login-bg">
+
 <div class="login-container">
   <div class="login-box">
     <h1>TalentIQ 🤖</h1>
-    <div class="input-group"><label>Email ID</label><input type="email" id="email" placeholder="Enter Email ID"></div>
-    <div class="input-group"><label>Password</label><input type="password" id="password" placeholder="Enter Password"></div>
+
+    <div class="input-group">
+        <label>Email ID</label>
+        <input type="email" id="email" placeholder="Enter Email ID">
+    </div>
+
+    <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter Password">
+        <button type="button" class="eye-btn" onclick="togglePassword()">👁️</button>
+    </div>
+
+    <a href="#" class="forgot-link" onclick="forgotPassword()">Forgot Password?</a>
+
     <button class="login-btn" onclick="login()">Login</button>
-    <div class="demo-box"><b>Demo Login</b><br>Email: candidate@talentiq.com<br>Password: candidate123</div>
+
+    <div class="demo-box">
+        <b>Demo Login</b><br>
+        Email: candidate@talentiq.com<br>
+        Password: candidate123
+    </div>
   </div>
   <p class="made-in-india">Made in India 🇮🇳</p>
 </div>
+
 <script>
 function login(){
-    let e=document.getElementById('email').value; let p=document.getElementById('password').value;
-    if(e==='candidate@talentiq.com'&&p==='candidate123'){localStorage.setItem('talentiq_loggedin','true');window.location.href='dashboard.html';}
-    else{alert('Invalid credentials')}
+    let e = document.getElementById('email').value; 
+    let p = document.getElementById('password').value;
+    if(e==='candidate@talentiq.com' && p==='candidate123'){
+        localStorage.setItem('talentiq_loggedin','true');
+        localStorage.setItem('talentiq_user', JSON.stringify({name: "Ram"})); // Name set cheyadam
+        window.location.href='dashboard.html';
+    } else {
+        alert('Invalid credentials')
+    }
+}
+
+function togglePassword(){
+    let passInput = document.getElementById('password');
+    let eyeBtn = document.querySelector('.eye-btn');
+    if(passInput.type === 'password'){
+        passInput.type = 'text';
+        eyeBtn.innerText = '🙈'; // Hide icon
+    } else {
+        passInput.type = 'password';
+        eyeBtn.innerText = '👁️'; // Show icon
+    }
+}
+
+function forgotPassword(){
+    let email = prompt("Enter your registered Email ID:");
+    if(email){
+        if(email === 'candidate@talentiq.com'){
+            alert("Demo Account: Password is 'candidate123'\n\nFor real app, we will send reset link to " + email);
+        } else {
+            alert("No account found with " + email);
+        }
+    }
 }
 </script>
 </body>
