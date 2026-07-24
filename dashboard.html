@@ -1,73 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
+<title>Dashboard - TalentIQ</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="header">
-  <h2>TalentIQ Suite</h2>
+  <h2 id="greeting">Hi 👋</h2>
   <button onclick="logout()">Logout</button>
 </div>
 
-<div class="card">
-  <h3>Resume Strength Meter</h3>
-  <p>Score: <span id="score">0%</span></p>
-  <input type="file" id="resumeUpload" onchange="uploadResume()">
-  <button class="btn-primary" onclick="saveProfile()">Save & Make Profile Live</button>
-  <button class="btn-danger" onclick="resetProfile()">Reset Profile Data</button>
+<!-- BANNER -->
+<div class="card" style="background:linear-gradient(90deg,#0F766E,#1E3A8A); color:white;">
+    <h3>🚀 Complete Your Profile to Unlock Jobs</h3>
+    <p>Upload resume once, we will do the rest</p>
 </div>
 
-<div id="jobsSection" style="display:none">
-  <h3 style="padding:0 15px">Recommended Jobs</h3>
-  <div id="jobsList"></div>
+<!-- RESUME METER -->
+<div class="card">
+    <div class="resume-meter">
+        <h3>Resume Strength Meter: <span id="resumeScore" style="color:#DC2626;">0%</span></h3>
+        <p id="resumeStatus">Upload resume to get started</p>
+        <input type="file" id="resumeFile" accept=".pdf,.docx">
+        <button class="btn-primary" onclick="uploadAndParseResume()">Upload & AI Analyze</button>
+    </div>
+</div>
+
+<!-- AI SUGGESTIONS -->
+<div class="card" id="aiSuggestions" style="display:none;">
+    <h3>🤖 AI Suggestions for You</h3>
+    <p>• Add 2 more projects to reach 90% score</p>
+    <p>• Add "System Design" skill for Java roles</p>
+    <p>• Your profile is 75% complete. Save to go live!</p>
+</div>
+
+<!-- JOBS SECTION -->
+<div id="jobsSection" style="display:none;">
+    <h3 style="padding:0 15px;">Recommended Jobs</h3>
+    <div id="jobsList"></div>
 </div>
 
 <nav class="bottom-nav">
-  <button class="active" onclick="location='dashboard.html'">🏠<span>Home</span></button>
+  <button class="active">🏠<span>Home</span></button>
   <button onclick="location='dashboard.html#jobs'">📄<span>Apply</span></button>
   <button onclick="location='profile.html'">👤<span>Profile</span></button>
 </nav>
 
 <script>
-// Login check
-if(localStorage.getItem('talentiq_loggedin')!=='true'){
-    window.location.href = 'index.html';
+window.onload = function(){
+    if(localStorage.getItem('talentiq_loggedin')!=='true'){ window.location.href = 'index.html'; }
+    loadDashboardData();
 }
 
-function logout(){
-    localStorage.removeItem('talentiq_loggedin');
-    window.location.href = 'index.html';
+function loadDashboardData(){
+    let profile = JSON.parse(localStorage.getItem("talentiqProfile") || '{}');
+    if(profile.name){ document.getElementById('greeting').innerText = `Hi, ${profile.name} 👋`; }
+
+    if(localStorage.getItem('resumeUploaded')==='true'){
+        document.getElementById('resumeScore').innerText = '75%';
+        document.getElementById('resumeScore').style.color = '#16A34A';
+        document.getElementById('resumeStatus').innerText = 'Good! ATS Score: 75%';
+        document.getElementById('aiSuggestions').style.display = 'block';
+        showJobs();
+    }
 }
 
-function uploadResume(){
+function uploadAndParseResume(){
+    let file = document.getElementById('resumeFile').files[0];
+    if(!file){ alert('Please select a file'); return; }
+
+    // FAKE AI PARSING - Real lo manam backend API use chestham
+    // Ippudu demo kosam static data teesthunna
+    let fakeParsedData = {
+        name: "Ram Kumar",
+        email: "candidate@talentiq.com",
+        designation: "Java Developer",
+        exp: "3 Years",
+        skills: "Java, Spring Boot, React, MySQL, AWS",
+        linkedin: "linkedin.com/in/ramkumar",
+        github: "github.com/ramkumar",
+        portfolio: "ramkumar.dev"
+    };
+
+    // 1. Profile lo save cheyi
+    localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
     localStorage.setItem('resumeUploaded','true');
-    document.getElementById('score').innerText = '75%';
-    showJobs(); // resume upload ayaka jobs chupinchu
+
+    alert('AI Analysis Complete! Profile Auto-Filled ✅');
+    loadDashboardData();
 }
 
 function showJobs(){
     let resume = localStorage.getItem('resumeUploaded')==='true';
     let profile = localStorage.getItem('profileComplete')==='true';
-    if(resume && profile){ // rendu unte ne jobs
+    if(resume && profile){
         document.getElementById('jobsSection').style.display = 'block';
         document.getElementById('jobsList').innerHTML = `
         <div class="card"><b>Senior Java Developer</b><br>TCS - Hyderabad <button>Apply Now</button></div>
-        <div class="card"><b>React Frontend Engineer</b><br>Infosys - Bangalore <button>Apply Now</button></div>
-        <div class="card"><b>IT Support Specialist</b><br>Wipro - Vizag <button>Apply Now</button></div>
-        `;
-    } else {
-        document.getElementById('jobsSection').style.display = 'none';
+        <div class="card"><b>React Frontend Engineer</b><br>Infosys - Bangalore <button>Apply Now</button></div>`;
     }
 }
 
-function saveProfile(){ alert('Profile Saved ✅'); }
-function resetProfile(){ localStorage.clear(); location.reload(); }
-
-// Page load ayyagane resume unte jobs chupinchu
-showJobs();
+function logout(){
+    localStorage.clear();
+    window.location.href = 'index.html';
+}
 </script>
 </body>
 </html>
