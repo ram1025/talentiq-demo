@@ -7,37 +7,49 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="login-bg">
-<div class="login-box">
-    <h1>TalentIQ 🤖</h1>
-    <div class="input-group">
-        <label>Email ID</label>
-        <input type="email" id="email" placeholder="Enter Email ID">
+
+<div class="login-container">
+    <div class="login-box">
+        <h1>TalentIQ 🤖</h1>
+        
+        <div class="input-group">
+            <label>Email ID</label>
+            <input type="email" id="email" placeholder="Enter Email ID" autocomplete="email">
+        </div>
+        
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter Password" autocomplete="current-password">
+        </div>
+        
+        <button class="login-btn" onclick="login()">Login</button>
+        
+        <div class="demo-box">
+            <b>Demo Login</b><br>
+            Email: candidate@talentiq.com<br>
+            Password: candidate123
+        </div>
     </div>
-    <div class="input-group">
-        <label>Password</label>
-        <input type="password" id="password" placeholder="Enter Password">
-    </div>
-    <button class="login-btn" onclick="login()">Login</button>
-    <div class="demo-box">
-        <b>Demo Login</b><br>
-        Email: candidate@talentiq.com<br>
-        Password: candidate123
-    </div>
+    
+    <div class="made-in-india">Made in India 🇮🇳</div>
 </div>
-<div class="made-in-india">Made in India 🇮🇳</div>
 
 <script>
-function login(){
-    let email = document.getElementById('email').value.trim();
-    let pass = document.getElementById('password').value.trim();
-    if(email === 'candidate@talentiq.com' && pass === 'candidate123'){
-        localStorage.setItem('talentiq_loggedin','true');
-        window.location.href = 'dashboard.html'; // direct redirect
-    } else { alert('Invalid Email or Password'); }
-}
 // already login unte direct dashboard ki
 if(localStorage.getItem('talentiq_loggedin')==='true'){
     window.location.href = 'dashboard.html';
+}
+
+function login(){
+    let email = document.getElementById('email').value.trim();
+    let pass = document.getElementById('password').value.trim();
+    
+    if(email === 'candidate@talentiq.com' && pass === 'candidate123'){
+        localStorage.setItem('talentiq_loggedin','true');
+        window.location.href = 'dashboard.html'; // direct redirect
+    } else { 
+        alert('Invalid Email or Password'); 
+    }
 }
 </script>
 </body>
