@@ -146,12 +146,26 @@ async function uploadAndParseResume(){
                 textContent.items.forEach(item => resumeText += item.str + " ");
             }
 
-            // 1. SMART NAME EXTRACTION - Removes designation from name
+            // DEBUG: Console lo text kanipisthunda chudu
+            console.log("Extracted Text:", resumeText);
+
+            if(resumeText.trim().length < 20){
+                alert("⚠️ This looks like a scanned PDF. Text not found. Please upload a text-based PDF.");
+                return;
+            }
+
+            // 1. SMART NAME: First 5 lines lo @ or.com leni Capital line ni name ga teestundi
             let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
-            let rawName = lines[0] || "Candidate Name";
-            let name = rawName.replace(/Senior|Junior|Lead|Analyst|Developer|Engineer|Test|ETL|Support|Manager|Specialist|Consultant|&|-/gi, '').trim();
-            name = name.split(" ")[0].trim(); // double space unte cut
-            if(name.length < 2) name = rawName.split(" ")[0]; // fallback
+            let name = "Candidate Name";
+            for(let i=0; i<Math.min(5, lines.length); i++){
+                let line = lines[i];
+                if(!line.includes('@') &&!line.includes('.com') && line === line.toUpperCase()){
+                    name = line.replace(/RESUME|CV/gi, '').trim();
+                    break;
+                }
+            }
+            name = name.replace(/Senior|Junior|Lead|Analyst|Developer|Engineer|Test|ETL|Support|Manager|Specialist|Consultant|&|-/gi, '').trim();
+            name = name.split(" ")[0].trim();
 
             // 2. EMAIL
             let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
@@ -168,35 +182,22 @@ async function uploadAndParseResume(){
             // 6. EXPERIENCE
             let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
 
-            // 7. SMART DESIGNATION EXTRACTION FROM PDF
-            let designation = "Software Engineer"; // default
+            // 7. SMART DESIGNATION
+            let designation = "Software Engineer";
             if(resumeText.match(/Test Analyst|Test Lead|QA Engineer|ETL/i)) designation = "Test Analyst";
             else if(resumeText.match(/Java Developer|Full Stack|Frontend|Backend/i)) designation = "Java Developer";
             else if(resumeText.match(/Recruiter|HR|Talent Acquisition/i)) designation = "Recruiter";
             else if(resumeText.match(/Support|Helpdesk|Technical Support/i)) designation = "IT Support Specialist";
-            else if(resumeText.match(/Data Engineer|ETL Developer|Data Analyst/i)) designation = "Data Engineer";
 
             // 8. SKILLS
             let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "WEBSPHERE", "SQL", "JIRA", "KIBANA", "GRAFANA", "RECRUITMENT", "ATS", "REACT", "NODE", "PYTHON", "AWS", "DOCKER", "ETL", "TESTING"];
             let skills = skillsList.filter(s => resumeText.toUpperCase().includes(s)).join(", ");
 
-            let fakeParsedData = {
-                name: name,
-                email: email,
-                designation: designation,
-                exp: exp,
-                skills: skills,
-                linkedin: linkedin,
-                github: github,
-                portfolio: portfolio,
-                location: "Visakhapatnam",
-                jobType: "30 Days",
-                workMode: "Hybrid"
-            };
+            let fakeParsedData = {name, email, designation, exp, skills, linkedin, github, portfolio, location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"};
 
             localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
             localStorage.setItem('resumeUploaded','true');
-            alert('AI Auto-Fill Complete! ✅ Now verify and Save to go LIVE');
+            alert('AI Auto-Fill Complete! ✅');
             loadDashboardData();
 
         } catch(e){
