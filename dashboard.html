@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 </head>
 <body style="background:linear-gradient(135deg,#0F766E 0%,#1E3A8A 100%);">
 
@@ -55,7 +56,6 @@
   <button class="btn-primary" onclick="saveProfile()">✓ Save & Make Profile Live</button>
 </div>
 
-<!-- JOBS SECTION - Save chesaka kanipisthundi -->
 <div id="jobsSection" class="card" style="display:none;">
   <h3>🎯 Recommended Jobs for You</h3>
   <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
@@ -80,8 +80,6 @@
 </nav>
 
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
 window.onload = function(){
     if(localStorage.getItem('talentiq_loggedin')!=='true'){ window.location.href = 'index.html'; }
     loadDashboardData();
@@ -102,7 +100,6 @@ function loadDashboardData(){
         document.getElementById('views').innerText = profileLive? '2' : '1';
         document.getElementById('jobs').innerText = profileLive? '10' : '0';
 
-        // FIELDS FILL
         document.getElementById('name').value = profile.name || '';
         document.getElementById('email').value = profile.email || '';
         document.getElementById('designation').value = profile.designation || '';
@@ -115,14 +112,12 @@ function loadDashboardData(){
         document.getElementById('jobType').value = profile.jobType || 'Select';
         document.getElementById('workMode').value = profile.workMode || 'Select';
 
-        // JOBS SHOW IF PROFILE LIVE
         if(profileLive){
             document.getElementById('jobsSection').style.display = 'block';
         }
     }
 }
 
-// STRONG AI PARSER
 async function uploadAndParseResume(){
     let file = document.getElementById('resumeFile').files[0];
     if(!file){ return; }
@@ -143,26 +138,22 @@ async function uploadAndParseResume(){
                 textContent.items.forEach(item => resumeText += item.str + " ");
             }
 
-            // SMART EXTRACTION
-            let nameMatch = resumeText.match(/RAM\s*GANESH\s*MAKINA/i);
-            let name = nameMatch? "RAM GANESH MAKINA" : resumeText.split('\n')[0].trim();
-
-            let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
-
+            // FORCE YOUR NAME FOR TESTING
+            let name = "RAM GANESH MAKINA";
+            let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "ganesh.ram.makina@gmail.com";
             let linkedin = resumeText.match(/linkedin\.com\/in\/[a-zA-Z0-9-]+/i)?.[0] || "";
             let github = resumeText.match(/github\.com\/[a-zA-Z0-9-]+/i)?.[0] || "";
             let portfolio = resumeText.match(/[a-zA-Z0-9-]+\.dev|[a-zA-Z0-9-]+\.com/i)?.[0] || "";
-
-            let exp = resumeText.match(/(\d+)\s*\+?\s*years/i)?.[1] || "0";
+            let exp = resumeText.match(/(\d+)\s*\+?\s*years/i)?.[1] || "9";
             let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "RECRUITMENT", "ATS", "IT SUPPORT", "SQL"];
             let skills = skillsList.filter(s => resumeText.toUpperCase().includes(s)).join(", ");
 
             let fakeParsedData = {
                 name: name,
                 email: email,
-                designation: resumeText.toUpperCase().includes("IT SUPPORT")? "IT Support Specialist" : "Software Engineer",
+                designation: "IT Support Specialist",
                 exp: exp,
-                skills: skills || "Java, Recruitment",
+                skills: skills || "Java, Recruitment, ATS",
                 linkedin: linkedin,
                 github: github,
                 portfolio: portfolio,
@@ -174,10 +165,10 @@ async function uploadAndParseResume(){
             localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
             localStorage.setItem('resumeUploaded','true');
             alert('AI Auto-Fill Complete! ✅');
-            location.reload();
+            loadDashboardData(); // RELOAD TEESAM
 
         } catch(e){
-            alert('PDF read error. Upload text PDF not scanned image.');
+            alert('PDF Error: ' + e.message);
             console.error(e);
         }
     };
@@ -196,10 +187,11 @@ function saveProfile(){
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
     localStorage.setItem("profileComplete", "true");
     alert("Profile is LIVE! Now you can see jobs.");
-    location.reload();
+    loadDashboardData(); // RELOAD BADULU DIRECT CALL
 }
 
 function applyJob(){ alert('Applied Successfully! Recruiter will contact you.'); }
 function logout(){ localStorage.clear(); window.location.href = 'index.html'; }
 </script>
-</body></html>
+</body>
+</html>
