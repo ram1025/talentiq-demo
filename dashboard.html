@@ -81,11 +81,13 @@
   <div class="form-group"><label>Portfolio</label><input id="portfolio" placeholder="yourname.dev"></div>
   <div class="form-group"><label>Key Skills</label><input id="skills"></div>
   <div class="form-group"><label>Total Experience (Years)</label><input id="exp"></div>
+
+  <!-- MANUAL FIELDS -->
   <div class="form-group"><label>Notice Period</label>
-    <select id="jobType"><option>Select</option><option>Immediate</option><option>30 Days</option></select>
+    <select id="jobType"><option>Select</option><option>Immediate</option><option>15 Days</option><option>30 Days</option><option>60 Days</option></select>
   </div>
   <div class="form-group"><label>Preferred Location</label>
-    <select id="location"><option>Select</option><option>Visakhapatnam</option><option>Hyderabad</option><option>Bangalore</option><option>Remote</option></select>
+    <select id="location"><option>Select</option><option>Visakhapatnam</option><option>Hyderabad</option><option>Bangalore</option><option>Chennai</option><option>Remote</option></select>
   </div>
   <div class="form-group"><label>Work Mode</label>
     <select id="workMode"><option>Select</option><option>Hybrid</option><option>Remote</option><option>WFO</option></select>
@@ -99,18 +101,7 @@
 
 <div id="jobsSection" class="card" style="display:none;">
   <h3>🎯 Recommended Jobs for You</h3>
-  <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
-    <div class="job-card">
-      <div><b>IT Support Specialist</b><br><span style="font-size:12px">TalentIQ Inc, Visakhapatnam - Hybrid</span></div>
-      <button class="btn-outline" onclick="applyJob()" style="padding:8px 15px">Apply</button>
-    </div>
-  </div>
-  <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
-    <div class="job-card">
-      <div><b>Java Developer</b><br><span style="font-size:12px">TechCorp, Hyderabad - WFO</span></div>
-      <button class="btn-outline" onclick="applyJob()" style="padding:8px 15px">Apply</button>
-    </div>
-  </div>
+  <div id="jobList"></div>
   <p style="text-align:center;font-size:12px;color:#64748b">+8 More Jobs Available</p>
 </div>
 
@@ -134,17 +125,15 @@ function loadDashboardData(){
     let resumeUploaded = localStorage.getItem('resumeUploaded')==='true';
     let profileLive = localStorage.getItem('profileComplete')==='true';
 
-    if(resumeUploaded && profile.name){
+    if(resumeUploaded){
         document.getElementById('score').innerText = '100%';
         document.getElementById('scoreText').innerText = '100%';
         document.getElementById('bar').style.width = '100%';
         document.getElementById('scoreMsg').innerText = '✓ Verify your details and go LIVE';
         document.getElementById('scoreMsg').style.background = '#FEF9C3';
-        document.getElementById('verifyCard').style.display = 'block';
+        document.getElementById('verifyCard').style.display = 'block'; // SHOW CARD
 
-        document.getElementById('views').innerText = profileLive? '12' : '0';
-        document.getElementById('jobs').innerText = profileLive? '10' : '0';
-
+        // AUTO FILL ALL FIELDS
         document.getElementById('name').value = profile.name || '';
         document.getElementById('email').value = profile.email || '';
         document.getElementById('designation').value = profile.designation || '';
@@ -157,12 +146,39 @@ function loadDashboardData(){
         document.getElementById('jobType').value = profile.jobType || 'Select';
         document.getElementById('workMode').value = profile.workMode || 'Select';
 
+        document.getElementById('views').innerText = profileLive? '12' : '0';
+        document.getElementById('jobs').innerText = profileLive? '10' : '0';
+
         if(profileLive){
             document.getElementById('scoreMsg').innerText = '✓ Your profile is LIVE! Scroll down for Jobs';
             document.getElementById('scoreMsg').style.background = '#DCFCE7';
             document.getElementById('jobsSection').style.display = 'block';
+            loadJobs(); // LOAD JOBS
         }
     }
+}
+
+function loadJobs(){
+    let jobList = document.getElementById('jobList');
+    jobList.innerHTML = `
+    <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
+        <div class="job-card">
+            <div><b>IT Support Specialist</b><br><span style="font-size:12px">TalentIQ Inc, Visakhapatnam - Hybrid</span></div>
+            <button class="btn-outline" onclick="applyJob('IT Support Specialist')" style="padding:8px 15px">Apply</button>
+        </div>
+    </div>
+    <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
+        <div class="job-card">
+            <div><b>Java Developer</b><br><span style="font-size:12px">TechCorp, Hyderabad - WFO</span></div>
+            <button class="btn-outline" onclick="applyJob('Java Developer')" style="padding:8px 15px">Apply</button>
+        </div>
+    </div>
+    <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
+        <div class="job-card">
+            <div><b>QA Test Analyst</b><br><span style="font-size:12px">Sovereign India, Remote</span></div>
+            <button class="btn-outline" onclick="applyJob('QA Test Analyst')" style="padding:8px 15px">Apply</button>
+        </div>
+    </div>`;
 }
 
 async function uploadAndParseResume(){
@@ -192,45 +208,28 @@ async function uploadAndParseResume(){
 
         if(resumeText.trim().length < 10) throw new Error("Could not read text");
 
-        let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 2 && l.length < 50);
-        let name = lines[0] || file.name.replace('.pdf','');
+        let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+        let name = lines[0] || file.name.replace(/\.(pdf|docx|doc)/i,'');
         name = name.replace(/RESUME|CV/gi, '').trim();
-
         let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
-        let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
-        let designation = resumeText.match(/Test|QA/i)? "Test Analyst" : "Software Engineer";
-        let skills = ["JAVA","SQL","REACT","PYTHON","AWS","TESTING"].filter(s => resumeText.toUpperCase().includes(s)).join(", ");
+        let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "9";
+        let designation = resumeText.match(/Test|QA|Support/i)? "IT Support Specialist" : "Software Engineer";
+        let skills = ["JAVA","SQL","REACT","PYTHON","AWS","TESTING","RECRUITMENT","ATS"].filter(s => resumeText.toUpperCase().includes(s)).join(", ");
 
-        // ===== BETTER LINK EXTRACTION LOGIC =====
-        let linkedin = "";
-        let github = "";
-        let portfolio = "";
+        // FORCE YOUR LINKS
+        let linkedin = resumeText.match(/linkedin\.com\/in\/[a-zA-Z0-9_-]+/i)?.[0] || "linkedin.com/in/ram-m-a73009b8";
+        let github = resumeText.match(/github\.com\/[a-zA-Z0-9_-]+/i)?.[0] || "github.com/ram1025";
+        let portfolio = resumeText.match(/[a-zA-Z0-9.-]+\.github\.io\/[a-zA-Z0-9_-]+/i)?.[0] || "ram2025.github.io/ram1025";
 
-        lines.forEach(line => {
-            line = line.trim();
-            if(line.toLowerCase().includes('linkedin.com/in/')) linkedin = line;
-            if(line.toLowerCase().includes('github.com/')) github = line;
-            if(line.match(/https?:\/\/[a-zA-Z0-9.-]+\.[a-z]{2,}/)) portfolio = line;
-        });
-
-        // Cleanup links
-        linkedin = linkedin.match(/linkedin\.com\/in\/[a-zA-Z0-9_-]+/i)?.[0] || "linkedin.com/in/ram-m-a73009b8";
-        github = github.match(/github\.com\/[a-zA-Z0-9_-]+/i)?.[0] || "github.com/ram1025";
-        portfolio = portfolio.match(/https?:\/\/[a-zA-Z0-9.-]+\.[a-z]{2,}/i)?.[0] || "ram2025.github.io/ram1025";
-
-        let fakeParsedData = {
-            name, email, designation, exp, skills,
-            linkedin, github, portfolio,
-            location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"
-        };
+        let fakeParsedData = {name, email, designation, exp, skills, linkedin, github, portfolio, location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"};
 
         localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
         localStorage.setItem('resumeUploaded','true');
         alert('AI Auto-Fill Complete! ✅');
-        loadDashboardData();
+        loadDashboardData(); // REFRESH UI
 
     } catch(e){
-        alert('Error: ' + e.message + '. Upload Text PDF');
+        alert('Error: ' + e.message);
     }
 }
 
@@ -241,7 +240,7 @@ function saveProfile(){
     profile.workMode = document.getElementById('workMode').value;
     profile.linkedin = document.getElementById('linkedin').value;
     profile.github = document.getElementById('github').value;
-    profile.portfolio = document.getElementById('portfolio')..value;
+    profile.portfolio = document.getElementById('portfolio').value;
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
     localStorage.setItem("profileComplete", "true");
     alert("Profile is LIVE! Now check Jobs section below.");
@@ -254,13 +253,20 @@ function resetProfile(){
         localStorage.removeItem("resumeUploaded");
         localStorage.removeItem("profileComplete");
         document.getElementById('resumeFile').value = "";
-        loadDashboardData();
         document.getElementById('verifyCard').style.display = 'none';
         document.getElementById('jobsSection').style.display = 'none';
+        document.getElementById('score').innerText = '0%';
+        document.getElementById('scoreText').innerText = '0%';
+        document.getElementById('bar').style.width = '0%';
+        document.getElementById('scoreMsg').innerText = 'Upload resume to get started';
+        document.getElementById('scoreMsg').style.background = '#FEE2E2';
     }
 }
 
-function applyJob(){ alert('Applied Successfully! Recruiter will contact you.'); }
+function applyJob(jobTitle){
+    alert('Applied Successfully for ' + jobTitle + '! Recruiter will contact you.');
+}
 function logout(){ localStorage.clear(); window.location.href = 'index.html'; }
 </script>
-</body></html>
+</body>
+</html>
