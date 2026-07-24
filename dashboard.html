@@ -53,7 +53,11 @@
   <div class="form-group"><label>Work Mode</label>
     <select id="workMode"><option>Select</option><option>Hybrid</option><option>Remote</option><option>WFO</option></select>
   </div>
-  <button class="btn-primary" onclick="saveProfile()">✓ Save & Make Profile Live</button>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <button class="btn-outline" onclick="resetProfile()" style="background:#FEE2E2;color:#B91C1C;border-color:#FCA5A5">🔄 Reset</button>
+    <button class="btn-primary" onclick="saveProfile()">✓ Save & Make Profile Live</button>
+  </div>
 </div>
 
 <div id="jobsSection" class="card" style="display:none;">
@@ -70,13 +74,7 @@
       <button class="btn-outline" onclick="applyJob()">Apply</button>
     </div>
   </div>
-  <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
-    <div class="job-card">
-      <div><b>Recruiter</b><br><span style="font-size:12px">HR Solutions, Remote</span></div>
-      <button class="btn-outline" onclick="applyJob()">Apply</button>
-    </div>
-  </div>
-  <p style="text-align:center;font-size:12px;color:#64748b">+7 More Jobs Available</p>
+  <p style="text-align:center;font-size:12px;color:#64748b">+8 More Jobs Available</p>
 </div>
 
 <nav class="bottom-nav">
@@ -100,10 +98,12 @@ function loadDashboardData(){
         document.getElementById('score').innerText = '100%';
         document.getElementById('scoreText').innerText = '100%';
         document.getElementById('bar').style.width = '100%';
-        document.getElementById('scoreMsg').innerText = '✓ Your resume is 100% complete!';
-        document.getElementById('scoreMsg').style.background = '#DCFCE7';
+        document.getElementById('scoreMsg').innerText = '✓ Verify your details and go LIVE';
+        document.getElementById('scoreMsg').style.background = '#FEF9C3';
         document.getElementById('verifyCard').style.display = 'block';
-        document.getElementById('views').innerText = profileLive? '2' : '1';
+
+        // FIX: Views and Jobs should show ONLY after Save
+        document.getElementById('views').innerText = profileLive? '1' : '0';
         document.getElementById('jobs').innerText = profileLive? '10' : '0';
 
         document.getElementById('name').value = profile.name || '';
@@ -119,12 +119,14 @@ function loadDashboardData(){
         document.getElementById('workMode').value = profile.workMode || 'Select';
 
         if(profileLive){
+            document.getElementById('scoreMsg').innerText = '✓ Your profile is LIVE!';
+            document.getElementById('scoreMsg').style.background = '#DCFCE7';
             document.getElementById('jobsSection').style.display = 'block';
         }
     }
 }
 
-// 100% DYNAMIC AI PARSER - Evaru resume aina work chesthundi
+// 100% DYNAMIC AI PARSER
 async function uploadAndParseResume(){
     let file = document.getElementById('resumeFile').files[0];
     if(!file){ return; }
@@ -145,57 +147,29 @@ async function uploadAndParseResume(){
                 textContent.items.forEach(item => resumeText += item.str + " ");
             }
 
-            // 1. NAME: First line ni name ga teestundi
             let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 3);
             let name = lines[0] || "Candidate Name";
-
-            // 2. EMAIL
             let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
-
-            // 3. LINKEDIN
             let linkedin = resumeText.match(/linkedin\.com\/in\/[a-zA-Z0-9-\/]+/i)?.[0] || "";
-
-            // 4. GITHUB
             let github = resumeText.match(/(github\.com\/[a-zA-Z0-9-]+)|([a-zA-Z0-9-]+\.github\.io\/[a-zA-Z0-9-\/]+)/i)?.[0] || "";
-
-            // 5. PORTFOLIO
             let portfolio = resumeText.match(/[a-zA-Z0-9-]+\.(dev|com|io|me)\/[a-zA-Z0-9-\/]*/i)?.[0] || "";
-
-            // 6. EXPERIENCE
             let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
-
-            // 7. SKILLS
             let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "WEBSPHERE", "SQL", "JIRA", "KIBANA", "GRAFANA", "RECRUITMENT", "ATS", "REACT", "NODE", "PYTHON", "AWS", "DOCKER", "IT SUPPORT"];
             let skills = skillsList.filter(s => resumeText.toUpperCase().includes(s)).join(", ");
-
-            // 8. DESIGNATION
             let designation = "Software Engineer";
             if(resumeText.toUpperCase().includes("SUPPORT")) designation = "IT Support Specialist";
             if(resumeText.toUpperCase().includes("RECRUITER")) designation = "Recruiter";
-            if(resumeText.toUpperCase().includes("DEVELOPER")) designation = "Developer";
 
-            let fakeParsedData = {
-                name: name,
-                email: email,
-                designation: designation,
-                exp: exp,
-                skills: skills,
-                linkedin: linkedin,
-                github: github,
-                portfolio: portfolio,
-                location: "Visakhapatnam",
-                jobType: "30 Days",
-                workMode: "Hybrid"
-            };
+            let fakeParsedData = {name, email, designation, exp, skills, linkedin, github, portfolio, location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"};
 
             localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
             localStorage.setItem('resumeUploaded','true');
-            alert('AI Auto-Fill Complete! ✅');
+            // IMPORTANT: Don't set profileComplete here
+            alert('AI Auto-Fill Complete! ✅ Now verify and Save to go LIVE');
             loadDashboardData();
 
         } catch(e){
-            alert('PDF Error: ' + e.message + '. Please upload text-based PDF');
-            console.error(e);
+            alert('PDF Error: ' + e.message);
         }
     };
     fileReader.readAsArrayBuffer(file);
@@ -211,9 +185,23 @@ function saveProfile(){
     profile.portfolio = document.getElementById('portfolio').value;
 
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
-    localStorage.setItem("profileComplete", "true");
+    localStorage.setItem("profileComplete", "true"); // IKKADA NE LIVE AVTUNDI
     alert("Profile is LIVE! Now you can see jobs.");
     loadDashboardData();
+}
+
+// NEW RESET FUNCTION
+function resetProfile(){
+    if(confirm("Are you sure? This will clear your uploaded resume data.")){
+        localStorage.removeItem("talentiqProfile");
+        localStorage.removeItem("resumeUploaded");
+        localStorage.removeItem("profileComplete");
+        document.getElementById('resumeFile').value = "";
+        alert("Profile Reset Successfully!");
+        loadDashboardData();
+        document.getElementById('verifyCard').style.display = 'none';
+        document.getElementById('jobsSection').style.display = 'none';
+    }
 }
 
 function applyJob(){ alert('Applied Successfully! Recruiter will contact you.'); }
