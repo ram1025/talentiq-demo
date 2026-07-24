@@ -4,26 +4,30 @@
 <title>TalentIQ Suite</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  body{margin:0;font-family:Arial, sans-serif;background:linear-gradient(135deg,#0F766E 0%,#1E3A8A 100%);min-height:100vh;color:#fff}
-  .header{display:flex;justify-content:space-between;align-items:center;padding:15px;background:rgba(0,0,0,0.2)}
-  .header button{background:#fff;color:#0F766E;border:none;padding:8px 15px;border-radius:8px;font-weight:bold}
-  .card{background:#fff;color:#333;margin:15px;border-radius:16px;padding:15px;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
-  .stat-card{background:rgba(255,255,255,0.15);border-radius:12px;padding:15px;text-align:center}
-  .stat-card h4{margin:0;font-size:12px;opacity:0.9}
-  .stat-card p{margin:5px 0 0 0;font-size:24px;font-weight:bold}
-  .progress-bar{background:#E5E7EB;border-radius:10px;height:10px;margin:10px 0}
-  .progress-fill{background:#10B981;height:10px;border-radius:10px}
-  .tag{background:#FEF9C3;color:#92400E;padding:3px 8px;border-radius:6px;font-size:11px;margin-left:5px}
-  .form-group{margin-bottom:12px}
-  .form-group label{font-size:12px;font-weight:bold;display:block;margin-bottom:5px}
-  .form-group input, .form-group select{width:100%;padding:10px;border:1px solid #D1D5DB;border-radius:8px;box-sizing:border-box}
-  .btn-primary{background:#0F766E;color:#fff;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;font-size:16px}
-  .btn-outline{background:#fff;color:#0F766E;border:2px solid #0F766E;padding:12px;border-radius:10px;width:100%;font-weight:bold}
-  .file-input-wrapper{border:2px dashed #0F766E;border-radius:12px;padding:20px;text-align:center;background:#F0FDFA}
-  .bottom-nav{position:fixed;bottom:0;width:100%;background:#fff;display:flex;justify-content:space-around;padding:10px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
-  .bottom-nav button{background:none;border:none;color:#64748B;font-size:12px}
-  .bottom-nav button.active{color:#0F766E;font-weight:bold}
-  .job-card{display:flex;justify-content:space-between;align-items:center}
+  body{margin:0;font-family:Arial, sans-serif;background:linear-gradient(135deg,#0F766E 0%,#1E3A8A 100%);min-height:100vh;color:#fff;padding-bottom:70px}
+ .header{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:rgba(0,0,0,0.25);position:sticky;top:0;z-index:10}
+ .header-left{display:flex;align-items:center;gap:10px}
+ .header-left img{width:35px;height:35px;border-radius:50%;border:2px solid #fff}
+ .header-right{display:flex;align-items:center;gap:15px}
+ .header-right button{background:#fff;color:#0F766E;border:none;padding:6px 12px;border-radius:8px;font-weight:bold;font-size:12px}
+ .icon-btn{font-size:20px;background:none;border:none;color:#fff}
+ .card{background:#fff;color:#333;margin:15px;border-radius:16px;padding:15px;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+ .stat-card{background:rgba(255,255,255,0.15);border-radius:12px;padding:15px;text-align:center}
+ .stat-card h4{margin:0;font-size:12px;opacity:0.9}
+ .stat-card p{margin:5px 0 0 0;font-size:24px;font-weight:bold}
+ .progress-bar{background:#E5E7EB;border-radius:10px;height:10px;margin:10px 0}
+ .progress-fill{background:#10B981;height:10px;border-radius:10px;transition:width 0.5s}
+ .tag{background:#FEF9C3;color:#92400E;padding:3px 8px;border-radius:6px;font-size:11px;margin-left:5px}
+ .form-group{margin-bottom:12px}
+ .form-group label{font-size:12px;font-weight:bold;display:block;margin-bottom:5px;color:#374151}
+ .form-group input,.form-group select{width:100%;padding:10px;border:1px solid #D1D5DB;border-radius:8px;box-sizing:border-box;font-size:14px}
+ .btn-primary{background:#0F766E;color:#fff;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;font-size:16px}
+ .btn-outline{background:#fff;color:#B91C1C;border:2px solid #FCA5A5;padding:12px;border-radius:10px;width:100%;font-weight:bold}
+ .file-input-wrapper{border:2px dashed #0F766E;border-radius:12px;padding:20px;text-align:center;background:#F0FDFA}
+ .bottom-nav{position:fixed;bottom:0;width:100%;background:#fff;display:flex;justify-content:space-around;padding:10px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+ .bottom-nav button{background:none;border:none;color:#64748B;font-size:11px}
+ .bottom-nav button.active{color:#0F766E;font-weight:bold}
+ .job-card{display:flex;justify-content:space-between;align-items:center}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -34,8 +38,17 @@
 <body>
 
 <div class="header">
-  <div><h2 style="margin:0">TalentIQ Suite 🧳</h2><p style="font-size:12px;opacity:0.9;margin:0">AI-Powered Candidate Platform</p></div>
-  <button onclick="logout()">Logout</button>
+  <div class="header-left">
+    <img id="userImg" src="https://ui-avatars.com/api/?name=User&background=0F766E&color=fff" alt="user">
+    <div>
+      <h2 style="margin:0;font-size:16px">Hi, <span id="userName">User</span> 👋</h2>
+      <p style="font-size:11px;opacity:0.9;margin:0">TalentIQ Suite</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" onclick="alert('No new notifications')">🔔</button>
+    <button onclick="logout()">Logout</button>
+  </div>
 </div>
 
 <div style="padding:15px;">
@@ -78,8 +91,8 @@
     <select id="workMode"><option>Select</option><option>Hybrid</option><option>Remote</option><option>WFO</option></select>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-    <button class="btn-outline" onclick="resetProfile()" style="background:#FEE2E2;color:#B91C1C;border-color:#FCA5A5">🔄 Reset</button>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+    <button class="btn-outline" onclick="resetProfile()">🔄 Reset</button>
     <button class="btn-primary" onclick="saveProfile()">✓ Save & Make Profile Live</button>
   </div>
 </div>
@@ -89,6 +102,12 @@
   <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
     <div class="job-card">
       <div><b>IT Support Specialist</b><br><span style="font-size:12px">TalentIQ Inc, Visakhapatnam - Hybrid</span></div>
+      <button class="btn-outline" onclick="applyJob()" style="padding:8px 15px">Apply</button>
+    </div>
+  </div>
+  <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
+    <div class="job-card">
+      <div><b>Java Developer</b><br><span style="font-size:12px">TechCorp, Hyderabad - WFO</span></div>
       <button class="btn-outline" onclick="applyJob()" style="padding:8px 15px">Apply</button>
     </div>
   </div>
@@ -102,16 +121,121 @@
 </nav>
 
 <script>
-// ... last nenu ichina JS function motham ikkada paste cheyi ...
 window.onload = function(){
     if(localStorage.getItem('talentiq_loggedin')!=='true'){ window.location.href = 'index.html'; }
+    let user = JSON.parse(localStorage.getItem('talentiq_user') || '{"name":"Ram"}');
+    document.getElementById('userName').innerText = user.name;
+    document.getElementById('userImg').src = `https://ui-avatars.com/api/?name=${user.name}&background=0F766E&color=fff`;
     loadDashboardData();
 }
-function loadDashboardData(){...}
-async function uploadAndParseResume(){...}
-function saveProfile(){...}
-function resetProfile(){...}
-function applyJob(){ alert('Applied Successfully!'); }
+
+function loadDashboardData(){
+    let profile = JSON.parse(localStorage.getItem("talentiqProfile") || '{}');
+    let resumeUploaded = localStorage.getItem('resumeUploaded')==='true';
+    let profileLive = localStorage.getItem('profileComplete')==='true';
+
+    if(resumeUploaded && profile.name){
+        document.getElementById('score').innerText = '100%';
+        document.getElementById('scoreText').innerText = '100%';
+        document.getElementById('bar').style.width = '100%';
+        document.getElementById('scoreMsg').innerText = '✓ Verify your details and go LIVE';
+        document.getElementById('scoreMsg').style.background = '#FEF9C3';
+        document.getElementById('verifyCard').style.display = 'block';
+
+        document.getElementById('views').innerText = profileLive? '12' : '0';
+        document.getElementById('jobs').innerText = profileLive? '10' : '0';
+
+        document.getElementById('name').value = profile.name || '';
+        document.getElementById('email').value = profile.email || '';
+        document.getElementById('designation').value = profile.designation || '';
+        document.getElementById('skills').value = profile.skills || '';
+        document.getElementById('exp').value = profile.exp || '';
+        document.getElementById('linkedin').value = profile.linkedin || '';
+        document.getElementById('github').value = profile.github || '';
+        document.getElementById('portfolio').value = profile.portfolio || '';
+        document.getElementById('location').value = profile.location || 'Select';
+        document.getElementById('jobType').value = profile.jobType || 'Select';
+        document.getElementById('workMode').value = profile.workMode || 'Select';
+
+        if(profileLive){
+            document.getElementById('scoreMsg').innerText = '✓ Your profile is LIVE! Scroll down for Jobs';
+            document.getElementById('scoreMsg').style.background = '#DCFCE7';
+            document.getElementById('jobsSection').style.display = 'block';
+        }
+    }
+}
+
+async function uploadAndParseResume(){
+    let file = document.getElementById('resumeFile').files[0];
+    if(!file){ return; }
+    document.getElementById('scoreMsg').innerText = 'AI is scanning your resume...';
+    document.getElementById('scoreMsg').style.background = '#FEF9C3';
+    let resumeText = "";
+    let fileType = file.name.split('.').pop().toLowerCase();
+    try {
+        if(fileType === 'docx' || fileType === 'doc'){
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.extractRawText({arrayBuffer: arrayBuffer});
+            resumeText = result.value;
+        }
+        else if(fileType === 'pdf'){
+            const pdfData = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(pdfData).promise;
+            for(let i=1; i<=pdf.numPages; i++){
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                textContent.items.forEach(item => resumeText += item.str + " ");
+            }
+        }
+        if(resumeText.trim().length < 10) throw new Error("Could not read text");
+
+        let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 2 && l.length < 50);
+        let name = lines[0] || file.name.replace('.pdf','');
+        name = name.replace(/RESUME|CV/gi, '').trim();
+
+        let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
+        let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
+        let designation = resumeText.match(/Test|QA/i)? "Test Analyst" : "Software Engineer";
+        let skills = ["JAVA","SQL","REACT","PYTHON","AWS"].filter(s => resumeText.toUpperCase().includes(s)).join(", ");
+
+        let fakeParsedData = {name, email, designation, exp, skills, location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"};
+        localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
+        localStorage.setItem('resumeUploaded','true');
+        alert('AI Auto-Fill Complete! ✅');
+        loadDashboardData();
+    } catch(e){
+        alert('Error: ' + e.message + '. Upload Text PDF');
+    }
+}
+
+function saveProfile(){
+    let profile = JSON.parse(localStorage.getItem("talentiqProfile") || '{}');
+    profile.jobType = document.getElementById('jobType').value;
+    profile.location = document.getElementById('location').value;
+    profile.workMode = document.getElementById('workMode').value;
+    profile.linkedin = document.getElementById('linkedin').value;
+    profile.github = document.getElementById('github').value;
+    profile.portfolio = document.getElementById('portfolio').value;
+    localStorage.setItem("talentiqProfile", JSON.stringify(profile));
+    localStorage.setItem("profileComplete", "true");
+    alert("Profile is LIVE! Now check Jobs section below.");
+    loadDashboardData();
+}
+
+function resetProfile(){
+    if(confirm("Reset profile?")){
+        localStorage.removeItem("talentiqProfile");
+        localStorage.removeItem("resumeUploaded");
+        localStorage.removeItem("profileComplete");
+        document.getElementById('resumeFile').value = "";
+        loadDashboardData();
+        document.getElementById('verifyCard').style.display = 'none';
+        document.getElementById('jobsSection').style.display = 'none';
+    }
+}
+
+function applyJob(){ alert('Applied Successfully! Recruiter will contact you.'); }
 function logout(){ localStorage.clear(); window.location.href = 'index.html'; }
 </script>
-</body></html>
+</body>
+</html>
