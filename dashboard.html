@@ -48,10 +48,10 @@
     <select id="jobType"><option>Select</option><option>Immediate</option><option>30 Days</option></select>
   </div>
   <div class="form-group"><label>Preferred Location</label>
-    <select id="location"><option>Select</option><option>Visakhapatnam</option><option>Hyderabad</option></select>
+    <select id="location"><option>Select</option><option>Visakhapatnam</option><option>Hyderabad</option><option>Bangalore</option><option>Remote</option></select>
   </div>
   <div class="form-group"><label>Work Mode</label>
-    <select id="workMode"><option>Select</option><option>Hybrid</option><option>Remote</option></select>
+    <select id="workMode"><option>Select</option><option>Hybrid</option><option>Remote</option><option>WFO</option></select>
   </div>
   <button class="btn-primary" onclick="saveProfile()">✓ Save & Make Profile Live</button>
 </div>
@@ -70,7 +70,13 @@
       <button class="btn-outline" onclick="applyJob()">Apply</button>
     </div>
   </div>
-  <p style="text-align:center;font-size:12px;color:#64748b">+8 More Jobs Available</p>
+  <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
+    <div class="job-card">
+      <div><b>Recruiter</b><br><span style="font-size:12px">HR Solutions, Remote</span></div>
+      <button class="btn-outline" onclick="applyJob()">Apply</button>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:12px;color:#64748b">+7 More Jobs Available</p>
 </div>
 
 <nav class="bottom-nav">
@@ -118,6 +124,7 @@ function loadDashboardData(){
     }
 }
 
+// 100% DYNAMIC AI PARSER - Evaru resume aina work chesthundi
 async function uploadAndParseResume(){
     let file = document.getElementById('resumeFile').files[0];
     if(!file){ return; }
@@ -138,22 +145,41 @@ async function uploadAndParseResume(){
                 textContent.items.forEach(item => resumeText += item.str + " ");
             }
 
-            // FORCE YOUR NAME FOR TESTING
-            let name = "RAM GANESH MAKINA";
-            let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "ganesh.ram.makina@gmail.com";
-            let linkedin = resumeText.match(/linkedin\.com\/in\/[a-zA-Z0-9-]+/i)?.[0] || "";
-            let github = resumeText.match(/github\.com\/[a-zA-Z0-9-]+/i)?.[0] || "";
-            let portfolio = resumeText.match(/[a-zA-Z0-9-]+\.dev|[a-zA-Z0-9-]+\.com/i)?.[0] || "";
-            let exp = resumeText.match(/(\d+)\s*\+?\s*years/i)?.[1] || "9";
-            let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "RECRUITMENT", "ATS", "IT SUPPORT", "SQL"];
+            // 1. NAME: First line ni name ga teestundi
+            let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 3);
+            let name = lines[0] || "Candidate Name";
+
+            // 2. EMAIL
+            let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
+
+            // 3. LINKEDIN
+            let linkedin = resumeText.match(/linkedin\.com\/in\/[a-zA-Z0-9-\/]+/i)?.[0] || "";
+
+            // 4. GITHUB
+            let github = resumeText.match(/(github\.com\/[a-zA-Z0-9-]+)|([a-zA-Z0-9-]+\.github\.io\/[a-zA-Z0-9-\/]+)/i)?.[0] || "";
+
+            // 5. PORTFOLIO
+            let portfolio = resumeText.match(/[a-zA-Z0-9-]+\.(dev|com|io|me)\/[a-zA-Z0-9-\/]*/i)?.[0] || "";
+
+            // 6. EXPERIENCE
+            let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
+
+            // 7. SKILLS
+            let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "WEBSPHERE", "SQL", "JIRA", "KIBANA", "GRAFANA", "RECRUITMENT", "ATS", "REACT", "NODE", "PYTHON", "AWS", "DOCKER", "IT SUPPORT"];
             let skills = skillsList.filter(s => resumeText.toUpperCase().includes(s)).join(", ");
+
+            // 8. DESIGNATION
+            let designation = "Software Engineer";
+            if(resumeText.toUpperCase().includes("SUPPORT")) designation = "IT Support Specialist";
+            if(resumeText.toUpperCase().includes("RECRUITER")) designation = "Recruiter";
+            if(resumeText.toUpperCase().includes("DEVELOPER")) designation = "Developer";
 
             let fakeParsedData = {
                 name: name,
                 email: email,
-                designation: "IT Support Specialist",
+                designation: designation,
                 exp: exp,
-                skills: skills || "Java, Recruitment, ATS",
+                skills: skills,
                 linkedin: linkedin,
                 github: github,
                 portfolio: portfolio,
@@ -165,10 +191,10 @@ async function uploadAndParseResume(){
             localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
             localStorage.setItem('resumeUploaded','true');
             alert('AI Auto-Fill Complete! ✅');
-            loadDashboardData(); // RELOAD TEESAM
+            loadDashboardData();
 
         } catch(e){
-            alert('PDF Error: ' + e.message);
+            alert('PDF Error: ' + e.message + '. Please upload text-based PDF');
             console.error(e);
         }
     };
@@ -187,11 +213,10 @@ function saveProfile(){
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
     localStorage.setItem("profileComplete", "true");
     alert("Profile is LIVE! Now you can see jobs.");
-    loadDashboardData(); // RELOAD BADULU DIRECT CALL
+    loadDashboardData();
 }
 
 function applyJob(){ alert('Applied Successfully! Recruiter will contact you.'); }
 function logout(){ localStorage.clear(); window.location.href = 'index.html'; }
 </script>
-</body>
-</html>
+</body></html>
