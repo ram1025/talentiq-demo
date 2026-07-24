@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">
+  <h2>TalentIQ Suite</h2>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<div class="card">
+  <h3>Resume Strength Meter</h3>
+  <p>Score: <span id="score">0%</span></p>
+  <input type="file" id="resumeUpload" onchange="uploadResume()">
+  <button class="btn-primary" onclick="saveProfile()">Save & Make Profile Live</button>
+  <button class="btn-danger" onclick="resetProfile()">Reset Profile Data</button>
+</div>
+
+<div id="jobsSection" style="display:none">
+  <h3 style="padding:0 15px">Recommended Jobs</h3>
+  <div id="jobsList"></div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="active" onclick="location='dashboard.html'">🏠<span>Home</span></button>
+  <button onclick="location='dashboard.html#jobs'">📄<span>Apply</span></button>
+  <button onclick="location='profile.html'">👤<span>Profile</span></button>
+</nav>
+
+<script>
+// Login check
+if(localStorage.getItem('talentiq_loggedin')!=='true'){
+    window.location.href = 'index.html';
+}
+
+function logout(){
+    localStorage.removeItem('talentiq_loggedin');
+    window.location.href = 'index.html';
+}
+
+function uploadResume(){
+    localStorage.setItem('resumeUploaded','true');
+    document.getElementById('score').innerText = '75%';
+    showJobs(); // resume upload ayaka jobs chupinchu
+}
+
+function showJobs(){
+    if(localStorage.getItem('resumeUploaded')==='true'){
+        document.getElementById('jobsSection').style.display = 'block';
+        document.getElementById('jobsList').innerHTML = `
+        <div class="card"><b>Senior Java Developer</b><br>TCS - Hyderabad <button>Apply Now</button></div>
+        <div class="card"><b>React Frontend Engineer</b><br>Infosys - Bangalore <button>Apply Now</button></div>
+        `;
+    }
+}
+
+function saveProfile(){ alert('Profile Saved ✅'); }
+function resetProfile(){ localStorage.clear(); location.reload(); }
+
+// Page load ayyagane resume unte jobs chupinchu
+showJobs();
+</script>
+</body>
+</html>
