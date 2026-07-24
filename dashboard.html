@@ -4,7 +4,6 @@
 <title>TalentIQ Suite</title>
 <link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- PDF READER LIBRARY -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body style="background:linear-gradient(135deg,#0F766E 0%,#1E3A8A 100%);">
@@ -31,7 +30,6 @@
   <h4 style="margin-top:20px">Step 1: Upload Resume <span class="tag">AI Auto Fill ON</span></h4>
   <div class="file-input-wrapper">
     <input type="file" id="resumeFile" accept=".pdf">
-    <p style="font-size:12px;margin-top:8px">Upload your PDF Resume</p>
   </div>
   <button class="btn-primary" onclick="uploadAndParseResume()">Upload & AI Analyze</button>
 </div>
@@ -42,14 +40,14 @@
   <div class="form-group"><label>Email</label><input id="email"></div>
   <div class="form-group"><label>Current Designation</label><input id="designation"></div>
   <div class="form-group"><label>Job Status / Notice Period</label>
-    <select id="jobType"><option>Select</option><option>Immediate</option><option>15 Days</option><option>30 Days</option><option>60 Days</option></select>
+    <select id="jobType"><option>Select</option><option>Immediate</option><option>30 Days</option></select>
   </div>
   <div class="form-group"><label>Key Skills</label><input id="skills"></div>
   <div class="form-group"><label>Preferred Location</label>
-    <select id="location"><option>Select</option><option>Visakhapatnam</option><option>Hyderabad</option><option>Bangalore</option><option>Remote</option></select>
+    <select id="location"><option>Select</option><option>Visakhapatnam</option><option>Hyderabad</option></select>
   </div>
   <div class="form-group"><label>Work Mode</label>
-    <select id="workMode"><option>Select</option><option>WFO</option><option>Hybrid</option><option>Remote</option></select>
+    <select id="workMode"><option>Select</option><option>Hybrid</option><option>Remote</option></select>
   </div>
   <div class="form-group"><label>Total Experience (Years)</label><input id="exp"></div>
   <button class="btn-primary" onclick="saveProfile()">✓ Save & Make Profile Live</button>
@@ -58,14 +56,16 @@
 
 <nav class="bottom-nav">
   <button class="active">🏠<span>Home</span></button>
-  <button onclick="showJobs()">📄<span>Apply</span></button>
+  <button onclick="alert('10 Jobs Found')">📄<span>Apply</span></button>
   <button onclick="location='profile.html'">👤<span>Profile</span></button>
 </nav>
 
 <script>
+// FIX 1: Worker set cheyadam
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
 window.onload = function(){
     if(localStorage.getItem('talentiq_loggedin')!=='true'){ window.location.href = 'index.html'; }
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     loadDashboardData();
 }
 
@@ -78,7 +78,7 @@ function loadDashboardData(){
         document.getElementById('score').innerText = '100%';
         document.getElementById('scoreText').innerText = '100%';
         document.getElementById('bar').style.width = '100%';
-        document.getElementById('scoreMsg').innerText = '✓ Your resume is 100% complete! Recruiters will love this.';
+        document.getElementById('scoreMsg').innerText = '✓ Your resume is 100% complete!';
         document.getElementById('scoreMsg').style.background = '#DCFCE7';
         document.getElementById('verifyCard').style.display = 'block';
         document.getElementById('views').innerText = profileLive? '2' : '1';
@@ -95,12 +95,12 @@ function loadDashboardData(){
     }
 }
 
-// REAL AI PDF PARSING
+// FIX 2: Error vasthe logout cheyyakunda just alert ivvadam
 async function uploadAndParseResume(){
     let file = document.getElementById('resumeFile').files[0];
     if(!file){ alert('Please select a PDF file'); return; }
 
-    alert('AI is scanning your resume... Please wait 5 seconds');
+    alert('AI is scanning your resume... Please wait');
 
     const fileReader = new FileReader();
     fileReader.onload = async function() {
@@ -117,37 +117,33 @@ async function uploadAndParseResume(){
 
             resumeText = resumeText.toUpperCase();
 
-            // AI LOGIC - Extract data
             let name = resumeText.includes("RAM GANESH MAKINA")? "RAM GANESH MAKINA" : "Candidate";
-            let email = resumeText.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0] || "your.email@gmail.com";
-            let phone = resumeText.match(/\+91\s*\d{10}|\d{10}/)?.[0] || "";
-            let exp = resumeText.match(/(\d+)\s*\+?\s*YEARS?/)?.[1] || resumeText.match(/EXPERIENCE.*?(\d+)/)?.[1] || "0";
-            let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "RECRUITMENT", "ATS", "IT SUPPORT"];
+            let email = resumeText.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0] || "";
+            let exp = resumeText.match(/(\d+)\s*\+?\s*YEARS?/)?.[1] || "0";
+            let skillsList = ["JAVA", "J2EE", "SPRING BOOT", "RECRUITMENT", "ATS"];
             let skills = skillsList.filter(s => resumeText.includes(s)).join(", ");
 
             let fakeParsedData = {
                 name: name,
                 email: email,
-                designation: resumeText.includes("IT SUPPORT")? "IT Support Specialist" : "Software Engineer",
+                designation: "IT Support Specialist",
                 exp: exp,
                 skills: skills || "Java, Recruitment",
-                linkedin: "",
-                github: "",
-                portfolio: "",
                 location: "Visakhapatnam",
                 jobType: "30 Days",
                 workMode: "Hybrid"
             };
 
-            localStorage.clear(); // old Ram Kumar data delete
+            // FIX 3: Login data delete cheyyakunda only profile data update cheyadam
             localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
             localStorage.setItem('resumeUploaded','true');
-            alert('AI Auto-Fill Complete! Your details are filled ✅');
+            alert('AI Auto-Fill Complete! ✅');
             location.reload();
 
         } catch(e){
-            alert('Error reading PDF. Please upload a text-based PDF.');
-            console.log(e);
+            alert('PDF read error. Please upload text-based PDF, not scanned image PDF.');
+            console.error(e);
+            // IKKADA LOGOUT CHEYYADU
         }
     };
     fileReader.readAsArrayBuffer(file);
@@ -159,25 +155,20 @@ function saveProfile(){
     profile.location = document.getElementById('location').value;
     profile.workMode = document.getElementById('workMode').value;
     profile.exp = document.getElementById('exp').value;
-
-    if(profile.jobType==='Select' || profile.location==='Select' || profile.workMode==='Select'){
-        alert('Please select Notice Period, Location and Work Mode');
-        return;
-    }
-
     localStorage.setItem("talentiqProfile", JSON.stringify(profile));
     localStorage.setItem("profileComplete", "true");
-    alert("Profile is LIVE! Recruiters can now see you.");
+    alert("Profile is LIVE!");
     location.reload();
 }
 
 function resetProfile(){
-    if(confirm("Delete all data?")){
-        localStorage.clear();
-        location.href='index.html';
+    if(confirm("Delete profile data?")){
+        localStorage.removeItem("talentiqProfile");
+        localStorage.removeItem("resumeUploaded");
+        localStorage.removeItem("profileComplete");
+        location.reload();
     }
 }
-function showJobs(){ alert('10 Jobs Found! Complete profile to see matches'); }
 function logout(){ localStorage.clear(); window.location.href = 'index.html'; }
 </script>
 </body></html>
