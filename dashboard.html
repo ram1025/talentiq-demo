@@ -2,112 +2,115 @@
 <html>
 <head>
 <title>TalentIQ Suite</title>
-<link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body{margin:0;font-family:Arial, sans-serif;background:linear-gradient(135deg,#0F766E 0%,#1E3A8A 100%);min-height:100vh;color:#fff}
+  .header{display:flex;justify-content:space-between;align-items:center;padding:15px;background:rgba(0,0,0,0.2)}
+  .header button{background:#fff;color:#0F766E;border:none;padding:8px 15px;border-radius:8px;font-weight:bold}
+  .card{background:#fff;color:#333;margin:15px;border-radius:16px;padding:15px;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+  .stat-card{background:rgba(255,255,255,0.15);border-radius:12px;padding:15px;text-align:center}
+  .stat-card h4{margin:0;font-size:12px;opacity:0.9}
+  .stat-card p{margin:5px 0 0 0;font-size:24px;font-weight:bold}
+  .progress-bar{background:#E5E7EB;border-radius:10px;height:10px;margin:10px 0}
+  .progress-fill{background:#10B981;height:10px;border-radius:10px}
+  .tag{background:#FEF9C3;color:#92400E;padding:3px 8px;border-radius:6px;font-size:11px;margin-left:5px}
+  .form-group{margin-bottom:12px}
+  .form-group label{font-size:12px;font-weight:bold;display:block;margin-bottom:5px}
+  .form-group input, .form-group select{width:100%;padding:10px;border:1px solid #D1D5DB;border-radius:8px;box-sizing:border-box}
+  .btn-primary{background:#0F766E;color:#fff;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;font-size:16px}
+  .btn-outline{background:#fff;color:#0F766E;border:2px solid #0F766E;padding:12px;border-radius:10px;width:100%;font-weight:bold}
+  .file-input-wrapper{border:2px dashed #0F766E;border-radius:12px;padding:20px;text-align:center;background:#F0FDFA}
+  .bottom-nav{position:fixed;bottom:0;width:100%;background:#fff;display:flex;justify-content:space-around;padding:10px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.1)}
+  .bottom-nav button{background:none;border:none;color:#64748B;font-size:12px}
+  .bottom-nav button.active{color:#0F766E;font-weight:bold}
+  .job-card{display:flex;justify-content:space-between;align-items:center}
+</style>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 <script src='https://unpkg.com/tesseract.js@4.1.1/dist/tesseract.min.js'></script>
 <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
 </head>
-<body style="background:linear-gradient(135deg,#0F766E 0%,#1E3A8A 100%);">
+<body>
 
-... nee HTML same...
+<div class="header">
+  <div><h2 style="margin:0">TalentIQ Suite 🧳</h2><p style="font-size:12px;opacity:0.9;margin:0">AI-Powered Candidate Platform</p></div>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<div style="padding:15px;">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+    <div class="stat-card"><h4>Profile Views</h4><p id="views">0</p></div>
+    <div class="stat-card"><h4>Resume Score</h4><p id="score">0%</p></div>
+    <div class="stat-card"><h4>Job Matches</h4><p id="jobs">0</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>📊 Resume Strength Meter</h3>
+  <p>Score: <b id="scoreText">0%</b></p>
+  <div class="progress-bar"><div class="progress-fill" id="bar" style="width:0%"></div></div>
+  <p id="scoreMsg" style="background:#FEE2E2;padding:8px;border-radius:8px;margin-top:10px;font-size:13px">Upload resume to get started</p>
+
+  <h4 style="margin-top:20px">Step 1: Upload Resume <span class="tag">AI Auto Fill ON</span></h4>
+  <div class="file-input-wrapper">
+    <input type="file" id="resumeFile" accept=".pdf,.docx,.doc" onchange="uploadAndParseResume()">
+  </div>
+</div>
+
+<div class="card" id="verifyCard" style="display:none;">
+  <h3>Step 2: Verify & Save</h3>
+  <div class="form-group"><label>Full Name</label><input id="name"></div>
+  <div class="form-group"><label>Email</label><input id="email"></div>
+  <div class="form-group"><label>Current Designation</label><input id="designation"></div>
+  <div class="form-group"><label>LinkedIn</label><input id="linkedin" placeholder="linkedin.com/in/..."></div>
+  <div class="form-group"><label>GitHub</label><input id="github" placeholder="github.com/..."></div>
+  <div class="form-group"><label>Portfolio</label><input id="portfolio" placeholder="yourname.dev"></div>
+  <div class="form-group"><label>Key Skills</label><input id="skills"></div>
+  <div class="form-group"><label>Total Experience (Years)</label><input id="exp"></div>
+  <div class="form-group"><label>Notice Period</label>
+    <select id="jobType"><option>Select</option><option>Immediate</option><option>30 Days</option></select>
+  </div>
+  <div class="form-group"><label>Preferred Location</label>
+    <select id="location"><option>Select</option><option>Visakhapatnam</option><option>Hyderabad</option><option>Bangalore</option><option>Remote</option></select>
+  </div>
+  <div class="form-group"><label>Work Mode</label>
+    <select id="workMode"><option>Select</option><option>Hybrid</option><option>Remote</option><option>WFO</option></select>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <button class="btn-outline" onclick="resetProfile()" style="background:#FEE2E2;color:#B91C1C;border-color:#FCA5A5">🔄 Reset</button>
+    <button class="btn-primary" onclick="saveProfile()">✓ Save & Make Profile Live</button>
+  </div>
+</div>
+
+<div id="jobsSection" class="card" style="display:none;">
+  <h3>🎯 Recommended Jobs for You</h3>
+  <div class="card" style="background:#f0fdfa;margin-bottom:10px;">
+    <div class="job-card">
+      <div><b>IT Support Specialist</b><br><span style="font-size:12px">TalentIQ Inc, Visakhapatnam - Hybrid</span></div>
+      <button class="btn-outline" onclick="applyJob()" style="padding:8px 15px">Apply</button>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:12px;color:#64748b">+8 More Jobs Available</p>
+</div>
+
+<nav class="bottom-nav">
+  <button class="active">🏠<br><span>Home</span></button>
+  <button onclick="document.getElementById('jobsSection').scrollIntoView()">📄<br><span>Apply</span></button>
+  <button onclick="location='profile.html'">👤<br><span>Profile</span></button>
+</nav>
 
 <script>
+// ... last nenu ichina JS function motham ikkada paste cheyi ...
 window.onload = function(){
     if(localStorage.getItem('talentiq_loggedin')!=='true'){ window.location.href = 'index.html'; }
     loadDashboardData();
 }
-
-function loadDashboardData(){... same as previous code... }
-
-async function uploadAndParseResume(){
-    let file = document.getElementById('resumeFile').files[0];
-    if(!file){ return; }
-
-    document.getElementById('scoreMsg').innerText = 'AI is scanning your resume...';
-    document.getElementById('scoreMsg').style.background = '#FEF9C3';
-
-    let resumeText = "";
-    let fileType = file.name.split('.').pop().toLowerCase();
-
-    try {
-        if(fileType === 'docx' || fileType === 'doc'){
-            document.getElementById('scoreMsg').innerText = 'Reading Word file...';
-            const arrayBuffer = await file.arrayBuffer();
-            const result = await mammoth.extractRawText({arrayBuffer: arrayBuffer});
-            resumeText = result.value;
-        }
-        else if(fileType === 'pdf'){
-            document.getElementById('scoreMsg').innerText = 'Reading PDF...';
-            const pdfData = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument(pdfData).promise;
-
-            for(let i=1; i<=pdf.numPages; i++){
-                const page = await pdf.getPage(i);
-                const textContent = await page.getTextContent();
-                textContent.items.forEach(item => resumeText += item.str + " ");
-            }
-
-            // FIX: OCR ni optional chesanu. Slow ga untundi kabatti
-            if(resumeText.trim().length < 20){
-                document.getElementById('scoreMsg').innerText = 'Scanned PDF. OCR is slow. Please use Text PDF for instant result';
-                // OCR skip chesam. Text PDF upload cheyamani chepthunam
-            }
-        }
-
-        if(resumeText.trim().length < 10){
-            throw new Error("Could not read text. Upload Text PDF or DOCX");
-        }
-
-        // ===== FIX 1: SMART NAME EXTRACTION =====
-        let lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 2 && l.length < 50);
-        let name = "Candidate";
-
-        // Rule 1: Email unna line ki paina unna line = Name
-        let emailIndex = lines.findIndex(l => l.includes('@'));
-        if(emailIndex > 0){
-            name = lines[emailIndex - 1];
-        }
-        // Rule 2: LinkedIn unna line ki paina unna line = Name
-        else {
-            let liIndex = lines.findIndex(l => l.toLowerCase().includes('linkedin'));
-            if(liIndex > 0) name = lines[liIndex - 1];
-            // Rule 3: First line teesuko
-            else name = lines[0];
-        }
-        name = name.replace(/RESUME|CV|CURRICULUM|VITAE|SENIOR|JUNIOR|LEAD|ANALYST|DEVELOPER|ENGINEER|TEST/gi, '').trim();
-
-        // ===== REST EXTRACTION =====
-        let email = resumeText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0] || "";
-        let exp = resumeText.match(/(\d+)\+?\s*years/i)?.[1] || "0";
-
-        let designation = "Software Engineer";
-        if(resumeText.match(/Test|QA/i)) designation = "Test Analyst";
-        else if(resumeText.match(/Java|Developer/i)) designation = "Java Developer";
-        else if(resumeText.match(/Recruiter|HR/i)) designation = "Recruiter";
-        else if(resumeText.match(/Support/i)) designation = "IT Support Specialist";
-
-        let skillsList = ["JAVA", "SQL", "REACT", "PYTHON", "AWS", "TESTING", "SPRING", "DOCKER", "JIRA"];
-        let skills = skillsList.filter(s => resumeText.toUpperCase().includes(s)).join(", ");
-
-        let fakeParsedData = {name, email, designation, exp, skills, location: "Visakhapatnam", jobType: "30 Days", workMode: "Hybrid"};
-
-        localStorage.setItem("talentiqProfile", JSON.stringify(fakeParsedData));
-        localStorage.setItem('resumeUploaded','true');
-        alert('AI Auto-Fill Complete! ✅ Name: ' + name);
-        loadDashboardData();
-
-    } catch(e){
-        console.error(e);
-        document.getElementById('scoreMsg').innerText = 'Error: ' + e.message;
-        document.getElementById('scoreMsg').style.background = '#FEE2E2';
-        alert('Error: ' + e.message);
-    }
-}
-
-function saveProfile(){... same... }
-function resetProfile(){... same... }
+function loadDashboardData(){...}
+async function uploadAndParseResume(){...}
+function saveProfile(){...}
+function resetProfile(){...}
 function applyJob(){ alert('Applied Successfully!'); }
 function logout(){ localStorage.clear(); window.location.href = 'index.html'; }
 </script>
